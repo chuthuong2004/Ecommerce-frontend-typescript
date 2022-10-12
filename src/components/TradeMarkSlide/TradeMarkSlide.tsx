@@ -1,0 +1,213 @@
+import classNames from 'classnames/bind';
+import { Link } from 'react-router-dom';
+import Slider from 'react-slick';
+import {
+    Aojo,
+    Ceci,
+    CharlesKeith,
+    CoachTradeMark,
+    Dsquared2,
+    Gigi,
+    Havaianas,
+    Lesella,
+    Marhenj,
+    MaxCo,
+    MLB,
+    Mujosh,
+    Pedro,
+    Pinko,
+    Puma,
+    Skechers,
+    TedBaker,
+    TheKooples,
+    TopMan,
+    TopShop,
+    WeekendMaxMara,
+} from './LogoTradeMark/LogoTradeMark';
+import styles from './TradeMarkSlide.module.scss';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import './CustomSlick.scss';
+const cx = classNames.bind(styles);
+const linkList = [
+    {
+        to: '/',
+        icon: <CoachTradeMark />
+    },
+    {
+        to: '/',
+        icon: <Dsquared2 />
+    },
+    {
+        to: '/',
+        icon: <WeekendMaxMara />
+    },
+    {
+        to: '/',
+        icon: <MaxCo />
+    },
+    {
+        to: '/',
+        icon: <Pinko />
+    },
+    {
+        to: '/',
+        icon: <MaxCo />
+    },
+    {
+        to: '/',
+        icon: <TedBaker />
+    },
+    {
+        to: '/',
+        icon: <Lesella />
+    },
+    {
+        to: '/',
+        icon: <Puma />
+    },
+    {
+        to: '/',
+        icon: <MLB />
+    },
+    {
+        to: '/',
+        icon: <Skechers />
+    },
+    {
+        to: '/',
+        icon: <Marhenj />
+    },
+    {
+        to: '/',
+        icon:<Pedro />
+    },
+    {
+        to: '/',
+        icon: <CharlesKeith />
+    },
+    {
+        to: '/',
+        icon: <Havaianas />
+    },
+    {
+        to: '/',
+        icon: <Mujosh />
+    },
+    {
+        to: '/',
+        icon: <Aojo />
+    },
+    {
+        to: '/',
+        icon: <TopShop />
+    },
+    {
+        to: '/',
+        icon: <TopMan />
+    },
+    {
+        to: '/',
+        icon: <Gigi />
+    },
+    {
+        to: '/',
+        icon:<Ceci />
+    }
+];
+const TradeMarkSlide = () => {
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        draggable: true,
+        autoplaySpeed: 3000,
+        dotsClass: cx('container-dots'),
+    };
+
+    return (
+        <div className={cx('trade-mark')}>
+            <div className={cx('trade-mark-wrapper')}>
+                <div className={cx('block-title')}>Thương hiệu</div>
+                <div className={cx('slides')}>
+                    <div className={cx('container')}>
+                        <Slider {...settings}>
+                            <div className={cx('slide-trademark')}>
+                                <Link to={'/'}>
+                                    <CoachTradeMark />
+                                </Link>
+                                <Link to={'/'}>
+                                    <Dsquared2 />
+                                </Link>
+                                <Link to={'/'}>
+                                    <WeekendMaxMara />
+                                </Link>
+                                <Link to={'/'}>
+                                    <MaxCo />
+                                </Link>
+                                <Link to={'/'}>
+                                    <Pinko />
+                                </Link>
+                                <Link to={'/'}>
+                                    <TedBaker />
+                                </Link>
+                                <Link to={'/'}>
+                                    <TheKooples />
+                                </Link>
+                                <Link to={'/'}>
+                                    <Lesella />
+                                </Link>
+                                <Link to={'/'}>
+                                    <Puma />
+                                </Link>
+                                <Link to={'/'}>
+                                    <MLB />
+                                </Link>
+                                <Link to={'/'}>
+                                    <Skechers />
+                                </Link>
+                                <Link to={'/'}>
+                                    <Marhenj />
+                                </Link>
+                                <Link to={'/'}>
+                                    <Pedro />
+                                </Link>
+                                <Link to={'/'}>
+                                    <CharlesKeith />
+                                </Link>
+                                <Link to={'/'}>
+                                    <Havaianas />
+                                </Link>
+                            </div>
+                            <div className={cx('slide-trademark')}>
+                                <Link to={'/'}>
+                                    <Mujosh />
+                                </Link>
+                                <Link to={'/'}>
+                                    <Aojo />
+                                </Link>
+                                <Link to={'/'}>
+                                    <TopShop />
+                                </Link>
+                                <Link to={'/'}>
+                                    <TopMan />
+                                </Link>
+                                <Link to={'/'}>
+                                    <Gigi />
+                                </Link>
+                                <Link to={'/'}>
+                                    <Ceci />
+                                </Link>
+                            </div>
+                        </Slider>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default TradeMarkSlide;

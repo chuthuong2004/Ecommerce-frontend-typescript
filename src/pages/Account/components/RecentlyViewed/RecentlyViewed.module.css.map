@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AACI,QADI,CACJ,UAAU,CAAC;EACP,OAAO,EAAE,IAAI;EACb,qBAAqB,EAAE,cAAc;EACrC,GAAG,EAAE,SAAS;CACjB",
+    "sources": [
+        "RecentlyViewed.module.scss"
+    ],
+    "names": [],
+    "file": "RecentlyViewed.module.css"
+}

@@ -1,0 +1,29 @@
+.slider-list {
+    .slick-list {
+        width: 100vw;
+        .slick-track {
+            display: flex;
+            float: left;
+
+            .slick-slide {
+                margin-right: 20px;
+            }
+        }
+    }
+}
+.btn-arrow-slide-item.btn-arrow {
+    top: 40%;
+    transform: translateY(-100%);
+    &.btn-prev {
+        opacity: 0;
+    }
+    &.btn-next {
+        opacity: 1;
+    }
+    &.btn-prev.active {
+        opacity: 1;
+    }
+    &.btn-next.active {
+        opacity: 0;
+    }
+}

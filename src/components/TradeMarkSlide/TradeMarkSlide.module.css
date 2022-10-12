@@ -1,0 +1,102 @@
+.trade-mark {
+  width: 100%;
+  height: 100%;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(black), to(rgba(0, 0, 0, 0.6)));
+  background-image: linear-gradient(180deg, black, rgba(0, 0, 0, 0.6));
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.trade-mark-wrapper {
+  width: var(--default-layout-width);
+  height: 100%;
+}
+
+.trade-mark-wrapper .block-title {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  line-height: 35px;
+  padding: 80px 0 60px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.trade-mark-wrapper .slides {
+  font-size: 14px;
+  letter-spacing: 1px;
+  line-height: 21px;
+  padding-bottom: 20px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.trade-mark-wrapper .slides .slide-trademark {
+  display: -ms-grid !important;
+  display: grid !important;
+  -ms-grid-columns: (1fr)[5];
+      grid-template-columns: repeat(5, 1fr);
+}
+
+.trade-mark-wrapper .slides .slide-trademark a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 30px;
+}
+
+.container-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+
+.container-dots li {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid #ffffff;
+  margin: 0 5px;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  background-color: var(--primary);
+  cursor: pointer;
+}
+
+.container-dots li button {
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  position: absolute;
+  -webkit-transform: translateX(-6px);
+          transform: translateX(-6px);
+  top: 0;
+  opacity: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid #ffffff;
+  margin: 0 5px;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  background-color: var(--primary);
+}
+/*# sourceMappingURL=TradeMarkSlide.module.css.map */

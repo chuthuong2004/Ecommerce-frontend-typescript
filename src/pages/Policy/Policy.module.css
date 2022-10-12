@@ -1,0 +1,40 @@
+.wrapper {
+  color: var(--primary);
+  font-size: 14px;
+  letter-spacing: 1px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 60px 0;
+}
+
+.wrapper .container {
+  padding: 0 12px;
+  width: var(--default-layout-width);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  gap: 16px;
+}
+
+.wrapper .container > h1 {
+  font-size: 40px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.wrapper .container > strong {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+/*# sourceMappingURL=Policy.module.css.map */

@@ -1,0 +1,9 @@
+.img-intro-kid {
+  width: 100vw;
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  cursor: pointer;
+}
+/*# sourceMappingURL=Kids.module.css.map */
