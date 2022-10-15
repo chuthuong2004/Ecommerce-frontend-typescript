@@ -12,12 +12,14 @@ import Collection from '../pages/Collection';
 import { HeaderOnly } from '../layouts';
 import Policy from '../pages/Policy';
 import React, { ReactNode } from 'react';
+import NoPageFound from '../pages/NoPageFound';
 // import NoPageFound from '../pages/NoPageFound';
 
 type routeType = {
   path: string;
   component: React.FC;
   layout?: React.FC<{ children: ReactNode }> | null;
+  private?: boolean;
 };
 // public routes
 const publicRoutes: Array<routeType> = [
@@ -67,27 +69,35 @@ const publicRoutes: Array<routeType> = [
     path: `${config.routes.collections}/:slugCollection`,
     component: Collection,
   },
-];
-const privateRoutes: Array<routeType> = [
   {
     path: config.routes.account,
     component: Account,
+    private: true,
   },
   {
     path: config.routes.order,
     component: Account,
+    private: true,
   },
   {
     path: `${config.routes.order}/:orderID`,
     component: Account,
+    private: true,
   },
   {
     path: config.routes.address,
     component: Account,
+    private: true,
   },
   {
     path: config.routes.recentlyViewed,
     component: Account,
+    private: true,
+  },
+  {
+    path: '*',
+    component: NoPageFound,
   },
 ];
+const privateRoutes: Array<routeType> = [];
 export { publicRoutes, privateRoutes };

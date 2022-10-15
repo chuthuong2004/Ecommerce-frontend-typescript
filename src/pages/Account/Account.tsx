@@ -10,7 +10,7 @@ import RecentlyViewed from './components/RecentlyViewed';
 import { SideBarItem, sidebars } from '../../assets/sidebars';
 import { user } from '../../assets/fakeUser';
 import { ArrowLeftIcon } from '../../components/Icons';
-import { IAddressUser } from '../../models/user';
+import { IAddressUser } from '../../models/user.model';
 import { logout, selectAuth } from '../../features/authSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useLogoutUserMutation } from '../../services/authApi';

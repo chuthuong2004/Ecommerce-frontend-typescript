@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-import { IBrand } from '../../../../models/brand';
-import { IProduct } from '../../../../models/product';
+import { IBrand } from '../../../../models/brand.model';
+import { IProduct } from '../../../../models/product.model';
 export const slides = [
   {
     _id: uuidv4(),

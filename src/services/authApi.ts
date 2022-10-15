@@ -17,6 +17,7 @@ export const authApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ['User', 'Product'],
   endpoints: (builder) => ({
     loginUser: builder.mutation({
       query: (body: { email: string; password: string }) => {
@@ -46,7 +47,20 @@ export const authApi = createApi({
         };
       },
     }),
+    getMyProfile: builder.query({
+      query: () => {
+        return {
+          url: '/me',
+        };
+      },
+      providesTags: ['User', 'Product'],
+    }),
   }),
 });
 
-export const { useLoginUserMutation, useRegisterUserMutation, useLogoutUserMutation } = authApi;
+export const {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+  useLogoutUserMutation,
+  useGetMyProfileQuery,
+} = authApi;

@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import { EditIcon, LocationEmptyIcon, PlusStrongIcon } from '../../../../components/Icons';
 import Button from '../../../../components/Button';
 import EmptyContent from '../../../../components/EmptyContent';
-import { IAddress, IAddressUser } from '../../../../models/user';
+import { IAddress, IAddressUser } from '../../../../models/user.model';
 const cx = classNames.bind(styles);
 type Props = {
     data: IAddressUser[] | undefined,

@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './Feature.module.scss';
 import React from 'react';
-import { IProduct } from '../../models/product';
+import { IProduct } from '../../models/product.model';
 const cx = classNames.bind(styles);
 
 type Props = {

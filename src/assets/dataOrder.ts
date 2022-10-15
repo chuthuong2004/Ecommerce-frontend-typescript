@@ -1,4 +1,4 @@
-import { IOrder } from '../models/order';
+import { IOrder } from '../models/order.model';
 
 export const dataOrder: IOrder[] = [
   {

@@ -13,7 +13,7 @@ export interface ITabContent {
 }
 const TabContent: React.FC<Props> = ({ contents }) => {
     const [tabSelected, setTabSelected] = useState(contents[0]);
-    console.log(tabSelected);
+    // console.log(tabSelected);
     return (
         <div>
             <div className={cx('tab-header')}>
@@ -22,7 +22,7 @@ const TabContent: React.FC<Props> = ({ contents }) => {
                         <div
                             key={navItem._id}
                             onClick={() => setTabSelected(navItem)}
-                            className={cx('nav-item', tabSelected._id === navItem._id && 'active')}
+                            className={cx('nav-item', tabSelected.content === navItem.content && 'active')}
                         >
                             {navItem.title}
                         </div>

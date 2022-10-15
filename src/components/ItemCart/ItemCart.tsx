@@ -4,53 +4,125 @@ import { CloseIcon, MinusIcon, PlusIcon, PlusStrongIcon } from '../Icons';
 import Button from '../Button/Button';
 import { Link } from 'react-router-dom';
 import config from '../../config/index';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { ICartItem } from '../../models/cart.model';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { clearCart, decreaseCart, increaseCart, removeFromCart, setCart } from '../../features/cartSlice';
+import { selectAuth } from '../../features/authSlice';
+import { useRemoveItemFromCartMutation, useUpdateQuantityCartMutation } from '../../services/cartsApi';
+import { toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 type Props = {
-    hasSale?: boolean,
-    itemInCart?: boolean,
-    checkbox?: boolean,
+    cartItem: ICartItem;
+    isSelected?: boolean;
+    onChangeChecked?: (cartItem: ICartItem) => void;
+    hasSale?: boolean;
+    itemInCart?: boolean;
+    checkbox?: boolean;
 };
-const ItemCart: React.FC<Props> = ({ hasSale, itemInCart, checkbox }) => {
+const ItemCart: React.FC<Props> = ({ cartItem, onChangeChecked = () => { }, isSelected = false, hasSale, itemInCart, checkbox }) => {
+    console.log(cartItem);
+    const dispatch = useAppDispatch()
+    const { user } = useAppSelector(selectAuth)
+    const [removeItemFromCart, { data: dataRemoved, isLoading: isLoadingRemoved, isError: isErrorRemoved, isSuccess: isSuccessRemoved, error: errorRemoved }] = useRemoveItemFromCartMutation()
+    const [updateQuantityCart, { data: dataUpdated, isLoading: isLoadingUpdated, isError: isErrorUpdated, isSuccess: isSuccessUpdated, error: errorUpdated }] = useUpdateQuantityCartMutation()
+    const handleRemoveFromCart = async () => {
+        if (user && cartItem) {
+            await removeItemFromCart(cartItem._id || '')
+        }
+        else {
+            dispatch(removeFromCart(cartItem))
+        }
+    }
+    const handleIncreaseCart = async () => {
+        if (user && cartItem) {
+            await updateQuantityCart({ cartItemId: cartItem._id || '', quantity: cartItem.quantity + 1 })
+        }
+        else {
+            dispatch(increaseCart(cartItem))
+        }
+    }
+    const handleDecreaseCart = async () => {
+        if (user && cartItem) {
+            await updateQuantityCart({ cartItemId: cartItem._id || '', quantity: cartItem.quantity - 1 })
+        }
+        else {
+            dispatch(decreaseCart(cartItem))
+        }
+    }
+    useEffect(() => {
+        if (isSuccessRemoved) {
+            if ((dataRemoved as any)?.message) {
+                dispatch(clearCart())
+                toast.error((dataRemoved as any).message)
+                return
+            }
+            toast.info('Xóa sản phẩm khỏi giỏ hàng thành công !')
+            dataRemoved && dispatch(setCart(dataRemoved))
+        }
+        if (isErrorRemoved) {
+            toast.error((errorRemoved as any).data.message)
+        }
+    }, [isLoadingRemoved])
+    useEffect(() => {
+        if (isSuccessUpdated) {
+            if ((dataUpdated as any)?.message) {
+                dispatch(clearCart())
+                toast.error((dataUpdated as any).message)
+                return
+            }
+            toast.info('Cập nhật số lượng sản phẩm thành công !')
+            dataUpdated && dispatch(setCart(dataUpdated))
+        }
+        if (isErrorUpdated) {
+            toast.error((errorUpdated as any).data.message)
+        }
+    }, [isLoadingUpdated])
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
-                {checkbox && <input type="checkbox" />}
-                <Link to={config.routes.product + '/f82jh2fyi1fiyf2i'} className={cx('image-wrapper')}>
-                    <img
-                        src="https://product.hstatic.net/1000284478/product/01_522151_1_2203dbcb2a6740b3a46926a4714da7e1_large.jpg"
-                        alt=""
-                    />
+                {checkbox && <input type="checkbox" checked={isSelected} onChange={() => onChangeChecked(cartItem)} />}
+                <Link
+                    to={config.routes.product + '/' + cartItem.product.slug}
+                    className={cx('image-wrapper')}
+                >
+                    <img src={process.env.REACT_APP_API_URL + cartItem.image} alt="" />
                 </Link>
                 <div className={cx('text-wrapper')}>
                     <div className={cx('top')}>
                         <Link to={config.routes.trademark} className={cx('brand')}>
-                            puma
+                            {cartItem.product.brand.name}
                         </Link>
-                        <div className={cx('close')}>
+                        <div onClick={handleRemoveFromCart} className={cx('close')}>
                             <CloseIcon />
                         </div>
                     </div>
                     <Link
-                        to={config.routes.product + '/f82jh2fyi1fiyf2i'}
+                        to={config.routes.product + '/' + cartItem.product.slug}
                         className={cx('product-name', checkbox && 'item-cart')}
                     >
-                        PUMA - Áo ba lỗ thể thao nữ Running CLOUDSPUN
+                        {cartItem.product.brand.name} - {cartItem.product.name}
                     </Link>
-                    <div className={cx('product-price', { hasSale })}>
-                        <span className={cx('price')}>1,199,000đ</span>
-                        <del>2,199,000đ</del>
+                    <div className={cx('product-price', { hasSale: cartItem.product.discount > 0 })}>
+                        <span className={cx('price')}>
+                            {(
+                                cartItem.product.price -
+                                cartItem.product.price * (cartItem.product.discount / 100)
+                            ).toLocaleString('vn-VN')}
+                            ₫
+                        </span>
+                        <del>{cartItem.product.price.toLocaleString('vn-VN')}₫</del>
                     </div>
                     <div className={cx('variant-select')}>
                         <div className={cx('product-variant-color')}>
                             <span>Màu sắc:</span>
-                            <span>01</span>
+                            <span>{cartItem.color}</span>
                         </div>
                         <div className={cx('product-variant-size')}>
                             <span>Kích cỡ:</span>
 
                             {checkbox ? (
-                                <div>230</div>
+                                <div>{cartItem.size}</div>
                             ) : (
                                 <select name="" id="">
                                     <option value="S">S</option>
@@ -64,11 +136,11 @@ const ItemCart: React.FC<Props> = ({ hasSale, itemInCart, checkbox }) => {
                     {checkbox ? (
                         <div className={cx('product-quantity')}>
                             <div className={cx('input-number')}>
-                                <div className={cx('btn-quantity')}>
+                                <div onClick={handleDecreaseCart} className={cx('btn-quantity')}>
                                     <MinusIcon />
                                 </div>
-                                <span className={cx('input-quantity')}>3</span>
-                                <div className={cx('btn-quantity')}>
+                                <span className={cx('input-quantity')}>{cartItem.quantity}</span>
+                                <div onClick={handleIncreaseCart} className={cx('btn-quantity')}>
                                     <PlusStrongIcon />
                                 </div>
                             </div>

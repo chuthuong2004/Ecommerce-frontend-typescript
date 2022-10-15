@@ -28,15 +28,19 @@ import { logout, selectAuth } from '../../../features/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useLogoutUserMutation } from '../../../services/authApi';
 import { toast } from 'react-toastify';
+import { useGetMyCartQuery } from '../../../services/cartsApi';
+import { clearCart, selectCart, setCart } from '../../../features/cartSlice';
 const cx = classNames.bind(styles);
 
 function Header() {
     const { user } = useAppSelector(selectAuth)
+    const cart = useAppSelector(selectCart)
     const dispatch = useAppDispatch()
     const [
         logoutUser,
-        { data: logoutData, isLoading, isSuccess: isLogoutSuccess, isError: isLogoutError, error: logoutError },
+        { data: logoutData, isLoading: isLoadingLogout, isSuccess: isLogoutSuccess, isError: isLogoutError, error: logoutError },
     ] = useLogoutUserMutation();
+    const { data: dataCart, isLoading: isLoadingCart, isSuccess: isSuccessCart, isError: isErrorCart, error: errorCart } = useGetMyCartQuery({}, { refetchOnMountOrArgChange: true })
     const [isScrollUp, setIsScrollUp] = useState(false);
     const [isScrollDown, setIsScrollDown] = useState(false);
     const [activeProfile, setActiveProfile] = useState(false);
@@ -71,7 +75,14 @@ function Header() {
         }
         setActiveWishList(false);
     }, [location.pathname]);
-
+    useEffect(() => {
+        if (isSuccessCart) {
+            user && dispatch(setCart(dataCart))
+        }
+        if (isErrorCart) {
+            user && dispatch(clearCart())
+        }
+    }, [isLoadingCart])
     const handleScrollTop = () => {
         document.body.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
@@ -96,6 +107,7 @@ function Header() {
     useEffect(() => {
         if (isLogoutSuccess) {
             dispatch(logout())
+            dispatch(clearCart())
             navigate(config.routes.login)
             toast.success((logoutData as any).message)
         }
@@ -103,8 +115,9 @@ function Header() {
             console.log(logoutError);
             toast.error((logoutError as any).data.message)
         }
-    }, [isLoading])
-    console.log({ logoutData, isLoading, isLogoutSuccess, isLogoutError, logoutError },);
+    }, [isLoadingLogout])
+    // console.log('header:', { cart, isLoading: isLoadingCart, isSuccess, isError, isFetching, error });
+
     return (
         <div ref={headerRef} className={cx('container', isScrollUp && 'sticky', isScrollDown && 'out-top')}>
             {/* banner */}
@@ -245,14 +258,14 @@ function Header() {
                                 <div className={cx('icons', location.pathname === config.routes.cart && 'active')}>
                                     <BagIcon className={cx('icon')} />
                                     <BagActiveIcon className={cx('icon-active')} />
-                                    <span
+                                    {(cart?.cartItems && cart.cartItems.length > 0) && (<span
                                         className={cx(
                                             'quantity-item',
                                             location.pathname === config.routes.cart && 'active',
                                         )}
                                     >
-                                        12
-                                    </span>
+                                        {cart.cartItems.length}
+                                    </span>)}
                                 </div>
                             </Tippy>
                         </Link>

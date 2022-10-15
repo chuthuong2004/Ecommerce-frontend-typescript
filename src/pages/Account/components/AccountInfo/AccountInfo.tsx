@@ -3,7 +3,7 @@ import styles from './AccountInfo.module.scss';
 import classNames from 'classnames/bind';
 import Button from '../../../../components/Button';
 import React from 'react';
-import { IAddress } from '../../../../models/user';
+import { IAddress } from '../../../../models/user.model';
 const cx = classNames.bind(styles);
 type Props = {
     data: IAddress & { email: string },

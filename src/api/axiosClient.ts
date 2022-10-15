@@ -5,37 +5,27 @@ import dayjs from 'dayjs';
 
 const baseURL: string | undefined = process.env.REACT_APP_API_URL + '/api/v1/';
 
-// let authTokens = localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null;
+let token = JSON.parse(localStorage.getItem('token') as any);
 const axiosClient = axios.create({
-    baseURL,
-    headers: {
-        'content-type': 'application/json',
-        // Authorization: `Bearer ${authTokens?.accessToken}`,
-    },
-    paramsSerializer: (params) => queryString.stringify(params),
+  baseURL,
+  headers: {
+    'content-type': 'application/json',
+    Authorization: `Bearer ${token?.accessToken}`,
+  },
+  paramsSerializer: (params) => queryString.stringify(params),
 });
 axiosClient.interceptors.request.use(async (config) => {
-    // if (!authTokens) {
-    //     let authTokens = localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null;
-    //     config.headers.Authorization = `Bearer ${authTokens?.accessToken}`;
-    // }
-    // const user = jwt_decode(authTokens.accessToken);
-    // const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
-    // if (!isExpired) return config;
-    // const response = await axios.post(`${baseURL}/auth/refresh`, {
-    //     refresh: authTokens.refreshToken,
-    // });
-    // localStorage.setItem('authTokens', JSON.stringify(response.data));
-    // config.headers.Authorization = `Bearer ${response.data.accessToken}`;
-    return config;
+  config.headers!.Authorization = `Bearer ${token?.accessToken}`;
+  config.headers!['x-refresh'] = token?.refreshToken;
+  return config;
 });
 axiosClient.interceptors.response.use(
-    async (response) => {
-        if (response && response.data) return response.data;
-        return response;
-    },
-    (error) => {
-        throw error;
-    },
+  async (response) => {
+    if (response && response.data) return response.data;
+    return response;
+  },
+  (error) => {
+    throw error;
+  },
 );
 export default axiosClient;

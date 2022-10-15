@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './RecentlyViewed.module.scss';
 import classNames from 'classnames/bind';
 import { products } from '../../../Collection/dataCollections';
-import { IProduct } from '../../../../models/product';
+import { IProduct } from '../../../../models/product.model';
 import ProductItem from '../../../../components/ProductItem';
 
 

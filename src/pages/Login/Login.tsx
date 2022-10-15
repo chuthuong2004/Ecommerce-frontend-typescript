@@ -8,10 +8,11 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { useLoginUserMutation, useRegisterUserMutation } from '../../services/authApi';
 import { useAppDispatch } from '../../app/hooks';
-import { setUser } from '../../features/authSlice';
+import { setCredentials } from '../../features/authSlice';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useGetMyCartQuery } from '../../services/cartsApi';
 
 const cx = classNames.bind(styles);
 
@@ -95,8 +96,8 @@ const Login = () => {
         if (isLoginSuccess) {
             const { accessToken, refreshToken, ...user } = loginData;
             toast.success('Đăng nhập thành công !');
+            dispatch(setCredentials({ user: user, token: { accessToken, refreshToken } }))
 
-            dispatch(setUser({ user: user, token: { accessToken, refreshToken } }))
             navigate(from.pathname)
         }
 

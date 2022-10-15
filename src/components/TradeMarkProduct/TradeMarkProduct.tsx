@@ -1,7 +1,7 @@
 import styles from './TradeMarkProduct.module.scss';
 import classNames from 'classnames/bind';
 import SlideProduct from '../SlideProduct';
-import { IBrand } from '../../models/brand';
+import { IBrand } from '../../models/brand.model';
 const cx = classNames.bind(styles);
 type Props = {
     trademarkProduct: IBrand;

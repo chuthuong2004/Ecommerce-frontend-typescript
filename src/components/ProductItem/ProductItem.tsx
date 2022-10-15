@@ -1,16 +1,26 @@
 import styles from './ProductItem.module.scss';
 import classNames from 'classnames/bind';
-import { useState, memo } from 'react';
-import { Link } from 'react-router-dom';
-import { IColor, IProduct } from '../../models/product';
+import { useState, memo, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { IColor, IProduct } from '../../models/product.model';
 import config from '../../config';
 import { HeartActiveIcon, HeartIcon } from '../Icons';
+import productApi from '../../api/productApi';
+import { toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { selectAuth, setCredentials } from './../../features/authSlice';
+import { useGetMyProfileQuery } from '../../services/authApi';
 const cx = classNames.bind(styles);
 type Props = {
     product: IProduct
 }
 const ProductItem: React.FC<Props> = ({ product }) => {
-    const [isLiked, setIsLiked] = useState<boolean>(false);
+
+    const location = useLocation();
+    const { user, token } = useAppSelector(selectAuth);
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch()
+    const [isLiked, setIsLiked] = useState<boolean>(user ? product.favorites.includes(user._id) : false);
     const [isCached, setIsCached] = useState<boolean>(false);
     const [defaultImages, setDefaultImages] = useState<IColor>(product.colors[0]);
     const [colorActive, setColorActive] = useState<IColor>(product.colors[0]);
@@ -21,7 +31,41 @@ const ProductItem: React.FC<Props> = ({ product }) => {
         const prevImageDefault: IColor | undefined = product.colors.find((color: IColor) => color._id === colorActive._id);
         action === 'mouseover' ? setDefaultImages(color) : setDefaultImages((prev: IColor) => (prevImageDefault ? prevImageDefault : prev));
     };
-
+    // const { data, isLoading, isError, isFetching, error, isSuccess } = useGetMyProfileQuery({}, { refetchOnMountOrArgChange: true });
+    // useEffect(() => {
+    //     isSuccess && dispatch(setCredentials({ user: data, token: token }))
+    // }, [isLoading])
+    const handleFavorite = () => {
+        if (!user) navigate(config.routes.login, { state: { from: location } });
+        else {
+            const addFavoriteHandler = async () => {
+                try {
+                    const res = await productApi.addFavorite(product ? product._id : '');
+                    console.log(res);
+                    setIsLiked(true)
+                    toast.success(res.message);
+                } catch (error) {
+                    console.log(error);
+                }
+            };
+            const removeFavoriteHandler = async () => {
+                try {
+                    const res = await productApi.removeFavorite(product ? product._id : '');
+                    console.log(res);
+                    setIsLiked(false)
+                    toast.success(res.message);
+                } catch (error: any) {
+                    toast.error(error.data.message);
+                }
+            };
+            if (product?.favorites.includes(user?._id || '')) {
+                // remove
+                removeFavoriteHandler();
+            } else {
+                addFavoriteHandler();
+            }
+        };
+    }
     return (
         <div className={cx('container')}>
             <div className={cx('wrapper')}>
@@ -41,7 +85,7 @@ const ProductItem: React.FC<Props> = ({ product }) => {
                         />
                     </Link>
                     {product?.discount > 0 && <div className={cx('discount')}>-{product.discount}%</div>}
-                    <div onClick={() => setIsLiked(!isLiked)} className={cx('wishlist', isLiked && 'active')}>
+                    <div onClick={handleFavorite} className={cx('wishlist', isLiked && 'active')}>
                         <HeartIcon className={cx('heart')} stroke="#ffffff" />
                         <HeartActiveIcon className={cx('heart-active')} />
                     </div>

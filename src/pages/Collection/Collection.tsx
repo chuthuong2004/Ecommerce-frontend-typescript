@@ -7,27 +7,11 @@ import { products } from './dataCollections';
 import ProductItem from '../../components/ProductItem';
 import { useEffect, useState } from 'react';
 import productApi from '../../api/productApi';
-import { EGenderType, IProduct } from '../../models/product';
+import { EGenderType, ESort, IActionFilter, IProduct } from '../../models/product.model';
 const cx = classNames.bind(styles);
-enum ESort {
-    MOST_POPULAR = '-likeCount',
-    LATEST = '-createdAt',
-    BEST_SELLER = '-quantitySold',
-    PRICE_INCREASE = 'price',
-    PRICE_DECREASE = '-price'
-}
-interface IFilter {
-    gender?: string;
-    brand?: string;
-    category?: string;
-    color?: string;
-    size?: string;
-    price?: number;
-}
-interface IActionFilter {
-    sort?: string;
-    filter?: IFilter;
-}
+
+
+
 let scrollTop = 0;
 const Collection = () => {
     let { slugCollection } = useParams();

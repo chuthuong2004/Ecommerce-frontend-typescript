@@ -13,7 +13,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <div>
-        <ToastContainer />
+        <ToastContainer autoClose={3000} />
 
         <Routes>
           {publicRoutes.map((route, index) => {
@@ -24,20 +24,28 @@ const App: React.FC = () => {
             } else if (route.layout === null) {
               Layout = Fragment;
             }
+            let PrivateRoute = ({ children }: { children: any }) => {
+              return children;
+            }
+            if (route.private) {
+              PrivateRoute = RequireAuth
+            }
             return (
               <Route
                 key={index}
                 path={route.path}
                 element={
-                  <Layout>
-                    <Page />
-                  </Layout>
+                  <PrivateRoute>
+                    <Layout>
+                      <Page />
+                    </Layout>
+                  </PrivateRoute>
                 }
               />
             );
           })}
         </Routes>
-        <Routes>
+        {/* <Routes>
           {privateRoutes.map((route, i) => {
             const Page = route.component
             let Layout = DefaultLayout
@@ -62,12 +70,12 @@ const App: React.FC = () => {
             )
 
           })}
-        </Routes>
+        </Routes> */}
       </div>
     </Router>
   );
 }
-function RequireAuth({ children }: { children: JSX.Element }) {
+function RequireAuth({ children }: { children: any }): JSX.Element {
   const { user } = useAppSelector(selectAuth)
   let location = useLocation();
   console.log('12312312312313123', location);

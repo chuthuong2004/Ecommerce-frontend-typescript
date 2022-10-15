@@ -1,4 +1,4 @@
-import { IAddress, IUser } from './user';
+import { IAddress, IUser } from './user.model';
 
 export interface IOrderItem {
   product: string;

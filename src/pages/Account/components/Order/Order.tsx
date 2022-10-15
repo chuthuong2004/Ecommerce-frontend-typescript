@@ -12,7 +12,7 @@ import { useState } from 'react';
 import OrderDetail from './OrderDetail';
 import { dataOrder } from '../../../../assets/dataOrder';
 import { ITabContent } from '../../../../components/TabContent/TabContent';
-import { EOrderStatus, IOrder } from '../../../../models/order';
+import { EOrderStatus, IOrder } from '../../../../models/order.model';
 const cx = classNames.bind(styles);
 
 const processing = dataOrder.filter((order) => order.orderStatus === EOrderStatus.Processing);

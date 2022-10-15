@@ -6,6 +6,9 @@ import Button from '../Button';
 import { CloseIcon, HeartFragileIcon } from '../Icons';
 import RecommendedProduct from '../RecommendedProduct';
 import EmptyContent from '../EmptyContent';
+import { selectAuth } from '../../features/authSlice';
+import { useAppSelector } from '../../app/hooks';
+import { IFavorite } from '../../models/user.model';
 const cx = classNames.bind(styles);
 
 type Props = {
@@ -15,6 +18,7 @@ type Props = {
 const PopUp: React.FC<Props> = ({ activeWishList, handleClosePopUp }) => {
     const wishlists: string[] = [];
     const modalRef = useRef<HTMLDivElement>(null);
+    const { user } = useAppSelector(selectAuth)
     useEffect(() => {
         if (!activeWishList) {
             const timeout = setTimeout(() => {
@@ -44,10 +48,13 @@ const PopUp: React.FC<Props> = ({ activeWishList, handleClosePopUp }) => {
                         </div>
                         <h3 className={cx('title')}>Yêu thích</h3>
                         <div className={cx('content')}>
-                            <ItemCart hasSale itemInCart />
+                            {/* {user?.favorites?.length> 0 && user?.favorites?.map((favorite: IFavorite) =>(
+                                <ItemCart cartItem={favorite} hasSale itemInCart />
+
+                            ))}
                             <ItemCart itemInCart />
                             <ItemCart hasSale />
-                            <ItemCart />
+                            <ItemCart /> */}
                         </div>
                         <div className={cx('wishlist-actions')}>
                             <Button primary children="Chuyển tất cả vào giỏ hàng" />

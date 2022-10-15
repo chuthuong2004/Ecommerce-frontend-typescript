@@ -1,4 +1,4 @@
-import { IColor, IProduct } from './product';
+import { IColor, IProduct } from './product.model';
 
 export interface IToken {
   accessToken: string;
@@ -29,7 +29,7 @@ export interface IUser {
   dateOfBirth?: string;
   orders?: string[];
   reviews?: string[];
-  favorites?: string[];
+  favorites?: IFavorite[];
   addresses?: IAddressUser[];
   cart?: string;
   __v?: number;

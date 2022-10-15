@@ -7,7 +7,7 @@ import { useState } from 'react';
 import './ProductSlider.scss';
 import styles from './SlideProduct.module.scss';
 import classNames from 'classnames/bind';
-import { IProduct } from '../../models/product';
+import { IProduct } from '../../models/product.model';
 import { NextArrowIcon, PrevArrowIcon } from '../Icons';
 import ProductItem from '../ProductItem';
 import Button from '../Button';
