@@ -61,6 +61,7 @@ export const cartsApi = createApi({
           body: { quantity },
         };
       },
+      invalidatesTags: ['Cart', 'User'],
     }),
   }),
 });

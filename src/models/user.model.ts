@@ -5,11 +5,12 @@ export interface IToken {
   refreshToken: string;
 }
 export interface IFavorite {
-  product: IProduct['_id'];
+  product: IProduct;
   size: string | number;
   color: string;
   colorId: IColor['_id'];
   quantity: number;
+  _id: string;
 }
 enum EGender {
   Male = 'Nam',

@@ -54,12 +54,12 @@ const Account = () => {
                     <div className={cx('col-3')}>
                         <div className={cx('account-avatar')}>
                             <div className={cx('avatar')}>
-                                <span className={cx('avatar-name')}>{defaultAddress?.firstName[0]}</span>
+                                <span className={cx('avatar-name')}>{defaultAddress?.firstName ? defaultAddress?.firstName[0] : user?.username[0]}</span>
                                 {user?.avatar && <img className={cx('img')} src={user.avatar} alt="" />}
                             </div>
                             <div
                                 className={cx('name')}
-                            >{`Xin chào, ${defaultAddress?.firstName && defaultAddress?.lastName ? defaultAddress.firstName + ' ' + defaultAddress.lastName : 'bạn'}`}</div>
+                            >{`Xin chào, ${defaultAddress?.firstName && defaultAddress?.lastName ? defaultAddress.firstName + ' ' + defaultAddress.lastName : user?.username}`}</div>
                         </div>
                         <div className={cx('sidebar__list')}>
                             {sidebars.map((sidebar, index) => (

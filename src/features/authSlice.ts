@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { IToken, IUser } from '../models/user.model';
+import { clearCart } from './cartSlice';
 
 export interface AuthState {
   user: IUser | null;
@@ -15,9 +16,18 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action: PayloadAction<AuthState>) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      localStorage.setItem('token', JSON.stringify(action.payload.token));
+      if (action.payload.user) {
+        state.user = action.payload.user;
+      }
+      if (action.payload.token) {
+        state.token = action.payload.token;
+        localStorage.setItem('token', JSON.stringify(action.payload.token));
+      }
+      if (!state.token) {
+        state.user = null;
+        logout();
+        clearCart();
+      }
     },
     logout: (state) => {
       state.user = null;

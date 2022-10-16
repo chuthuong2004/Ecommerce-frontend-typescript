@@ -27,8 +27,9 @@ import { addToCart, setCart } from '../../features/cartSlice';
 import { toast } from 'react-toastify';
 import NextArrow from '../../components/NextArrow';
 import PrevArrow from '../../components/PrevArrow';
-import { selectAuth } from '../../features/authSlice';
+import { selectAuth, setCredentials } from '../../features/authSlice';
 import { useAddItemToCartMutation } from '../../services/cartsApi';
+import { useGetMyProfileQuery } from '../../services/authApi';
 const cx = classNames.bind(styles);
 
 const Product = () => {
@@ -38,12 +39,10 @@ const Product = () => {
     const { user } = useAppSelector(selectAuth);
     const navigate = useNavigate();
     const [addItemToCart, { data: dataCart, isLoading: isLoadingCart, isSuccess: isSuccessCart, isError: isErrorCart, error: errorCart },] = useAddItemToCartMutation()
-    const [defaultColor, setDefaultColor] = useState<IColor | undefined>(
-        location.state?.colorSelected || undefined,
-    );
-    const [defaultSize, setDefaultSize] = useState<ISize | undefined>(
-        location.state?.colorSelected.sizes[0] || undefined,
-    );
+    const { data: dataProfile, refetch, isLoading: isLoadingProfile, isSuccess: isSuccessProfile, isFetching, isError: isErrorProfile, error: errorProfile } = useGetMyProfileQuery({})
+
+    const [defaultColor, setDefaultColor] = useState<IColor | undefined>(undefined);
+    const [defaultSize, setDefaultSize] = useState<ISize | undefined>(undefined,);
     const [isFavorited, setIsFavorited] = useState<boolean>(false);
     let settings = {
         dots: false,
@@ -95,31 +94,30 @@ const Product = () => {
                 setLoading(true);
                 const res = await productApi.getBySlug(slug);
                 if (res) {
+                    console.log(res);
                     setProduct(res);
-                    if (!defaultColor) {
-                        setDefaultColor(res.colors[0]);
-                        setDefaultSize(res.colors[0].sizes[0]);
-                    }
+                    setDefaultColor(location.state?.colorSelected || res.colors[0]);
+                    setDefaultSize(location.state?.colorSelected.sizes[0] || res.colors[0].sizes[0]);
+                    setIsFavorited(res.favorites.includes(user?._id || ''))
                     setLoading(false);
                 }
             } catch (error) {
                 console.log(error);
             }
         };
-
-        setDefaultColor(location.state?.colorSelected || undefined);
-        setDefaultSize(location.state?.colorSelected.sizes[0] || undefined);
         fetchProduct();
-    }, [slug, isFavorited]);
+    }, [slug]);
     useEffect(() => {
         if (user && product) {
-            setIsFavorited(product.favorites.includes(user._id));
+            // refetch profile để update state cho user
+            refetch()
         }
-    }, [product, user]);
+    }, [product]);
     useEffect(() => {
         if (isSuccessCart) {
             if (dataCart?.data) {
                 dispatch(setCart(dataCart.data))
+                refetch()
                 toast.success(dataCart?.message)
             }
         }
@@ -155,7 +153,16 @@ const Product = () => {
                 try {
                     const res = await productApi.addFavorite(product ? product._id : '');
                     console.log(res);
-                    setProduct(res.data);
+                    setProduct((prev: IProduct | null) => {
+                        if (!prev) {
+                            return res.data
+                        }
+                        return {
+                            ...prev,
+                            favorites: res.data.favorites
+                        }
+                    });
+                    setIsFavorited(res.data.favorites.includes(user._id));
                     toast.success(res.message);
                 } catch (error) {
                     console.log(error);
@@ -165,8 +172,17 @@ const Product = () => {
                 try {
                     const res = await productApi.removeFavorite(product ? product._id : '');
                     console.log(res);
-                    setProduct(res.data);
-                    toast.success(res.message);
+                    setProduct((prev: IProduct | null) => {
+                        if (!prev) {
+                            return res.data
+                        }
+                        return {
+                            ...prev,
+                            favorites: res.data.favorites
+                        }
+                    });
+                    setIsFavorited(res.data.favorites.includes(user._id));
+                    toast.error(res.message);
                 } catch (error: any) {
                     toast.error(error.data.message);
                 }
@@ -179,8 +195,16 @@ const Product = () => {
             }
         }
     };
-    console.log({ data: dataCart, isLoading: isLoadingCart, isSuccess: isSuccessCart, isError: isErrorCart, error: errorCart },);
+    useEffect(() => {
+        if (isSuccessProfile) {
+            dispatch(setCredentials({ user: dataProfile, token: null }));
+            console.log('đã set');
 
+        }
+        if (isErrorProfile) {
+            console.log(errorProfile);
+        }
+    }, [isFetching])
     return (
         <div className={cx('wrapper')}>
             {loading ? (

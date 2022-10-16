@@ -24,23 +24,42 @@ import MenuSub from './MenuSub';
 import Search from './Search';
 import { headerLinks } from '../../../assets/headerLinks';
 import { SideBarItem, sidebars } from '../../../assets/sidebars';
-import { logout, selectAuth } from '../../../features/authSlice';
+import { logout, selectAuth, setCredentials } from '../../../features/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { useLogoutUserMutation } from '../../../services/authApi';
+import { useGetMyProfileQuery, useLogoutUserMutation } from '../../../services/authApi';
 import { toast } from 'react-toastify';
-import { useGetMyCartQuery } from '../../../services/cartsApi';
 import { clearCart, selectCart, setCart } from '../../../features/cartSlice';
+import { useGetMyCartQuery } from '../../../services/cartsApi';
 const cx = classNames.bind(styles);
 
 function Header() {
-    const { user } = useAppSelector(selectAuth)
-    const cart = useAppSelector(selectCart)
-    const dispatch = useAppDispatch()
+    const { user } = useAppSelector(selectAuth);
+    let cart = useAppSelector(selectCart);
+    const dispatch = useAppDispatch();
     const [
         logoutUser,
-        { data: logoutData, isLoading: isLoadingLogout, isSuccess: isLogoutSuccess, isError: isLogoutError, error: logoutError },
+        {
+            data: logoutData,
+            isLoading: isLoadingLogout,
+            isSuccess: isLogoutSuccess,
+            isError: isLogoutError,
+            error: logoutError,
+        },
     ] = useLogoutUserMutation();
-    const { data: dataCart, isLoading: isLoadingCart, isSuccess: isSuccessCart, isError: isErrorCart, error: errorCart } = useGetMyCartQuery({}, { refetchOnMountOrArgChange: true })
+    const {
+        data: dataProfile,
+        isLoading: isLoadingProfile,
+        isSuccess: isSuccessProfile,
+        isError: isErrorProfile,
+        error: errorProfile,
+    } = useGetMyProfileQuery({}, { refetchOnMountOrArgChange: true });
+    const {
+        data: dataCart,
+        isLoading: isLoadingCart,
+        isSuccess: isSuccessCart,
+        isError: isErrorCart,
+        error: errorCart,
+    } = useGetMyCartQuery({}, { refetchOnMountOrArgChange: true });
     const [isScrollUp, setIsScrollUp] = useState(false);
     const [isScrollDown, setIsScrollDown] = useState(false);
     const [activeProfile, setActiveProfile] = useState(false);
@@ -52,18 +71,21 @@ function Header() {
 
     const location = useLocation();
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     useEffect(() => {
         const onScroll: EventListener = (e: any) => {
+            setActiveWishList(false);
             setCurrentPageYOffset(e.target?.documentElement.scrollTop);
             setIsScrollUp(
-                e.target?.documentElement.scrollTop >= currentPageYOffset || e.target?.documentElement.scrollTop < 97
+                e.target?.documentElement.scrollTop >= currentPageYOffset ||
+                    e.target?.documentElement.scrollTop < 97
                     ? false
                     : true,
             );
             setIsScrollDown(e.target?.documentElement.scrollTop < currentPageYOffset ? false : true);
-            e.target?.documentElement.scrollTop < 97 && headerRef.current?.classList.remove(cx('out-top'));
+            e.target?.documentElement.scrollTop < 97 &&
+                headerRef.current?.classList.remove(cx('out-top'));
         };
         window.addEventListener('scroll', onScroll);
         return () => window.removeEventListener('scroll', onScroll);
@@ -75,14 +97,7 @@ function Header() {
         }
         setActiveWishList(false);
     }, [location.pathname]);
-    useEffect(() => {
-        if (isSuccessCart) {
-            user && dispatch(setCart(dataCart))
-        }
-        if (isErrorCart) {
-            user && dispatch(clearCart())
-        }
-    }, [isLoadingCart])
+
     const handleScrollTop = () => {
         document.body.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
@@ -92,34 +107,57 @@ function Header() {
             setActiveProfile(!activeProfile);
             setActiveWishList(false);
         } else if (direction === 'wishlist') {
-            if (!user) navigate(config.routes.login, { state: { from: location } })
+            if (!user) navigate(config.routes.login, { state: { from: location } });
             setActiveWishList(!activeWishList);
             setActiveProfile(false);
         }
     };
 
     const handleLogout = async (sidebar: SideBarItem) => {
-        setActiveProfile(false)
+        setActiveProfile(false);
         if (sidebar.to === '#') {
-            await logoutUser({})
+            await logoutUser({});
         }
-    }
+    };
     useEffect(() => {
         if (isLogoutSuccess) {
-            dispatch(logout())
-            dispatch(clearCart())
-            navigate(config.routes.login)
-            toast.success((logoutData as any).message)
+            dispatch(logout());
+            dispatch(clearCart());
+            navigate(config.routes.login);
+            toast.success((logoutData as any).message);
         }
         if (isLogoutError) {
             console.log(logoutError);
-            toast.error((logoutError as any).data.message)
+            toast.error((logoutError as any).data.message);
         }
-    }, [isLoadingLogout])
-    // console.log('header:', { cart, isLoading: isLoadingCart, isSuccess, isError, isFetching, error });
+    }, [isLoadingLogout]);
+    useEffect(() => {
+        if (isSuccessProfile) {
+            dispatch(setCredentials({ user: dataProfile, token: null }));
+        }
+        if (isErrorProfile) {
+            console.log(errorProfile);
+        }
+    }, [isLoadingProfile]);
+    useEffect(() => {
+        if (isSuccessCart) {
+            dispatch(setCart(dataCart));
+        }
+        if (isErrorCart) {
+            if (user) {
+                dispatch(clearCart());
+            }
+            console.log(errorCart);
+        }
+    }, [isLoadingCart]);
+    console.log('cart', cart);
+    console.log('datacart', dataCart);
 
     return (
-        <div ref={headerRef} className={cx('container', isScrollUp && 'sticky', isScrollDown && 'out-top')}>
+        <div
+            ref={headerRef}
+            className={cx('container', isScrollUp && 'sticky', isScrollDown && 'out-top')}
+        >
             {/* banner */}
             <img
                 className={cx('img-banner')}
@@ -243,9 +281,17 @@ function Header() {
                                     <HeartActiveIcon className={cx('icon-active')} />
                                 </div>
                             </Tippy>
-                            <PopUp activeWishList={activeWishList} handleClosePopUp={() => setActiveWishList(false)} />
+                            <PopUp
+                                activeWishList={activeWishList}
+                                handleClosePopUp={() => setActiveWishList(false)}
+                                handleOpenPopUp={() => setActiveWishList(true)}
+                            />
                         </div>
-                        <Link onClick={() => handleClickActive('cart')} to={config.routes.cart} className={cx('cart')}>
+                        <Link
+                            onClick={() => handleClickActive('cart')}
+                            to={config.routes.cart}
+                            className={cx('cart')}
+                        >
                             <Tippy
                                 placement="bottom"
                                 delay={100}
@@ -258,14 +304,16 @@ function Header() {
                                 <div className={cx('icons', location.pathname === config.routes.cart && 'active')}>
                                     <BagIcon className={cx('icon')} />
                                     <BagActiveIcon className={cx('icon-active')} />
-                                    {(cart?.cartItems && cart.cartItems.length > 0) && (<span
-                                        className={cx(
-                                            'quantity-item',
-                                            location.pathname === config.routes.cart && 'active',
-                                        )}
-                                    >
-                                        {cart.cartItems.length}
-                                    </span>)}
+                                    {cart?.cartItems && cart.cartItems.length > 0 && (
+                                        <span
+                                            className={cx(
+                                                'quantity-item',
+                                                location.pathname === config.routes.cart && 'active',
+                                            )}
+                                        >
+                                            {cart.cartItems.length}
+                                        </span>
+                                    )}
                                 </div>
                             </Tippy>
                         </Link>

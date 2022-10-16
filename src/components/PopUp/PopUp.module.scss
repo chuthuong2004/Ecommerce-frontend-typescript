@@ -1,95 +1,95 @@
 :root {
-    --right-width: 7rem;
-    --top-width: 3rem;
-    --width-content-modal: 56rem;
-    --top-height-modal: 8rem;
+  --right-width: 7rem;
+  --top-width: 3rem;
+  --width-content-modal: 56rem;
+  --top-height-modal: 8rem;
 }
 .modal,
 .overlay {
-    width: 100vw;
-    top: var(--default-layout-header-height);
-    left: 0;
-    right: 0;
-    bottom: 0;
-    position: fixed;
-    z-index: 9;
-    transition: all 1s ease-in-out;
+  width: 100vw;
+  top: var(--default-layout-header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  z-index: 9;
+  transition: all 0.6s ease-in-out;
 }
 .modal.no-active {
-    opacity: 0;
+  opacity: 0;
 }
 .modal.active {
-    opacity: 1;
-    display: block;
+  opacity: 1;
+  display: block;
 }
 @keyframes fade {
-    to {
-        opacity: 0;
-    }
+  to {
+    opacity: 0;
+  }
 }
 .overlay {
-    background-color: rgba(49, 49, 49, 0.8);
+  background-color: rgba(49, 49, 49, 0.8);
 }
 .modal-content {
-    position: fixed;
-    top: var(--default-layout-header-height);
-    right: 0;
-    bottom: 0;
-    transform: translateY(-50%, -50%);
-    line-height: 1.4;
-    background-color: #fff;
-    padding: var(--top-width) var(--right-width);
-    border-radius: 3px;
-    width: var(--width-content-modal);
-    z-index: 9999;
-    display: flex;
+  position: fixed;
+  top: var(--default-layout-header-height);
+  right: 0;
+  bottom: 0;
+  transform: translateY(-50%, -50%);
+  line-height: 1.4;
+  background-color: #fff;
+  padding: var(--top-width) var(--right-width);
+  border-radius: 3px;
+  width: var(--width-content-modal);
+  z-index: 9999;
+  display: flex;
+  overflow-y: scroll;
+  flex-direction: column;
+  transition: all 0.6s ease-in-out;
+  animation: fadeIn 0.6s ease-in-out;
+  &.empty {
+    overflow-y: none;
+    background-color: red;
+  }
+  &.no-active {
+    animation: fadeOut 0.6s ease-in-out;
+  }
+  .title {
+    margin-bottom: 1rem;
+  }
+  .close {
+    position: absolute;
+    top: var(--top-width);
+    right: var(--right-width);
+    cursor: pointer;
+  }
+  .content {
+    height: calc(100% - var(--top-height-modal));
     overflow-y: scroll;
-    flex-direction: column;
-    transition: all 1s ease-in-out;
-    animation: fadeIn 1s ease-in-out;
-    &.empty {
-        overflow-y: none;
-        background-color: red;
-    }
-    &.no-active {
-        animation: fadeOut 1s ease-in-out;
-    }
-    .title {
-        margin-bottom: 1rem;
-    }
-    .close {
-        position: absolute;
-        top: var(--top-width);
-        right: var(--right-width);
-        cursor: pointer;
-    }
-    .content {
-        height: calc(100% - var(--top-height-modal));
-        overflow-y: scroll;
-    }
-    .wishlist-actions {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: var(--top-width) var(--right-width);
-    }
+  }
+  .wishlist-actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: var(--top-width) var(--right-width);
+  }
 }
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateX(40rem);
-    }
-    to {
-        opacity: 1;
-    }
+  from {
+    opacity: 0;
+    transform: translateX(40rem);
+  }
+  to {
+    opacity: 1;
+  }
 }
 @keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-    to {
-        transform: translateX(40rem);
-        opacity: 0;
-    }
+  from {
+    opacity: 1;
+  }
+  to {
+    transform: translateX(40rem);
+    opacity: 0;
+  }
 }

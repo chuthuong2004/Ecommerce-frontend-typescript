@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../app/store';
+import { IUser } from '../models/user.model';
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
@@ -17,7 +18,7 @@ export const authApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['User', 'Product'],
+  tagTypes: ['User', 'Product', 'Cart'],
   endpoints: (builder) => ({
     loginUser: builder.mutation({
       query: (body: { email: string; password: string }) => {
@@ -47,13 +48,13 @@ export const authApi = createApi({
         };
       },
     }),
-    getMyProfile: builder.query({
+    getMyProfile: builder.query<IUser, {}>({
       query: () => {
         return {
           url: '/me',
         };
       },
-      providesTags: ['User', 'Product'],
+      providesTags: ['User', 'Product', 'Cart'],
     }),
   }),
 });

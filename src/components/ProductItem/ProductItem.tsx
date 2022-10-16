@@ -20,6 +20,7 @@ const ProductItem: React.FC<Props> = ({ product }) => {
     const { user, token } = useAppSelector(selectAuth);
     const navigate = useNavigate();
     const dispatch = useAppDispatch()
+    const [currentProduct, setCurrentProduct] = useState<IProduct>(product)
     const [isLiked, setIsLiked] = useState<boolean>(user ? product.favorites.includes(user._id) : false);
     const [isCached, setIsCached] = useState<boolean>(false);
     const [defaultImages, setDefaultImages] = useState<IColor>(product.colors[0]);
@@ -28,37 +29,40 @@ const ProductItem: React.FC<Props> = ({ product }) => {
         direction === 'mouseover' ? setIsCached(true) : setIsCached(false);
     };
     const handleMouseColor = (color: IColor, action: string) => {
-        const prevImageDefault: IColor | undefined = product.colors.find((color: IColor) => color._id === colorActive._id);
+        const prevImageDefault: IColor | undefined = currentProduct.colors.find((color: IColor) => color._id === colorActive._id);
         action === 'mouseover' ? setDefaultImages(color) : setDefaultImages((prev: IColor) => (prevImageDefault ? prevImageDefault : prev));
     };
-    // const { data, isLoading, isError, isFetching, error, isSuccess } = useGetMyProfileQuery({}, { refetchOnMountOrArgChange: true });
-    // useEffect(() => {
-    //     isSuccess && dispatch(setCredentials({ user: data, token: token }))
-    // }, [isLoading])
+    const { data: dataProfile, refetch, isLoading: isLoadingProfile, isSuccess: isSuccessProfile, isFetching, isError: isErrorProfile, error: errorProfile } = useGetMyProfileQuery({})
+
     const handleFavorite = () => {
         if (!user) navigate(config.routes.login, { state: { from: location } });
         else {
             const addFavoriteHandler = async () => {
                 try {
-                    const res = await productApi.addFavorite(product ? product._id : '');
-                    console.log(res);
+                    const res = await productApi.addFavorite(currentProduct ? currentProduct._id : '');
+
+                    refetch()
+                    setCurrentProduct((prev: IProduct) => {
+                        return { ...prev, favorites: res.data.favorites }
+                    })
                     setIsLiked(true)
-                    toast.success(res.message);
                 } catch (error) {
                     console.log(error);
                 }
             };
             const removeFavoriteHandler = async () => {
                 try {
-                    const res = await productApi.removeFavorite(product ? product._id : '');
-                    console.log(res);
+                    const res = await productApi.removeFavorite(currentProduct ? currentProduct._id : '');
+                    refetch()
                     setIsLiked(false)
-                    toast.success(res.message);
+                    setCurrentProduct((prev: IProduct) => {
+                        return { ...prev, favorites: res.data.favorites }
+                    })
                 } catch (error: any) {
                     toast.error(error.data.message);
                 }
             };
-            if (product?.favorites.includes(user?._id || '')) {
+            if (currentProduct?.favorites.includes(user?._id || '')) {
                 // remove
                 removeFavoriteHandler();
             } else {
@@ -66,6 +70,15 @@ const ProductItem: React.FC<Props> = ({ product }) => {
             }
         };
     }
+    useEffect(() => {
+        if (isSuccessProfile) {
+            dispatch(setCredentials({ user: dataProfile, token: null }));
+            console.log('đã set');
+        }
+        if (isErrorProfile) {
+            console.log(errorProfile);
+        }
+    }, [isFetching])
     return (
         <div className={cx('container')}>
             <div className={cx('wrapper')}>
@@ -74,7 +87,7 @@ const ProductItem: React.FC<Props> = ({ product }) => {
                         className={cx('img-link')}
                         onMouseOver={() => handleOnMouse('mouseover')}
                         onMouseOut={() => handleOnMouse('mouseout')}
-                        to={config.routes.product + '/' + product.slug}
+                        to={config.routes.product + '/' + currentProduct.slug}
                         state={{ colorSelected: colorActive }}
                     >
                         <img src={process.env.REACT_APP_API_URL + defaultImages?.images[0]} alt="" />
@@ -84,7 +97,7 @@ const ProductItem: React.FC<Props> = ({ product }) => {
                             className={cx('lazyloaded', isCached && 'is-cached')}
                         />
                     </Link>
-                    {product?.discount > 0 && <div className={cx('discount')}>-{product.discount}%</div>}
+                    {currentProduct?.discount > 0 && <div className={cx('discount')}>-{currentProduct.discount}%</div>}
                     <div onClick={handleFavorite} className={cx('wishlist', isLiked && 'active')}>
                         <HeartIcon className={cx('heart')} stroke="#ffffff" />
                         <HeartActiveIcon className={cx('heart-active')} />
@@ -97,7 +110,7 @@ const ProductItem: React.FC<Props> = ({ product }) => {
                         />
                     </div>
                     <div className={cx('outer-product-color')}>
-                        {product.colors.map((color) => (
+                        {currentProduct.colors.map((color) => (
                             <div
                                 onMouseOver={() => handleMouseColor(color, 'mouseover')}
                                 onMouseOut={() => handleMouseColor(color, 'mouseout')}
@@ -111,20 +124,20 @@ const ProductItem: React.FC<Props> = ({ product }) => {
                     </div>
                 </div>
                 <div className={cx('product-loop-info')}>
-                    <Link to={config.routes.product + '/' + product.slug}
+                    <Link to={config.routes.product + '/' + currentProduct.slug}
                         state={{ colorSelected: colorActive }}>
-                        <h3 className={cx('trademark-name')}>{product.brand?.name}</h3>
-                        <p className={cx('product-name')}>{product.name}</p>
+                        <h3 className={cx('trademark-name')}>{currentProduct.brand?.name}</h3>
+                        <p className={cx('product-name')}>{currentProduct.name}</p>
                     </Link>
-                    <span className={cx('quantity-color')}>{product.colors.length} màu</span>
+                    <span className={cx('quantity-color')}>{currentProduct.colors.length} màu</span>
                     <div className={cx('product-price')}>
-                        <span className={cx('price', product.discount > 0 && 'hasSale')}>
-                            {(product.price - product.price * (product.discount / 100)).toLocaleString('vn-VN')}
+                        <span className={cx('price', currentProduct.discount > 0 && 'hasSale')}>
+                            {(currentProduct.price - currentProduct.price * (currentProduct.discount / 100)).toLocaleString('vn-VN')}
                             <span className={cx('td-underline')}>đ</span>
                         </span>
-                        {product?.discount > 0 && (
+                        {currentProduct?.discount > 0 && (
                             <del>
-                                {product.price.toLocaleString('vn-VN')}
+                                {currentProduct.price.toLocaleString('vn-VN')}
                                 <span className={cx('td-underline')}>đ</span>
                             </del>
                         )}

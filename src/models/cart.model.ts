@@ -17,3 +17,9 @@ export interface ICartItem {
   image: string;
   _id?: string;
 }
+export enum EActionCart {
+  ADD = 'add',
+  REMOVE = 'remove',
+  INCREASE = 'increase',
+  DECREASE = 'decrease',
+}
