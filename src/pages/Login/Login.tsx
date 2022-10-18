@@ -7,12 +7,14 @@ import { useState, useEffect, useCallback, FocusEvent } from 'react';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { useLoginUserMutation, useRegisterUserMutation } from '../../services/authApi';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setCredentials } from '../../features/authSlice';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useGetMyCartQuery } from '../../services/cartsApi';
+import { useAddItemToCartMutation, useGetMyCartQuery } from '../../services/cartsApi';
+import { clearCart, selectCart, setCart } from '../../features/cartSlice';
+import { ICartItem } from '../../models/cart.model';
 
 const cx = classNames.bind(styles);
 
@@ -29,20 +31,46 @@ const initialState: InputAuth = {
 const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const cart = useAppSelector(selectCart);
+
+    const dispatch = useAppDispatch();
     const { from } = location.state || { from: { pathname: '/' } };
     const [formValue, setFormValue] = useState(initialState);
     const [activeSignup, setActiveSignup] = useState(false);
     const [errorInput, setErrorInput] = useState<InputAuth>(initialState);
     const [openForgotPassword, setOpenForgotPassword] = useState(false);
+    const [cartItems, setCartItems] = useState(cart?.cartItems);
     const [
         loginUser,
-        { data: loginData, isLoading: isLoadingLogin, isSuccess: isLoginSuccess, isError: isLoginError, error: loginError },
+        {
+            data: loginData,
+            isLoading: isLoadingLogin,
+            isSuccess: isLoginSuccess,
+            isError: isLoginError,
+            error: loginError,
+        },
     ] = useLoginUserMutation();
     const [
         registerUser,
-        { data: registerData, isLoading: isLoadingRegister, isSuccess: isRegisterSuccess, isError: isRegisterError, error: registerError },
+        {
+            data: registerData,
+            isLoading: isLoadingRegister,
+            isSuccess: isRegisterSuccess,
+            isError: isRegisterError,
+            error: registerError,
+        },
     ] = useRegisterUserMutation();
-    const dispatch = useAppDispatch();
+
+    const [
+        addItemToCart,
+        {
+            data: dataCart,
+            isLoading: isLoadingCart,
+            isSuccess: isSuccessCart,
+            isError: isErrorCart,
+            error: errorCart,
+        },
+    ] = useAddItemToCartMutation();
     useEffect(() => {
         location.pathname === config.routes.login ? setActiveSignup(false) : setActiveSignup(true);
         setFormValue(initialState);
@@ -70,21 +98,25 @@ const Login = () => {
     };
     const handleLogin = async () => {
         if (formValue.email && formValue.password && formValue.password.length >= 6) {
-            await loginUser({ email: formValue.email, password: formValue.password })
+            await loginUser({ email: formValue.email, password: formValue.password });
         }
-        checkInputEmpty(formValue)
+        checkInputEmpty(formValue);
     };
     const handleRegister = async () => {
-        if (formValue.email && formValue.phone && formValue.password && formValue.password.length >= 6) {
+        if (
+            formValue.email &&
+            formValue.phone &&
+            formValue.password &&
+            formValue.password.length >= 6
+        ) {
             await registerUser({
                 email: formValue.email,
                 password: formValue.password,
                 phone: formValue.phone,
-            })
+            });
         }
     };
-    const handleForgotPassword = () => {
-    };
+    const handleForgotPassword = () => { };
     const handleSubmit = () => {
         if (location.pathname === config.routes.login) {
             handleLogin();
@@ -93,33 +125,55 @@ const Login = () => {
         }
     };
     useEffect(() => {
+        if (isSuccessCart) {
+            if (dataCart?.data && dataCart.data.cartItems.length === cartItems.length) {
+                dispatch(setCart(dataCart.data.cartItems));
+                // toast.success(dataCart?.message);
+                toast.success('Đăng nhập thành công !');
+                navigate(from.pathname);
+            }
+        }
+    }, [isLoadingCart]);
+    const addToCart = async (productId: string, color: string, size: string | number) => {
+        const cart = await addItemToCart({
+            product: productId,
+            color,
+            size,
+        });
+        return cart;
+    };
+    useEffect(() => {
         if (isLoginSuccess) {
             const { accessToken, refreshToken, ...user } = loginData;
+            if (cart.cartItems && cart.cartItems.length > 0) {
+                setCartItems(cart.cartItems);
+                dispatch(clearCart());
+                cartItems.forEach(async (cartItem: ICartItem) => {
+                    const newCart = await addToCart(cartItem.product._id, cartItem.color, cartItem.size);
+                    console.log(newCart);
+                });
+            }
+            dispatch(setCredentials({ user: user, token: { accessToken, refreshToken } }));
             toast.success('Đăng nhập thành công !');
-            dispatch(setCredentials({ user: user, token: { accessToken, refreshToken } }))
-
-            navigate(from.pathname)
+            navigate(from.pathname);
         }
 
         if (isLoginError) {
-            // toast.error('Login error');
-            // console.log(loginError);
             toast.error((loginError as any).data.message, {
                 position: 'top-right',
             });
         }
         if (isRegisterSuccess && activeSignup) {
-            toast.success(registerData.message)
-            setFormValue(initialState)
-            navigate(config.routes.login)
+            toast.success(registerData.message);
+            setFormValue(initialState);
+            navigate(config.routes.login);
         }
         if (isRegisterError) {
-
             toast.error((registerError as any).data.message, {
                 position: 'top-right',
             });
         }
-    }, [isLoadingLogin, isLoadingRegister])
+    }, [isLoadingLogin, isLoadingRegister]);
     const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
         setErrorInput({
             ...errorInput,
@@ -130,6 +184,7 @@ const Login = () => {
                 : 'Trường này là bắt buộc.!!!',
         });
     };
+    console.log('c', cartItems);
 
     return (
         <section className={cx('login-section')}>

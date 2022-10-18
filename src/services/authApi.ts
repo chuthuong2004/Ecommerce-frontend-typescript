@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../app/store';
 import { IUser } from '../models/user.model';
+import { IProduct } from '../models/product.model';
+import { ICart } from '../models/cart.model';
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
@@ -18,7 +20,7 @@ export const authApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['User', 'Product', 'Cart'],
+  tagTypes: ['IUser', 'IProduct', 'ICart'],
   endpoints: (builder) => ({
     loginUser: builder.mutation({
       query: (body: { email: string; password: string }) => {
@@ -54,7 +56,7 @@ export const authApi = createApi({
           url: '/me',
         };
       },
-      providesTags: ['User', 'Product', 'Cart'],
+      providesTags: ['IUser', 'IProduct', 'ICart'],
     }),
   }),
 });

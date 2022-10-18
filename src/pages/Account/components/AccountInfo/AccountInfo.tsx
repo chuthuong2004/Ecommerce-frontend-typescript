@@ -6,10 +6,12 @@ import React from 'react';
 import { IAddress } from '../../../../models/user.model';
 const cx = classNames.bind(styles);
 type Props = {
-    data: IAddress & { email: string },
+    data: IAddress & { email: string, phone: string },
 }
 
 const AccountInfo: React.FC<Props> = ({ data }) => {
+    console.log(data);
+
     return (
         <div className={cx('form')}>
             <div>

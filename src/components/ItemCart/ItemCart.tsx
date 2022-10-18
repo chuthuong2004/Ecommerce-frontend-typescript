@@ -8,6 +8,7 @@ import React, { useEffect, useState, memo } from 'react';
 import { EActionCart, ICartItem } from '../../models/cart.model';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
+    addToCart,
     clearCart,
     decreaseCart,
     increaseCart,
@@ -64,14 +65,14 @@ const ItemCart: React.FC<Props> = ({
     ] = useUpdateQuantityCartMutation();
 
     const {
-        data: dataProfile,
+        // data: dataProfile,
         refetch: refetchProfile,
-        isLoading: isLoadingProfile,
-        isSuccess: isSuccessProfile,
-        isFetching: isFetchingProfile,
-        isError: isErrorProfile,
-        error: errorProfile,
-    } = useGetMyProfileQuery({},);
+        // isLoading: isLoadingProfile,
+        // isSuccess: isSuccessProfile,
+        // isFetching: isFetchingProfile,
+        // isError: isErrorProfile,
+        // error: errorProfile,
+    } = useGetMyProfileQuery({});
     const [
         addItemToCart,
         {
@@ -82,91 +83,109 @@ const ItemCart: React.FC<Props> = ({
             error: errorCart,
         },
     ] = useAddItemToCartMutation();
+    //  const {
+    //     refetch: refetchCart,
+    // } = useGetMyCartQuery({});
 
     const [checked, setChecked] = useState(false);
     useEffect(() => {
         setChecked(isSelected);
     }, [isSelected]);
-    useEffect(() => {
-        if (isSuccessRemoved) {
-            if ((dataRemoved as any)?.message) {
-                dispatch(clearCart());
-                onChangeChecked(cartItem, false);
-                toast.error((dataRemoved as any).message);
-                return;
-            }
-            toast.info('Xóa sản phẩm khỏi giỏ hàng thành công !');
-            dataRemoved && dispatch(setCart(dataRemoved));
-            refetchProfile();
-        }
-        if (isErrorRemoved) {
-            toast.error((errorRemoved as any).data.message);
-        }
-    }, [isLoadingRemoved]);
-    useEffect(() => {
-        if (isSuccessUpdated) {
-            if ((dataUpdated as any)?.message) {
-                dispatch(clearCart());
-                toast.error((dataUpdated as any).message);
-                return;
-            }
-            toast.info('Cập nhật số lượng sản phẩm thành công !');
-            dataUpdated && dispatch(setCart(dataUpdated));
-            refetchProfile();
-        }
-        if (isErrorUpdated) {
-            toast.error((errorUpdated as any).data.message);
-        }
-    }, [isLoadingUpdated]);
-    useEffect(() => {
-        if (isSuccessProfile) {
-            dispatch(setCredentials({ user: dataProfile, token: null }));
-            console.log('đã set');
-        }
-        if (isErrorProfile) {
-            console.log(errorProfile);
-        }
-    }, [isFetchingProfile, isLoadingProfile]);
-    useEffect(() => {
-        if (isSuccessCart) {
-            if (dataCart?.data) {
-                dispatch(setCart(dataCart.data));
-                toast.success(dataCart?.message);
-            }
-        }
-    }, [isLoadingCart]);
+    //   useEffect(() => {
+    //     if (isSuccessRemoved) {
+    //       if ((dataRemoved as any)?.message) {
+    //         dispatch(clearCart());
+    //         onChangeChecked(cartItem, false);
+    //         toast.error((dataRemoved as any).message);
+    //         return;
+    //       }
+    //       toast.info('Xóa sản phẩm khỏi giỏ hàng thành công !');
+    //       dataRemoved && dispatch(setCart(dataRemoved.cartItems));
+    //       refetchProfile();
+    //     }
+    //     if (isErrorRemoved) {
+    //       toast.error((errorRemoved as any).data.message);
+    //     }
+    //   }, [isLoadingRemoved]);
+    //   useEffect(() => {
+    //     if (isSuccessUpdated) {
+    //       if ((dataUpdated as any)?.message) {
+    //         dispatch(clearCart());
+    //         toast.error((dataUpdated as any).message);
+    //         return;
+    //       }
+    //       toast.info('Cập nhật số lượng sản phẩm thành công !');
+    //       dataUpdated && dispatch(setCart(dataUpdated.cartItems));
+    //       refetchProfile();
+    //     }
+    //     if (isErrorUpdated) {
+    //       toast.error((errorUpdated as any).data.message);
+    //     }
+    //   }, [isLoadingUpdated]);
+    // useEffect(() => {
+    //     if (isSuccessCart) {
+    //         if (dataCart?.data) {
+    //             dispatch(setCart(dataCart.data.cartItems));
+    //             // refetchCart()
+    //             // toast.success(dataCart?.message);
+    //         }
+    //     }
+    // }, [isLoadingCart]);
 
     const handleRemoveFavorite = async () => {
         try {
             const res = await productApi.removeFavorite(cartItem.product._id);
-
             refetchProfile();
         } catch (error: any) {
             toast.error(error.data.message);
         }
     };
-    const handleCart = async (action: EActionCart) => {
+    const handleAddToCart = async () => {
+        handleRemoveFavorite();
+        await addItemToCart({
+            product: cartItem.product._id,
+            color: cartItem.color,
+            size: cartItem.size,
+        });
+        dispatch(
+            addToCart({
+                product: cartItem.product,
+                color: cartItem.color,
+                size: cartItem.size,
+                quantity: 1,
+                image: cartItem.product.colors[0].images[0],
+            }),
+        );
+        handleClosePopUp();
+    };
+    const handleDecreaseCart = async () => {
+        await updateQuantityCart({
+            cartItemId: cartItem._id || '',
+            quantity: cartItem.quantity - 1,
+        });
+        dispatch(decreaseCart(cartItem));
+    };
+    const handleIncreaseCart = async () => {
+        await updateQuantityCart({
+            cartItemId: cartItem._id || '',
+            quantity: cartItem.quantity + 1,
+        });
+        dispatch(increaseCart(cartItem));
+    };
+    const handleRemoveFromCart = async () => {
+        if (isCart) {
+            const res = await removeItemFromCart(cartItem._id || '');
+            console.log('res', res);
+            dispatch(removeFromCart(cartItem));
+        }
+        !isCart && handleRemoveFavorite();
+    };
+    const handleCart = (action: EActionCart) => {
         if (user && cartItem) {
-            if (action === EActionCart.ADD) {
-                handleRemoveFavorite()
-                await addItemToCart({
-                    product: cartItem.product._id,
-                    color: cartItem.color,
-                    size: cartItem.size,
-                })
-                handleClosePopUp()
-            }
-            action === EActionCart.DECREASE &&
-                (await updateQuantityCart({
-                    cartItemId: cartItem._id || '',
-                    quantity: cartItem.quantity - 1,
-                }));
-            action === EActionCart.INCREASE &&
-                (await updateQuantityCart({
-                    cartItemId: cartItem._id || '',
-                    quantity: cartItem.quantity + 1,
-                }));
-            action === EActionCart.REMOVE && (await removeItemFromCart(cartItem._id || ''));
+            action === EActionCart.ADD && handleAddToCart();
+            action === EActionCart.DECREASE && handleDecreaseCart();
+            action === EActionCart.INCREASE && handleIncreaseCart();
+            action === EActionCart.REMOVE && handleRemoveFromCart();
         } else {
             action === EActionCart.DECREASE && dispatch(decreaseCart(cartItem));
             action === EActionCart.INCREASE && dispatch(increaseCart(cartItem));
@@ -177,7 +196,7 @@ const ItemCart: React.FC<Props> = ({
         setChecked(e.target.checked);
         onChangeChecked(cartItem, e.target.checked);
     };
-    console.log('profile', dataProfile);
+    // console.log('profile', dataProfile);
 
     return (
         <div className={cx('wrapper')}>
@@ -270,7 +289,12 @@ const ItemCart: React.FC<Props> = ({
                             ) ? (
                                 <Button disabled small primary children="Đã có trong giỏ hàng" />
                             ) : (
-                                <Button onClick={() => handleCart(EActionCart.ADD)} small primary children="Chuyển vào giỏ hàng" />
+                                <Button
+                                    onClick={() => handleCart(EActionCart.ADD)}
+                                    small
+                                    primary
+                                    children="Chuyển vào giỏ hàng"
+                                />
                             )}
                         </div>
                     )}

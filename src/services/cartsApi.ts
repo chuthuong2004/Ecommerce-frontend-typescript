@@ -2,6 +2,7 @@ import { BaseQueryResult } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../app/store';
 import { ICart } from '../models/cart.model';
+import { IUser } from './../models/user.model';
 export const cartsApi = createApi({
   reducerPath: 'cartsApi',
   baseQuery: fetchBaseQuery({
@@ -19,7 +20,7 @@ export const cartsApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Cart', 'User'],
+  tagTypes: ['ICart'],
   endpoints: (builder) => ({
     getMyCart: builder.query<ICart, {}>({
       query: () => {
@@ -29,7 +30,7 @@ export const cartsApi = createApi({
           // credentials: 'include',
         };
       },
-      providesTags: ['Cart', 'User'],
+      providesTags: ['ICart'],
     }),
     addItemToCart: builder.mutation<
       { message: string; data: ICart },
@@ -42,7 +43,7 @@ export const cartsApi = createApi({
           body,
         };
       },
-      invalidatesTags: ['Cart', 'User'],
+      invalidatesTags: ['ICart'],
     }),
     removeItemFromCart: builder.mutation<ICart, string>({
       query: (cartItemId) => {
@@ -51,7 +52,7 @@ export const cartsApi = createApi({
           method: 'PUT',
         };
       },
-      invalidatesTags: ['Cart', 'User'],
+      invalidatesTags: ['ICart'],
     }),
     updateQuantityCart: builder.mutation<ICart, { cartItemId: string; quantity: number }>({
       query: ({ cartItemId, quantity }) => {
@@ -61,7 +62,7 @@ export const cartsApi = createApi({
           body: { quantity },
         };
       },
-      invalidatesTags: ['Cart', 'User'],
+      invalidatesTags: ['ICart'],
     }),
   }),
 });

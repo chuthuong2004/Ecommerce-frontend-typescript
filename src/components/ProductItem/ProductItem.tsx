@@ -12,27 +12,22 @@ import { selectAuth, setCredentials } from './../../features/authSlice';
 import { useGetMyProfileQuery } from '../../services/authApi';
 const cx = classNames.bind(styles);
 type Props = {
-    product: IProduct
-}
+    product: IProduct;
+};
 const ProductItem: React.FC<Props> = ({ product }) => {
-
     const location = useLocation();
     const { user, token } = useAppSelector(selectAuth);
     const navigate = useNavigate();
-    const dispatch = useAppDispatch()
-    const [currentProduct, setCurrentProduct] = useState<IProduct>(product)
-    const [isLiked, setIsLiked] = useState<boolean>(user ? product.favorites.includes(user._id) : false);
+    const dispatch = useAppDispatch();
+    const [currentProduct, setCurrentProduct] = useState<IProduct>(product);
+    const [isLiked, setIsLiked] = useState<boolean>(
+        user ? product.favorites.includes(user._id) : false,
+    );
     const [isCached, setIsCached] = useState<boolean>(false);
     const [defaultImages, setDefaultImages] = useState<IColor>(product.colors[0]);
     const [colorActive, setColorActive] = useState<IColor>(product.colors[0]);
-    const handleOnMouse = (direction: string) => {
-        direction === 'mouseover' ? setIsCached(true) : setIsCached(false);
-    };
-    const handleMouseColor = (color: IColor, action: string) => {
-        const prevImageDefault: IColor | undefined = currentProduct.colors.find((color: IColor) => color._id === colorActive._id);
-        action === 'mouseover' ? setDefaultImages(color) : setDefaultImages((prev: IColor) => (prevImageDefault ? prevImageDefault : prev));
-    };
-    const { data: dataProfile, refetch, isLoading: isLoadingProfile, isSuccess: isSuccessProfile, isFetching, isError: isErrorProfile, error: errorProfile } = useGetMyProfileQuery({})
+
+    const { refetch } = useGetMyProfileQuery({});
 
     const handleFavorite = () => {
         if (!user) navigate(config.routes.login, { state: { from: location } });
@@ -41,11 +36,8 @@ const ProductItem: React.FC<Props> = ({ product }) => {
                 try {
                     const res = await productApi.addFavorite(currentProduct ? currentProduct._id : '');
 
-                    refetch()
-                    setCurrentProduct((prev: IProduct) => {
-                        return { ...prev, favorites: res.data.favorites }
-                    })
-                    setIsLiked(true)
+                    setCurrentProduct((prev: IProduct) => ({ ...prev, favorites: res.data.favorites }))
+                    setIsLiked(true);
                 } catch (error) {
                     console.log(error);
                 }
@@ -53,11 +45,8 @@ const ProductItem: React.FC<Props> = ({ product }) => {
             const removeFavoriteHandler = async () => {
                 try {
                     const res = await productApi.removeFavorite(currentProduct ? currentProduct._id : '');
-                    refetch()
-                    setIsLiked(false)
-                    setCurrentProduct((prev: IProduct) => {
-                        return { ...prev, favorites: res.data.favorites }
-                    })
+                    setIsLiked(false);
+                    setCurrentProduct((prev: IProduct) => ({ ...prev, favorites: res.data.favorites }));
                 } catch (error: any) {
                     toast.error(error.data.message);
                 }
@@ -68,17 +57,20 @@ const ProductItem: React.FC<Props> = ({ product }) => {
             } else {
                 addFavoriteHandler();
             }
-        };
-    }
-    useEffect(() => {
-        if (isSuccessProfile) {
-            dispatch(setCredentials({ user: dataProfile, token: null }));
-            console.log('đã set');
+            refetch();
         }
-        if (isErrorProfile) {
-            console.log(errorProfile);
-        }
-    }, [isFetching])
+    };
+    const handleOnMouse = (direction: string) => {
+        direction === 'mouseover' ? setIsCached(true) : setIsCached(false);
+    };
+    const handleMouseColor = (color: IColor, action: string) => {
+        const prevImageDefault: IColor | undefined = currentProduct.colors.find(
+            (color: IColor) => color._id === colorActive._id,
+        );
+        action === 'mouseover'
+            ? setDefaultImages(color)
+            : setDefaultImages((prev: IColor) => (prevImageDefault ? prevImageDefault : prev));
+    };
     return (
         <div className={cx('container')}>
             <div className={cx('wrapper')}>
@@ -97,7 +89,9 @@ const ProductItem: React.FC<Props> = ({ product }) => {
                             className={cx('lazyloaded', isCached && 'is-cached')}
                         />
                     </Link>
-                    {currentProduct?.discount > 0 && <div className={cx('discount')}>-{currentProduct.discount}%</div>}
+                    {currentProduct?.discount > 0 && (
+                        <div className={cx('discount')}>-{currentProduct.discount}%</div>
+                    )}
                     <div onClick={handleFavorite} className={cx('wishlist', isLiked && 'active')}>
                         <HeartIcon className={cx('heart')} stroke="#ffffff" />
                         <HeartActiveIcon className={cx('heart-active')} />
@@ -118,21 +112,30 @@ const ProductItem: React.FC<Props> = ({ product }) => {
                                 key={color._id}
                                 className={cx('product-color-loop', colorActive._id === color._id && 'active')}
                             >
-                                <img src={process.env.REACT_APP_API_URL + color.imageSmall} alt="" className={cx('product-color-img')} />
+                                <img
+                                    src={process.env.REACT_APP_API_URL + color.imageSmall}
+                                    alt=""
+                                    className={cx('product-color-img')}
+                                />
                             </div>
                         ))}
                     </div>
                 </div>
                 <div className={cx('product-loop-info')}>
-                    <Link to={config.routes.product + '/' + currentProduct.slug}
-                        state={{ colorSelected: colorActive }}>
+                    <Link
+                        to={config.routes.product + '/' + currentProduct.slug}
+                        state={{ colorSelected: colorActive }}
+                    >
                         <h3 className={cx('trademark-name')}>{currentProduct.brand?.name}</h3>
                         <p className={cx('product-name')}>{currentProduct.name}</p>
                     </Link>
                     <span className={cx('quantity-color')}>{currentProduct.colors.length} màu</span>
                     <div className={cx('product-price')}>
                         <span className={cx('price', currentProduct.discount > 0 && 'hasSale')}>
-                            {(currentProduct.price - currentProduct.price * (currentProduct.discount / 100)).toLocaleString('vn-VN')}
+                            {(
+                                currentProduct.price -
+                                currentProduct.price * (currentProduct.discount / 100)
+                            ).toLocaleString('vn-VN')}
                             <span className={cx('td-underline')}>đ</span>
                         </span>
                         {currentProduct?.discount > 0 && (

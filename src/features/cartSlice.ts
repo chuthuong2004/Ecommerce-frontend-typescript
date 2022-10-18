@@ -6,13 +6,7 @@ import { ICart, ICartItem } from '../models/cart.model';
 import { IUser } from '../models/user.model';
 import { selectAuth } from './authSlice';
 import { v4 as uuidv4 } from 'uuid';
-const initialState: { user: IUser; cartItems: ICartItem[] } = {
-  user: {
-    _id: '',
-    email: '',
-    username: '',
-    isAdmin: false,
-  },
+const initialState: { cartItems: ICartItem[] } = {
   cartItems: [],
 };
 export const cartSlice = createSlice({
@@ -61,13 +55,13 @@ export const cartSlice = createSlice({
       );
       if (state.cartItems[indexItem].quantity > 1) {
         state.cartItems[indexItem].quantity -= 1;
-        toast.info('Cập nhật giỏ hàng thành công !');
+        // toast.info('Cập nhật giỏ hàng thành công !');
       } else if (state.cartItems[indexItem].quantity === 1) {
         const newState: ICartItem[] = state.cartItems.filter(
           (cartItem: ICartItem) => cartItem._id !== action.payload._id,
         );
         state.cartItems = newState;
-        toast.error('Đã xóa sản phẩm khỏi giỏ hàng !');
+        toast.info('Đã xóa sản phẩm khỏi giỏ hàng !');
       }
     },
     increaseCart: (state, action: PayloadAction<ICartItem>) => {
@@ -75,15 +69,13 @@ export const cartSlice = createSlice({
         (cartItem) => cartItem._id === action.payload._id,
       );
       state.cartItems[indexItem].quantity += 1;
-      toast.info('Cập nhật giỏ hàng thành công !');
+      // toast.info('Cập nhật giỏ hàng thành công !');
     },
-    setCart: (state, action: PayloadAction<ICart>) => {
-      state.user = action.payload.user;
-      state.cartItems = action.payload.cartItems;
+    setCart: (state, action: PayloadAction<ICartItem[]>) => {
+      state.cartItems = action.payload;
     },
     clearCart: (state) => {
       state.cartItems = [];
-      state.user = initialState.user;
     },
   },
 });

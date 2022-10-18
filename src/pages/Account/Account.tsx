@@ -102,6 +102,7 @@ const Account = () => {
                                         ...defaultAddress,
                                         firstName: defaultAddress?.firstName ? defaultAddress?.firstName : '',
                                         email: user?.email || '',
+                                        phone: user?.phone || ''
                                     }}
                                 />
                             )}

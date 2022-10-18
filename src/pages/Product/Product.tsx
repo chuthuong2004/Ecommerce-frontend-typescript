@@ -30,6 +30,7 @@ import PrevArrow from '../../components/PrevArrow';
 import { selectAuth, setCredentials } from '../../features/authSlice';
 import { useAddItemToCartMutation } from '../../services/cartsApi';
 import { useGetMyProfileQuery } from '../../services/authApi';
+import { IFavorite } from '../../models/user.model';
 const cx = classNames.bind(styles);
 
 const Product = () => {
@@ -38,8 +39,6 @@ const Product = () => {
     const dispatch = useAppDispatch();
     const { user } = useAppSelector(selectAuth);
     const navigate = useNavigate();
-    const [addItemToCart, { data: dataCart, isLoading: isLoadingCart, isSuccess: isSuccessCart, isError: isErrorCart, error: errorCart },] = useAddItemToCartMutation()
-    const { data: dataProfile, refetch, isLoading: isLoadingProfile, isSuccess: isSuccessProfile, isFetching, isError: isErrorProfile, error: errorProfile } = useGetMyProfileQuery({})
 
     const [defaultColor, setDefaultColor] = useState<IColor | undefined>(undefined);
     const [defaultSize, setDefaultSize] = useState<ISize | undefined>(undefined,);
@@ -66,6 +65,9 @@ const Product = () => {
     };
     const [product, setProduct] = useState<IProduct | null>(null);
     const [loading, setLoading] = useState(false);
+    const [addItemToCart] = useAddItemToCartMutation()
+    const { data: dataProfile, refetch, isLoading: isLoadingProfile, isSuccess: isSuccessProfile, isFetching, isError: isErrorProfile, error: errorProfile } = useGetMyProfileQuery({})
+
     const navItems: ITabContent[] = [
         {
             _id: uuidv4(),
@@ -114,14 +116,34 @@ const Product = () => {
         }
     }, [product]);
     useEffect(() => {
-        if (isSuccessCart) {
-            if (dataCart?.data) {
-                dispatch(setCart(dataCart.data))
-                refetch()
-                toast.success(dataCart?.message)
+        user && setProduct((prev: IProduct | null) => {
+            if (!prev) {
+                return null;
             }
-        }
-    }, [isLoadingCart])
+            let newFavorites = prev.favorites
+            // []
+            const productInUser = user.favorites?.find((favorite: IFavorite) => favorite.product._id === prev._id)
+            const userInProduct = prev.favorites.find((favorite: string) => favorite === user._id)
+            // if (!() {
+            //     newFavorites.filter((favorite: string) => favorite !== user._id)
+            // }
+            if (!productInUser && userInProduct) {
+                console.log('');
+
+                newFavorites = prev.favorites.filter((favorite: string) => favorite !== userInProduct)
+                setIsFavorited(false);
+            }
+            console.log({ productInUser, userInProduct });
+
+            // else {
+            //     newFavorites.push(user._id)
+            // }
+            return {
+                ...prev,
+                favorites: newFavorites
+            }
+        });
+    }, [user])
     const handleSetColor = (color: IColor) => {
         setDefaultColor(color);
         setDefaultSize(color.sizes[0]);
@@ -130,17 +152,16 @@ const Product = () => {
         if (product && defaultColor && defaultSize) {
             if (user) {
                 await addItemToCart({ product: product._id, color: defaultColor.colorName, size: defaultSize.size })
-            } else {
-                dispatch(
-                    addToCart({
-                        product: product,
-                        color: defaultColor.colorName,
-                        size: defaultSize.size,
-                        quantity: 1,
-                        image: defaultColor.images[0],
-                    }),
-                );
             }
+            dispatch(
+                addToCart({
+                    product: product,
+                    color: defaultColor.colorName,
+                    size: defaultSize.size,
+                    quantity: 1,
+                    image: defaultColor.images[0],
+                }),
+            );
 
         } else {
             toast.warn('Vui lòng chọn màu sắc và kích cỡ !');
@@ -195,16 +216,18 @@ const Product = () => {
             }
         }
     };
-    useEffect(() => {
-        if (isSuccessProfile) {
-            dispatch(setCredentials({ user: dataProfile, token: null }));
-            console.log('đã set');
+    // useEffect(() => {
+    //     if (isSuccessProfile) {
+    //         dispatch(setCredentials({ user: dataProfile, token: null }));
+    //         console.log('đã set');
 
-        }
-        if (isErrorProfile) {
-            console.log(errorProfile);
-        }
-    }, [isFetching])
+    //     }
+    //     if (isErrorProfile) {
+    //         console.log(errorProfile);
+    //     }
+    // }, [isFetching])
+    console.log('re product', product?.favorites);
+
     return (
         <div className={cx('wrapper')}>
             {loading ? (

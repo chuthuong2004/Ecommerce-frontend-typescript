@@ -36,30 +36,6 @@ function Header() {
     const { user } = useAppSelector(selectAuth);
     let cart = useAppSelector(selectCart);
     const dispatch = useAppDispatch();
-    const [
-        logoutUser,
-        {
-            data: logoutData,
-            isLoading: isLoadingLogout,
-            isSuccess: isLogoutSuccess,
-            isError: isLogoutError,
-            error: logoutError,
-        },
-    ] = useLogoutUserMutation();
-    const {
-        data: dataProfile,
-        isLoading: isLoadingProfile,
-        isSuccess: isSuccessProfile,
-        isError: isErrorProfile,
-        error: errorProfile,
-    } = useGetMyProfileQuery({}, { refetchOnMountOrArgChange: true });
-    const {
-        data: dataCart,
-        isLoading: isLoadingCart,
-        isSuccess: isSuccessCart,
-        isError: isErrorCart,
-        error: errorCart,
-    } = useGetMyCartQuery({}, { refetchOnMountOrArgChange: true });
     const [isScrollUp, setIsScrollUp] = useState(false);
     const [isScrollDown, setIsScrollDown] = useState(false);
     const [activeProfile, setActiveProfile] = useState(false);
@@ -73,6 +49,33 @@ function Header() {
 
     const navigate = useNavigate();
 
+
+    const [
+        logoutUser,
+        {
+            data: logoutData,
+            isLoading: isLoadingLogout,
+            isSuccess: isLogoutSuccess,
+            isError: isLogoutError,
+            error: logoutError,
+        },
+    ] = useLogoutUserMutation();
+    const {
+        data: dataProfile,
+        currentData,
+        isFetching: isFetchingProfile,
+        isLoading: isLoadingProfile,
+        isSuccess: isSuccessProfile,
+        isError: isErrorProfile,
+        error: errorProfile,
+    } = useGetMyProfileQuery({},);
+    const {
+        data: dataCart,
+        isLoading: isLoadingCart,
+        isSuccess: isSuccessCart,
+        isError: isErrorCart,
+        error: errorCart,
+    } = useGetMyCartQuery({},);
     useEffect(() => {
         const onScroll: EventListener = (e: any) => {
             setActiveWishList(false);
@@ -133,25 +136,35 @@ function Header() {
     }, [isLoadingLogout]);
     useEffect(() => {
         if (isSuccessProfile) {
-            dispatch(setCredentials({ user: dataProfile, token: null }));
+            user &&
+                dispatch(setCredentials({ user: dataProfile, token: null }));
         }
         if (isErrorProfile) {
             console.log(errorProfile);
         }
-    }, [isLoadingProfile]);
-    useEffect(() => {
-        if (isSuccessCart) {
-            dispatch(setCart(dataCart));
-        }
-        if (isErrorCart) {
-            if (user) {
-                dispatch(clearCart());
-            }
-            console.log(errorCart);
-        }
-    }, [isLoadingCart]);
+    }, [currentData]);
+    // useEffect(() => {
+    //     if (isSuccessCart) {
+    //         user && dispatch(setCart(dataCart.cartItems));
+    //     }
+    //     if (isErrorCart) {
+    //         if (user) {
+    //             dispatch(clearCart());
+    //         }
+    //         console.log(errorCart);
+    //     }
+    // }, [isLoadingCart]);
     console.log('cart', cart);
+    console.log({
+        data: dataProfile,
+        isLoading: isLoadingProfile,
+        isSuccess: isSuccessProfile,
+        isError: isErrorProfile,
+        error: errorProfile,
+    });
+
     console.log('datacart', dataCart);
+    console.log('data use', { dataProfile, currentData });
 
     return (
         <div

@@ -6,13 +6,17 @@ import Button from '../Button';
 import { CloseIcon, HeartFragileIcon } from '../Icons';
 import RecommendedProduct from '../RecommendedProduct';
 import EmptyContent from '../EmptyContent';
-import { selectAuth } from '../../features/authSlice';
-import { useAppSelector } from '../../app/hooks';
+import { selectAuth, setCredentials } from '../../features/authSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { IFavorite } from '../../models/user.model';
-import { ICartItem } from '../../models/cart.model';
+import { EActionCart, ICartItem } from '../../models/cart.model';
 import { toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
 import config from '../../config';
+import { useAddItemToCartMutation } from '../../services/cartsApi';
+import productApi from '../../api/productApi';
+import { useGetMyProfileQuery } from '../../services/authApi';
+import { setCart } from '../../features/cartSlice';
 const cx = classNames.bind(styles);
 
 type Props = {
@@ -22,9 +26,27 @@ type Props = {
 };
 const PopUp: React.FC<Props> = ({ activeWishList, handleClosePopUp, handleOpenPopUp }) => {
     const location = useLocation();
+    const dispatch = useAppDispatch()
     const modalRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const { user } = useAppSelector(selectAuth);
+    const [
+        addItemToCart,
+        {
+            data: dataCart,
+            isLoading: isLoadingCart,
+            isSuccess: isSuccessCart,
+            isError: isErrorCart,
+            error: errorCart,
+        },
+    ] = useAddItemToCartMutation();
+
+    const {
+        refetch: refetchProfile,
+    } = useGetMyProfileQuery({},);
+
+
+
     useEffect(() => {
         if (!activeWishList) {
             const timeout = setTimeout(() => {
@@ -35,20 +57,64 @@ const PopUp: React.FC<Props> = ({ activeWishList, handleClosePopUp, handleOpenPo
             };
         } else {
             modalRef.current!.style.display = 'block';
-            contentRef.current!.scrollIntoView()
         }
     }, [activeWishList]);
     useEffect(() => {
         if (location.pathname !== config.routes.cart) {
-            handleOpenPopUp()
-            contentRef.current!.scrollIntoView();
+            handleOpenPopUp();
         }
-    }, [user]);
+    }, [user?.favorites]);
+
+
+    // ! nếu lỗi hãy mở code 
+    // useEffect(() => {
+    //     if (isSuccessProfile) {
+    //         dispatch(setCredentials({ user: dataProfile, token: null }));
+    //         console.log('đã set');
+    //     }
+    //     if (isErrorProfile) {
+    //         console.log(errorProfile);
+    //     }
+    // }, [isFetchingProfile, isLoadingProfile]);
+    useEffect(() => {
+        if (isSuccessCart) {
+            if (dataCart?.data) {
+                dispatch(setCart(dataCart.data.cartItems));
+                toast.success(dataCart?.message);
+            }
+        }
+    }, [isLoadingCart]);
+
+
+    const handleRemoveFavorite = async (productId: string) => {
+        try {
+            const res = await productApi.removeFavorite(productId);
+            refetchProfile();
+        } catch (error: any) {
+            toast.error(error.data.message);
+        }
+    };
+
+
+    const handleAddAllToCart = () => {
+        if (user?.favorites && user.favorites.length > 0) {
+            user.favorites.forEach((favorite: IFavorite) => {
+                setTimeout(async () => {
+                    handleRemoveFavorite(favorite.product._id)
+                    await addItemToCart({
+                        product: favorite.product._id,
+                        color: favorite.color,
+                        size: favorite.size,
+                    })
+                }, 100)
+            })
+            handleClosePopUp()
+        }
+    }
     return (
         <div ref={modalRef} className={cx('modal', activeWishList ? 'active' : 'no-active')}>
             <div onClick={handleClosePopUp} className={cx('overlay')}></div>
             <div
-
                 className={cx(
                     'modal-content',
                     !activeWishList && 'no-active',
@@ -72,12 +138,12 @@ const PopUp: React.FC<Props> = ({ activeWishList, handleClosePopUp, handleOpenPo
                                     size: favorite.size,
                                 };
                                 return (
-                                    <ItemCart handleClosePopUp={handleClosePopUp} cartItem={item} isCart={false} />
+                                    <ItemCart key={favorite._id} handleClosePopUp={handleClosePopUp} cartItem={item} isCart={false} />
                                 );
                             })}
                         </div>
                         <div className={cx('wishlist-actions')}>
-                            <Button primary children="Chuyển tất cả vào giỏ hàng" />
+                            <Button onClick={handleAddAllToCart} primary children="Chuyển tất cả vào giỏ hàng" />
                         </div>
                     </>
                 ) : (
