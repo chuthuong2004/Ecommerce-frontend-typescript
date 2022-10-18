@@ -31,6 +31,8 @@ import { selectAuth, setCredentials } from '../../features/authSlice';
 import { useAddItemToCartMutation } from '../../services/cartsApi';
 import { useGetMyProfileQuery } from '../../services/authApi';
 import { IFavorite } from '../../models/user.model';
+import ReactLoading from 'react-loading';
+import Loading from '../../components/Loading';
 const cx = classNames.bind(styles);
 
 const Product = () => {
@@ -41,7 +43,7 @@ const Product = () => {
     const navigate = useNavigate();
 
     const [defaultColor, setDefaultColor] = useState<IColor | undefined>(undefined);
-    const [defaultSize, setDefaultSize] = useState<ISize | undefined>(undefined,);
+    const [defaultSize, setDefaultSize] = useState<ISize | undefined>(undefined);
     const [isFavorited, setIsFavorited] = useState<boolean>(false);
     let settings = {
         dots: false,
@@ -64,9 +66,19 @@ const Product = () => {
         className: 'slide-image-product',
     };
     const [product, setProduct] = useState<IProduct | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [addItemToCart] = useAddItemToCartMutation()
-    const { data: dataProfile, refetch, isLoading: isLoadingProfile, isSuccess: isSuccessProfile, isFetching, isError: isErrorProfile, error: errorProfile } = useGetMyProfileQuery({})
+    const [loading, setLoading] = useState(true);
+    const [isLoadingFavorite, setIsLoadingFavorite] = useState(false);
+
+    const [addItemToCart, { isLoading: isLoadingAddToCart }] = useAddItemToCartMutation();
+    const {
+        data: dataProfile,
+        refetch,
+        isLoading: isLoadingProfile,
+        isSuccess: isSuccessProfile,
+        isFetching,
+        isError: isErrorProfile,
+        error: errorProfile,
+    } = useGetMyProfileQuery({});
 
     const navItems: ITabContent[] = [
         {
@@ -93,14 +105,13 @@ const Product = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                setLoading(true);
                 const res = await productApi.getBySlug(slug);
                 if (res) {
                     console.log(res);
                     setProduct(res);
                     setDefaultColor(location.state?.colorSelected || res.colors[0]);
                     setDefaultSize(location.state?.colorSelected.sizes[0] || res.colors[0].sizes[0]);
-                    setIsFavorited(res.favorites.includes(user?._id || ''))
+                    setIsFavorited(res.favorites.includes(user?._id || ''));
                     setLoading(false);
                 }
             } catch (error) {
@@ -112,38 +123,41 @@ const Product = () => {
     useEffect(() => {
         if (user && product) {
             // refetch profile để update state cho user
-            refetch()
+            refetch();
         }
     }, [product]);
     useEffect(() => {
-        user && setProduct((prev: IProduct | null) => {
-            if (!prev) {
-                return null;
-            }
-            let newFavorites = prev.favorites
-            // []
-            const productInUser = user.favorites?.find((favorite: IFavorite) => favorite.product._id === prev._id)
-            const userInProduct = prev.favorites.find((favorite: string) => favorite === user._id)
-            // if (!() {
-            //     newFavorites.filter((favorite: string) => favorite !== user._id)
-            // }
-            if (!productInUser && userInProduct) {
-                console.log('');
+        user &&
+            setProduct((prev: IProduct | null) => {
+                if (!prev) {
+                    return null;
+                }
+                let newFavorites = prev.favorites;
+                // []
+                const productInUser = user.favorites?.find(
+                    (favorite: IFavorite) => favorite.product._id === prev._id,
+                );
+                const userInProduct = prev.favorites.find((favorite: string) => favorite === user._id);
+                // if (!() {
+                //     newFavorites.filter((favorite: string) => favorite !== user._id)
+                // }
+                if (!productInUser && userInProduct) {
+                    console.log('');
 
-                newFavorites = prev.favorites.filter((favorite: string) => favorite !== userInProduct)
-                setIsFavorited(false);
-            }
-            console.log({ productInUser, userInProduct });
+                    newFavorites = prev.favorites.filter((favorite: string) => favorite !== userInProduct);
+                    setIsFavorited(false);
+                }
+                console.log({ productInUser, userInProduct });
 
-            // else {
-            //     newFavorites.push(user._id)
-            // }
-            return {
-                ...prev,
-                favorites: newFavorites
-            }
-        });
-    }, [user])
+                // else {
+                //     newFavorites.push(user._id)
+                // }
+                return {
+                    ...prev,
+                    favorites: newFavorites,
+                };
+            });
+    }, [user]);
     const handleSetColor = (color: IColor) => {
         setDefaultColor(color);
         setDefaultSize(color.sizes[0]);
@@ -151,7 +165,11 @@ const Product = () => {
     const handleAddToCart = async () => {
         if (product && defaultColor && defaultSize) {
             if (user) {
-                await addItemToCart({ product: product._id, color: defaultColor.colorName, size: defaultSize.size })
+                await addItemToCart({
+                    product: product._id,
+                    color: defaultColor.colorName,
+                    size: defaultSize.size,
+                });
             }
             dispatch(
                 addToCart({
@@ -162,7 +180,6 @@ const Product = () => {
                     image: defaultColor.images[0],
                 }),
             );
-
         } else {
             toast.warn('Vui lòng chọn màu sắc và kích cỡ !');
         }
@@ -172,40 +189,46 @@ const Product = () => {
         else {
             const addFavoriteHandler = async () => {
                 try {
+                    setIsLoadingFavorite(true);
                     const res = await productApi.addFavorite(product ? product._id : '');
                     console.log(res);
                     setProduct((prev: IProduct | null) => {
                         if (!prev) {
-                            return res.data
+                            return res.data;
                         }
                         return {
                             ...prev,
-                            favorites: res.data.favorites
-                        }
+                            favorites: res.data.favorites,
+                        };
                     });
                     setIsFavorited(res.data.favorites.includes(user._id));
-                    toast.success(res.message);
+                    setIsLoadingFavorite(false);
+                    // toast.success(res.message);
                 } catch (error) {
                     console.log(error);
                 }
             };
             const removeFavoriteHandler = async () => {
                 try {
+                    setIsLoadingFavorite(true);
                     const res = await productApi.removeFavorite(product ? product._id : '');
                     console.log(res);
                     setProduct((prev: IProduct | null) => {
                         if (!prev) {
-                            return res.data
+                            return res.data;
                         }
                         return {
                             ...prev,
-                            favorites: res.data.favorites
-                        }
+                            favorites: res.data.favorites,
+                        };
                     });
                     setIsFavorited(res.data.favorites.includes(user._id));
-                    toast.error(res.message);
+                    setIsLoadingFavorite(false);
+                    // toast.error(res.message);
                 } catch (error: any) {
-                    toast.error(error.data.message);
+                    // toast.error(error.data.message);
+                    console.log(error.data.message);
+
                 }
             };
             if (product?.favorites.includes(user?._id || '')) {
@@ -216,22 +239,11 @@ const Product = () => {
             }
         }
     };
-    // useEffect(() => {
-    //     if (isSuccessProfile) {
-    //         dispatch(setCredentials({ user: dataProfile, token: null }));
-    //         console.log('đã set');
-
-    //     }
-    //     if (isErrorProfile) {
-    //         console.log(errorProfile);
-    //     }
-    // }, [isFetching])
     console.log('re product', product?.favorites);
-
     return (
         <div className={cx('wrapper')}>
             {loading ? (
-                <p>Loading ...</p>
+                <Loading />
             ) : (
                 <>
                     <div className={cx('container-fluid')}>
@@ -436,17 +448,37 @@ const Product = () => {
                                         </Button>
                                     </div>
                                     <div className={cx('btn')}>
-                                        <Button large primary onClick={handleAddToCart}>
-                                            thêm vào giỏ
+                                        <Button large primary onClick={handleAddToCart} >
+                                            {isLoadingAddToCart ? (
+                                                <ReactLoading
+                                                    type="spinningBubbles"
+                                                    color="#ffffff"
+                                                    width={20}
+                                                    height={20}
+                                                />
+                                            ) : (
+                                                'thêm vào giỏ'
+                                            )}
                                         </Button>
                                     </div>
                                     <div className={cx('btn')}>
                                         <Button
                                             onClick={handleWishList}
                                             className={cx('add-to-wish')}
-                                            leftIcon={isFavorited ? <HeartActiveIcon /> : <HeartIcon />}
+                                            leftIcon={
+                                                isLoadingFavorite ? null : isFavorited ? <HeartActiveIcon /> : <HeartIcon />
+                                            }
                                         >
-                                            thêm vào wishlist
+                                            {isLoadingFavorite ? (
+                                                <ReactLoading
+                                                    type="spinningBubbles"
+                                                    color="#2e2e2e"
+                                                    width={20}
+                                                    height={20}
+                                                />
+                                            ) : (
+                                                'thêm vào wishlist'
+                                            )}
                                         </Button>
                                     </div>
                                 </div>

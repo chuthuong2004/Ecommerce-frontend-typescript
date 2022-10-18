@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
 import { IToken, IUser } from '../models/user.model';
 import { clearCart } from './cartSlice';
@@ -25,8 +26,8 @@ export const authSlice = createSlice({
       }
       if (!state.token) {
         state.user = null;
-        logout();
-        clearCart();
+        state.token = null;
+        localStorage.clear();
       }
     },
     logout: (state) => {

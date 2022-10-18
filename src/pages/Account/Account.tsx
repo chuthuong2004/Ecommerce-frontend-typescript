@@ -15,6 +15,7 @@ import { logout, selectAuth } from '../../features/authSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useLogoutUserMutation } from '../../services/authApi';
 import { toast } from 'react-toastify';
+import { clearCart } from '../../features/cartSlice';
 const cx = classNames.bind(styles);
 
 const Account = () => {
@@ -39,6 +40,7 @@ const Account = () => {
     useEffect(() => {
         if (isLogoutSuccess) {
             dispatch(logout())
+            dispatch(clearCart())
             navigate(config.routes.login)
             toast.success((logoutData as any).message)
         }

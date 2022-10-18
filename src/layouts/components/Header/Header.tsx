@@ -49,7 +49,6 @@ function Header() {
 
     const navigate = useNavigate();
 
-
     const [
         logoutUser,
         {
@@ -68,14 +67,15 @@ function Header() {
         isSuccess: isSuccessProfile,
         isError: isErrorProfile,
         error: errorProfile,
-    } = useGetMyProfileQuery({},);
+    } = useGetMyProfileQuery({});
     const {
         data: dataCart,
         isLoading: isLoadingCart,
+        isFetching: isFetchingCart,
         isSuccess: isSuccessCart,
         isError: isErrorCart,
         error: errorCart,
-    } = useGetMyCartQuery({},);
+    } = useGetMyCartQuery({});
     useEffect(() => {
         const onScroll: EventListener = (e: any) => {
             setActiveWishList(false);
@@ -125,9 +125,9 @@ function Header() {
     useEffect(() => {
         if (isLogoutSuccess) {
             dispatch(logout());
-            dispatch(clearCart());
-            navigate(config.routes.login);
+            dispatch(clearCart())
             toast.success((logoutData as any).message);
+            navigate(config.routes.login);
         }
         if (isLogoutError) {
             console.log(logoutError);
@@ -136,35 +136,24 @@ function Header() {
     }, [isLoadingLogout]);
     useEffect(() => {
         if (isSuccessProfile) {
-            user &&
-                dispatch(setCredentials({ user: dataProfile, token: null }));
+            user && dispatch(setCredentials({ user: dataProfile, token: null }));
         }
         if (isErrorProfile) {
             console.log(errorProfile);
         }
-    }, [currentData]);
-    // useEffect(() => {
-    //     if (isSuccessCart) {
-    //         user && dispatch(setCart(dataCart.cartItems));
-    //     }
-    //     if (isErrorCart) {
-    //         if (user) {
-    //             dispatch(clearCart());
-    //         }
-    //         console.log(errorCart);
-    //     }
-    // }, [isLoadingCart]);
-    console.log('cart', cart);
-    console.log({
-        data: dataProfile,
-        isLoading: isLoadingProfile,
-        isSuccess: isSuccessProfile,
-        isError: isErrorProfile,
-        error: errorProfile,
-    });
-
-    console.log('datacart', dataCart);
-    console.log('data use', { dataProfile, currentData });
+    }, [isFetchingProfile, isLoadingProfile]);
+    useEffect(() => {
+        if (isSuccessCart) {
+            user && dispatch(setCart(dataCart.cartItems));
+        }
+        if (isErrorCart) {
+            if (user) {
+                dispatch(clearCart());
+            }
+            console.log(errorCart);
+        }
+    }, [isLoadingCart, isFetchingCart]);
+    console.log({ cart: dataCart, profile: dataProfile });
 
     return (
         <div

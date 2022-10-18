@@ -15,6 +15,7 @@ const axiosClient = axios.create({
   paramsSerializer: (params) => queryString.stringify(params),
 });
 axiosClient.interceptors.request.use(async (config) => {
+  token = JSON.parse(localStorage.getItem('token') as any);
   config.headers!.Authorization = `Bearer ${token?.accessToken}`;
   config.headers!['x-refresh'] = token?.refreshToken;
   return config;

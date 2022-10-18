@@ -25,6 +25,7 @@ import {
 import { toast } from 'react-toastify';
 import { useGetMyProfileQuery } from '../../services/authApi';
 import productApi from '../../api/productApi';
+import ReactLoading from 'react-loading';
 const cx = classNames.bind(styles);
 type Props = {
     cartItem: ICartItem;
@@ -43,10 +44,14 @@ const ItemCart: React.FC<Props> = ({
     const dispatch = useAppDispatch();
     const { user } = useAppSelector(selectAuth);
     const cart = useAppSelector(selectCart);
+
+    const [checked, setChecked] = useState(false);
+    const [defaultSize, setDefaultSize] = useState<string | number>(cartItem.size);
     const [
         removeItemFromCart,
         {
             data: dataRemoved,
+
             isLoading: isLoadingRemoved,
             isError: isErrorRemoved,
             isSuccess: isSuccessRemoved,
@@ -65,13 +70,7 @@ const ItemCart: React.FC<Props> = ({
     ] = useUpdateQuantityCartMutation();
 
     const {
-        // data: dataProfile,
         refetch: refetchProfile,
-        // isLoading: isLoadingProfile,
-        // isSuccess: isSuccessProfile,
-        // isFetching: isFetchingProfile,
-        // isError: isErrorProfile,
-        // error: errorProfile,
     } = useGetMyProfileQuery({});
     const [
         addItemToCart,
@@ -83,54 +82,48 @@ const ItemCart: React.FC<Props> = ({
             error: errorCart,
         },
     ] = useAddItemToCartMutation();
-    //  const {
-    //     refetch: refetchCart,
-    // } = useGetMyCartQuery({});
 
-    const [checked, setChecked] = useState(false);
     useEffect(() => {
         setChecked(isSelected);
     }, [isSelected]);
-    //   useEffect(() => {
-    //     if (isSuccessRemoved) {
-    //       if ((dataRemoved as any)?.message) {
-    //         dispatch(clearCart());
-    //         onChangeChecked(cartItem, false);
-    //         toast.error((dataRemoved as any).message);
-    //         return;
-    //       }
-    //       toast.info('Xóa sản phẩm khỏi giỏ hàng thành công !');
-    //       dataRemoved && dispatch(setCart(dataRemoved.cartItems));
-    //       refetchProfile();
-    //     }
-    //     if (isErrorRemoved) {
-    //       toast.error((errorRemoved as any).data.message);
-    //     }
-    //   }, [isLoadingRemoved]);
-    //   useEffect(() => {
-    //     if (isSuccessUpdated) {
-    //       if ((dataUpdated as any)?.message) {
-    //         dispatch(clearCart());
-    //         toast.error((dataUpdated as any).message);
-    //         return;
-    //       }
-    //       toast.info('Cập nhật số lượng sản phẩm thành công !');
-    //       dataUpdated && dispatch(setCart(dataUpdated.cartItems));
-    //       refetchProfile();
-    //     }
-    //     if (isErrorUpdated) {
-    //       toast.error((errorUpdated as any).data.message);
-    //     }
-    //   }, [isLoadingUpdated]);
-    // useEffect(() => {
-    //     if (isSuccessCart) {
-    //         if (dataCart?.data) {
-    //             dispatch(setCart(dataCart.data.cartItems));
-    //             // refetchCart()
-    //             // toast.success(dataCart?.message);
-    //         }
-    //     }
-    // }, [isLoadingCart]);
+    useEffect(() => {
+        if (isSuccessRemoved) {
+            if ((dataRemoved as any)?.message) {
+                dispatch(clearCart());
+                // onChangeChecked(cartItem, false);
+                // toast.info((dataRemoved as any).message);
+            } else {
+                dataRemoved && dispatch(setCart(dataRemoved.cartItems));
+            }
+        }
+        if (isErrorRemoved) {
+            toast.error((errorRemoved as any).data.message);
+        }
+    }, [isLoadingRemoved]);
+    useEffect(() => {
+        if (isSuccessUpdated) {
+            if ((dataUpdated as any)?.message) {
+                dispatch(clearCart());
+                toast.error((dataUpdated as any).message);
+            } else {
+                dataUpdated && dispatch(setCart(dataUpdated.cartItems));
+                toast.info('Cập nhật số lượng sản phẩm thành công !');
+            }
+        }
+        if (isErrorUpdated) {
+            toast.error((errorUpdated as any).data.message);
+        }
+    }, [isLoadingUpdated]);
+    useEffect(() => {
+        if (isSuccessCart) {
+            if (dataCart?.data) {
+                dispatch(setCart(dataCart.data.cartItems));
+                handleClosePopUp();
+                // refetchCart()
+                toast.success(dataCart?.message);
+            }
+        }
+    }, [isLoadingCart]);
 
     const handleRemoveFavorite = async () => {
         try {
@@ -145,32 +138,20 @@ const ItemCart: React.FC<Props> = ({
         await addItemToCart({
             product: cartItem.product._id,
             color: cartItem.color,
-            size: cartItem.size,
+            size: defaultSize,
         });
-        dispatch(
-            addToCart({
-                product: cartItem.product,
-                color: cartItem.color,
-                size: cartItem.size,
-                quantity: 1,
-                image: cartItem.product.colors[0].images[0],
-            }),
-        );
-        handleClosePopUp();
     };
     const handleDecreaseCart = async () => {
         await updateQuantityCart({
             cartItemId: cartItem._id || '',
             quantity: cartItem.quantity - 1,
         });
-        dispatch(decreaseCart(cartItem));
     };
     const handleIncreaseCart = async () => {
         await updateQuantityCart({
             cartItemId: cartItem._id || '',
             quantity: cartItem.quantity + 1,
         });
-        dispatch(increaseCart(cartItem));
     };
     const handleRemoveFromCart = async () => {
         if (isCart) {
@@ -196,7 +177,10 @@ const ItemCart: React.FC<Props> = ({
         setChecked(e.target.checked);
         onChangeChecked(cartItem, e.target.checked);
     };
-    // console.log('profile', dataProfile);
+
+    const handleChangeSelectedSize = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setDefaultSize(e.target.value);
+    }
 
     return (
         <div className={cx('wrapper')}>
@@ -244,12 +228,12 @@ const ItemCart: React.FC<Props> = ({
                             {isCart ? (
                                 <div>{cartItem.size}</div>
                             ) : (
-                                <select name="" id="">
+                                <select name="" id="" onChange={handleChangeSelectedSize}>
                                     {cartItem.product.colors
                                         .find((c) => c.colorName === cartItem.color)
                                         ?.sizes.map((size) => (
                                             <option
-                                                selected={size.size === cartItem.size}
+                                                selected={size.size === defaultSize}
                                                 key={size._id}
                                                 value={size.size}
                                             >
@@ -293,8 +277,21 @@ const ItemCart: React.FC<Props> = ({
                                     onClick={() => handleCart(EActionCart.ADD)}
                                     small
                                     primary
-                                    children="Chuyển vào giỏ hàng"
-                                />
+
+                                >
+
+                                    {isLoadingCart ? (
+                                        <ReactLoading
+                                            type="spinningBubbles"
+                                            color="#ffffff"
+                                            width={20}
+                                            height={20}
+                                        />
+                                    ) : (
+                                        'Chuyển vào giỏ hàng'
+                                    )}
+
+                                </Button>
                             )}
                         </div>
                     )}

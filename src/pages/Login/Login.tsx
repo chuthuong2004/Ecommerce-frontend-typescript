@@ -6,7 +6,11 @@ import config from '../../config';
 import { useState, useEffect, useCallback, FocusEvent } from 'react';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import { useLoginUserMutation, useRegisterUserMutation } from '../../services/authApi';
+import {
+    useForgotPasswordMutation,
+    useLoginUserMutation,
+    useRegisterUserMutation,
+} from '../../services/authApi';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setCredentials } from '../../features/authSlice';
 
@@ -15,6 +19,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useAddItemToCartMutation, useGetMyCartQuery } from '../../services/cartsApi';
 import { clearCart, selectCart, setCart } from '../../features/cartSlice';
 import { ICartItem } from '../../models/cart.model';
+import ReactLoading from 'react-loading';
 
 const cx = classNames.bind(styles);
 
@@ -60,6 +65,16 @@ const Login = () => {
             error: registerError,
         },
     ] = useRegisterUserMutation();
+    const [
+        forgotPassword,
+        {
+            data: dataForgotPassword,
+            isLoading: isLoadingForgotPassword,
+            isSuccess: isSuccessForgotPassword,
+            isError: isErrorForgotPassword,
+            error: errorForgotPassword,
+        },
+    ] = useForgotPasswordMutation();
 
     const [
         addItemToCart,
@@ -115,8 +130,16 @@ const Login = () => {
                 phone: formValue.phone,
             });
         }
+        checkInputEmpty(formValue);
     };
-    const handleForgotPassword = () => { };
+    const handleForgotPassword = async () => {
+        if (formValue.email) {
+            await forgotPassword({
+                email: formValue.email,
+            });
+        }
+        checkInputEmpty(formValue);
+    };
     const handleSubmit = () => {
         if (location.pathname === config.routes.login) {
             handleLogin();
@@ -124,16 +147,16 @@ const Login = () => {
             handleRegister();
         }
     };
-    useEffect(() => {
-        if (isSuccessCart) {
-            if (dataCart?.data && dataCart.data.cartItems.length === cartItems.length) {
-                dispatch(setCart(dataCart.data.cartItems));
-                // toast.success(dataCart?.message);
-                toast.success('Đăng nhập thành công !');
-                navigate(from.pathname);
-            }
-        }
-    }, [isLoadingCart]);
+    // useEffect(() => {
+    //     if (isSuccessCart) {
+    //         if (dataCart?.data && dataCart.data.cartItems.length === cartItems.length) {
+    //             dispatch(setCart(dataCart.data.cartItems));
+    //             // toast.success(dataCart?.message);
+    //             toast.success('Đăng nhập thành công !');
+    //             navigate(from.pathname);
+    //         }
+    //     }
+    // }, [isLoadingCart]);
     const addToCart = async (productId: string, color: string, size: string | number) => {
         const cart = await addItemToCart({
             product: productId,
@@ -145,6 +168,7 @@ const Login = () => {
     useEffect(() => {
         if (isLoginSuccess) {
             const { accessToken, refreshToken, ...user } = loginData;
+            dispatch(setCredentials({ user: user, token: { accessToken, refreshToken } }));
             if (cart.cartItems && cart.cartItems.length > 0) {
                 setCartItems(cart.cartItems);
                 dispatch(clearCart());
@@ -153,7 +177,6 @@ const Login = () => {
                     console.log(newCart);
                 });
             }
-            dispatch(setCredentials({ user: user, token: { accessToken, refreshToken } }));
             toast.success('Đăng nhập thành công !');
             navigate(from.pathname);
         }
@@ -174,6 +197,11 @@ const Login = () => {
             });
         }
     }, [isLoadingLogin, isLoadingRegister]);
+
+    useEffect(() => {
+        isSuccessForgotPassword && toast.info(dataForgotPassword.message);
+        isErrorForgotPassword && toast.error((errorForgotPassword as any).data.message);
+    }, [isLoadingForgotPassword]);
     const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
         setErrorInput({
             ...errorInput,
@@ -291,7 +319,18 @@ const Login = () => {
                                             </>
                                         )}
                                         <Button onClick={handleSubmit} className={cx('btn-action')} large primary>
-                                            {activeSignup ? 'Tạo tài khoản' : 'Đăng nhập'}
+                                            {isLoadingRegister || isLoadingLogin ? (
+                                                <ReactLoading
+                                                    type="spinningBubbles"
+                                                    color="#ffffff"
+                                                    width={20}
+                                                    height={20}
+                                                />
+                                            ) : activeSignup ? (
+                                                'Tạo tài khoản'
+                                            ) : (
+                                                'Đăng nhập'
+                                            )}
                                         </Button>
 
                                         {!activeSignup && (
@@ -346,7 +385,12 @@ const Login = () => {
                                         />
                                         <div className={cx('btn')}>
                                             <Button onClick={handleForgotPassword} large primary>
-                                                xác thực email
+                                                {isLoadingForgotPassword ? <ReactLoading
+                                                    type="spinningBubbles"
+                                                    color="#ffffff"
+                                                    width={20}
+                                                    height={20}
+                                                /> : 'Xác thực email'}
                                             </Button>
                                         </div>
                                         <div className={cx('btn', 'btn-forgot')}>

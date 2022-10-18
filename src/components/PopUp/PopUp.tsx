@@ -59,11 +59,11 @@ const PopUp: React.FC<Props> = ({ activeWishList, handleClosePopUp, handleOpenPo
             modalRef.current!.style.display = 'block';
         }
     }, [activeWishList]);
-    useEffect(() => {
-        if (location.pathname !== config.routes.cart) {
-            handleOpenPopUp();
-        }
-    }, [user?.favorites]);
+    // useEffect(() => {
+    //     if (location.pathname !== config.routes.cart) {
+    //         handleOpenPopUp();
+    //     }
+    // }, [user?.favorites]);
 
 
     // ! nếu lỗi hãy mở code 
@@ -98,15 +98,15 @@ const PopUp: React.FC<Props> = ({ activeWishList, handleClosePopUp, handleOpenPo
 
     const handleAddAllToCart = () => {
         if (user?.favorites && user.favorites.length > 0) {
-            user.favorites.forEach((favorite: IFavorite) => {
-                setTimeout(async () => {
-                    handleRemoveFavorite(favorite.product._id)
-                    await addItemToCart({
-                        product: favorite.product._id,
-                        color: favorite.color,
-                        size: favorite.size,
-                    })
-                }, 100)
+            user.favorites.forEach(async (favorite: IFavorite) => {
+                // setTimeout(async () => {
+                await handleRemoveFavorite(favorite.product._id)
+                await addItemToCart({
+                    product: favorite.product._id,
+                    color: favorite.color,
+                    size: favorite.size,
+                })
+                // }, 100)
             })
             handleClosePopUp()
         }

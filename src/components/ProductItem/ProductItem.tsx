@@ -35,7 +35,7 @@ const ProductItem: React.FC<Props> = ({ product }) => {
             const addFavoriteHandler = async () => {
                 try {
                     const res = await productApi.addFavorite(currentProduct ? currentProduct._id : '');
-
+                    refetch();
                     setCurrentProduct((prev: IProduct) => ({ ...prev, favorites: res.data.favorites }))
                     setIsLiked(true);
                 } catch (error) {
@@ -45,6 +45,7 @@ const ProductItem: React.FC<Props> = ({ product }) => {
             const removeFavoriteHandler = async () => {
                 try {
                     const res = await productApi.removeFavorite(currentProduct ? currentProduct._id : '');
+                    refetch();
                     setIsLiked(false);
                     setCurrentProduct((prev: IProduct) => ({ ...prev, favorites: res.data.favorites }));
                 } catch (error: any) {
@@ -57,7 +58,7 @@ const ProductItem: React.FC<Props> = ({ product }) => {
             } else {
                 addFavoriteHandler();
             }
-            refetch();
+
         }
     };
     const handleOnMouse = (direction: string) => {

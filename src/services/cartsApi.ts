@@ -20,7 +20,7 @@ export const cartsApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['ICart'],
+  tagTypes: ['Cart'],
   endpoints: (builder) => ({
     getMyCart: builder.query<ICart, {}>({
       query: () => {
@@ -30,7 +30,7 @@ export const cartsApi = createApi({
           // credentials: 'include',
         };
       },
-      providesTags: ['ICart'],
+      providesTags: ['Cart'],
     }),
     addItemToCart: builder.mutation<
       { message: string; data: ICart },
@@ -43,7 +43,7 @@ export const cartsApi = createApi({
           body,
         };
       },
-      invalidatesTags: ['ICart'],
+      invalidatesTags: ['Cart'],
     }),
     removeItemFromCart: builder.mutation<ICart, string>({
       query: (cartItemId) => {
@@ -52,7 +52,7 @@ export const cartsApi = createApi({
           method: 'PUT',
         };
       },
-      invalidatesTags: ['ICart'],
+      invalidatesTags: ['Cart'],
     }),
     updateQuantityCart: builder.mutation<ICart, { cartItemId: string; quantity: number }>({
       query: ({ cartItemId, quantity }) => {
@@ -62,7 +62,7 @@ export const cartsApi = createApi({
           body: { quantity },
         };
       },
-      invalidatesTags: ['ICart'],
+      invalidatesTags: ['Cart'],
     }),
   }),
 });
