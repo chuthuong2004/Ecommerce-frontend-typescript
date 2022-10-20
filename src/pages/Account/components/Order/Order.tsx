@@ -1,117 +1,44 @@
 import classNames from 'classnames/bind';
 import styles from './Order.module.scss';
 import { v4 as uuidv4 } from 'uuid';
-import { ArrowRightIcon, SearchIcon, TruckEmptyIcon } from '../../../../components/Icons';
+import { TruckEmptyIcon } from '../../../../components/Icons';
 import EmptyContent from '../../../../components/EmptyContent';
 import RecommendedProduct from '../../../../components/RecommendedProduct';
 import TabContent from '../../../../components/TabContent';
-import Input from '../../../../components/Input';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import config from '../../../../config';
-import { useState } from 'react';
 import OrderDetail from './OrderDetail';
 import { dataOrder } from '../../../../assets/dataOrder';
 import { ITabContent } from '../../../../components/TabContent/TabContent';
-import { EOrderStatus, IOrder } from '../../../../models/order.model';
+import { EOrderStatus } from '../../../../models/order.model';
+import OrderContent from './OrderContent';
 const cx = classNames.bind(styles);
 
-const processing = dataOrder.filter((order) => order.orderStatus === EOrderStatus.Processing);
-const shipping = dataOrder.filter((order) => order.orderStatus === EOrderStatus.Shipping);
-const delivery = dataOrder.filter((order) => order.orderStatus === EOrderStatus.Delivery);
-const delivered = dataOrder.filter((order) => order.orderStatus === EOrderStatus.Delivered);
-const canceled = dataOrder.filter((order) => order.orderStatus === EOrderStatus.Canceled);
+const processing = dataOrder.filter((order) => order.orderStatus === EOrderStatus.Processing || order.orderStatus === EOrderStatus.Shipping || order.orderStatus === EOrderStatus.Delivery);
+const completed = dataOrder.filter((order) => order.orderStatus === EOrderStatus.Canceled || order.orderStatus === EOrderStatus.Delivered)
 const Order: React.FC = () => {
     let { orderID } = useParams();
     const { pathname } = useLocation();
-    const Content: React.FC<{ data: IOrder[] }> = ({ data }) => {
-        console.log(data);
-        return (
-            <div>
-                <div className={cx('orders-search')}>
-                    <div className={cx('search-icon')}>
-                        <SearchIcon width="20" height="20" color="#868D95" />
-                    </div>
-                    <input
-                        className={cx('search-input')}
-                        type="text"
-                        placeholder="Tìm kiếm theo mã đơn hàng hoặc tên sản phẩm"
-                    />
-                </div>
-                <div className={cx('list-orders')}>
-                    {data.map((order: IOrder) => (
-                        <Link key={order._id} to={config.routes.order + '/' + order._id} className={cx('order')}>
-                            <div className={cx('order__meta')}>
-                                <div className={cx('order__code')}>
-                                    Đơn hàng <strong>#{order._id}</strong>
-                                </div>
-                                <div className={cx('order__status')}>
-                                    <span>
-                                        {order.orderStatus === EOrderStatus.Processing && 'Đang xử lý'}
-                                        {order.orderStatus === EOrderStatus.Shipping && 'Đang vận chuyển'}
-                                        {order.orderStatus === EOrderStatus.Delivery && 'Đang giao hàng'}
-                                        {order.orderStatus === EOrderStatus.Delivered && 'Đã giao hàng'}
-                                        <ArrowRightIcon width="20" height="20" color="#868d95" />
-                                    </span>
-                                </div>
-                            </div>
-                            <div className={cx('order__product')}>
-                                <div className={cx('product')}>
-                                    <div className={cx('image-wrapper')}>
-                                        <img
-                                            className={cx('image-product')}
-                                            src={process.env.REACT_APP_API_URL + order.orderItems[0].image}
-                                            alt={order.orderItems[0].name}
-                                        />
-                                    </div>
-                                    <div className={cx('text-wrapper')}>
-                                        <div className={cx('product-brand')}>PUMA</div>
-                                        <div className={cx('product-name')}>{order.orderItems[0].name}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={cx('lq')}>
-                                <span>{order.orderItems.length} sản phẩm</span>
-                                <strong>{(order.shippingPrice + order.totalPrice).toLocaleString('vn-VN')}₫</strong>
-                            </div>
-                        </Link>
-                    ))}
-                </div>
-            </div>
-        );
-    };
-    const EmptyOrder: React.FC = () => (
-        <EmptyContent
-            icon={<TruckEmptyIcon />}
-            titleBtn="Dạo một vòng xem nào!"
-            content1="Không có đơn hàng nào!"
-            content2="Hãy mua sắm ngay lúc này để tận hưởng các ưu đãi hấp dẫn chỉ dành riêng cho bạn."
-        />
-    );
     const tabHeaders: ITabContent[] = [
         {
             _id: uuidv4(),
             title: `Đang xử lý ${processing?.length > 0 ? `(${processing?.length})` : ''}`,
-            content: processing?.length > 0 && processing ? <Content data={processing} /> : <EmptyOrder />,
+            content: processing?.length > 0 && processing ? <OrderContent data={processing} /> : <EmptyContent
+                icon={<TruckEmptyIcon />}
+                titleBtn="Dạo một vòng xem nào!"
+                content1="Không có đơn hàng nào!"
+                content2="Hãy mua sắm ngay lúc này để tận hưởng các ưu đãi hấp dẫn chỉ dành riêng cho bạn."
+            />,
         },
         {
             _id: uuidv4(),
-            title: `Đang vận chuyển ${shipping?.length > 0 ? `(${shipping?.length})` : ''}`,
-            content: shipping?.length > 0 && shipping ? <Content data={shipping} /> : <EmptyOrder />,
-        },
-        {
-            _id: uuidv4(),
-            title: `Đang giao hàng ${delivery?.length > 0 ? `(${delivery?.length})` : ''}`,
-            content: delivery?.length > 0 && delivery ? <Content data={delivery} /> : <EmptyOrder />,
-        },
-        {
-            _id: uuidv4(),
-            title: `Đã giao hàng ${delivered?.length > 0 ? `(${delivered?.length})` : ''}`,
-            content: delivered?.length > 0 && delivered ? <Content data={delivered} /> : <EmptyOrder />,
-        },
-        {
-            _id: uuidv4(),
-            title: `Đã hủy ${canceled?.length > 0 ? `(${canceled?.length})` : ''}`,
-            content: canceled?.length > 0 && canceled ? <Content data={canceled} /> : <EmptyOrder />,
+            title: `Đã hoàn tất ${completed?.length > 0 ? `(${completed?.length})` : ''}`,
+            content: completed?.length > 0 && completed ? <OrderContent data={completed} /> : <EmptyContent
+                icon={<TruckEmptyIcon />}
+                titleBtn="Dạo một vòng xem nào!"
+                content1="Không có đơn hàng nào!"
+                content2="Hãy mua sắm ngay lúc này để tận hưởng các ưu đãi hấp dẫn chỉ dành riêng cho bạn."
+            />,
         },
     ];
     return (

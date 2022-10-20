@@ -5,82 +5,83 @@ import PropTypes from 'prop-types';
 import React, { ReactNode } from 'react';
 const cx = classNames.bind(styles);
 export type Props = {
-    to?: string;
-    href?: string;
-    primary?:boolean;
-    outline?: boolean;
-    disabled?: boolean;
-    text?: boolean;
-    large?: boolean;
-    small?: boolean;
-    rounded?: boolean;
-    children: ReactNode;
-    className?: string;
-    icon?:ReactNode;
-    leftIcon?: ReactNode;
-    rightIcon?: ReactNode;
-    onClick?:  React.MouseEventHandler<HTMLButtonElement>;
-}
+  to?: string;
+  href?: string;
+  primary?: boolean;
+  outline?: boolean;
+  disabled?: boolean;
+  text?: boolean;
+  large?: boolean;
+  small?: boolean;
+  rounded?: boolean;
+  children: ReactNode;
+  className?: string;
+  icon?: ReactNode;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
+  state?: any;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+};
 const Button: React.FC<Props> = ({
-    to,
-    href,
-    primary = false,
-    outline = false,
-    disabled = false,
-    text = false,
-    large = false,
-    small = false,
-    rounded = false,
-    children,
-    className,
-    leftIcon,
-    rightIcon,
-    icon,
+  to,
+  href,
+  primary = false,
+  outline = false,
+  disabled = false,
+  text = false,
+  large = false,
+  small = false,
+  rounded = false,
+  children,
+  className,
+  leftIcon,
+  rightIcon,
+  icon,
+  onClick,
+  ...passProps
+}) => {
+  let Comp: any = 'button';
+  const props: any = {
     onClick,
-    ...passProps
-}) =>{
-    let Comp:any = 'button';
-    const props: any = {
-        onClick,
-        ...passProps,
-    };
-    // if (disabled) {
-    //     delete props.onClick;
-    // }
-    // Remove event
-    if (disabled) {
-        Object.keys(props).forEach((key) => {
-            if (key.startsWith('on') && typeof key === 'function') {
-                delete props[key];
-            }
-        });
-    }
-    if (to) {
-        props.to = to;
-        Comp = Link;
-    } else if (href) {
-        props.href = href;
-        Comp = 'a';
-    }
-    const classes = cx('wrapper', {
-        primary,
-        outline,
-        small,
-        large,
-        text,
-        disabled,
-        rounded,
-        [className? className : '']: className,
+    ...passProps,
+  };
+  // if (disabled) {
+  //     delete props.onClick;
+  // }
+  // Remove event
+  if (disabled) {
+    Object.keys(props).forEach((key) => {
+      if (key.startsWith('on') && typeof key === 'function') {
+        delete props[key];
+      }
     });
-    return (
-        <Comp className={classes} {...props}>
-            {icon && <span  className={cx('icon-abs')}>{icon}</span>}
-            {leftIcon && <span className={cx('icon')}>{leftIcon}</span>}
-            <span className={cx('title')}>{children}</span>
-            {rightIcon && <span className={cx('icon')}>{rightIcon}</span>}
-        </Comp>
-    );
-}
+  }
+  if (to) {
+    props.to = to;
+    Comp = Link;
+  } else if (href) {
+    props.href = href;
+    Comp = 'a';
+  }
+  const classes = cx('wrapper', {
+    primary,
+    outline,
+    small,
+    large,
+    text,
+    disabled,
+    rounded,
+    [className ? className : '']: className,
+  });
+  return (
+    <Comp className={classes} {...props}>
+      {icon && <span className={cx('icon-abs')}>{icon}</span>}
+      {leftIcon && <span className={cx('icon')}>{leftIcon}</span>}
+      <span className={cx('title')}>{children}</span>
+      {rightIcon && <span className={cx('icon')}>{rightIcon}</span>}
+    </Comp>
+  );
+};
 // Button.propTypes = {
 //     to: PropTypes.string,
 //     href: PropTypes.string,

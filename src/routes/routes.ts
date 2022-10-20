@@ -17,7 +17,7 @@ import NoPageFound from '../pages/NoPageFound';
 
 type routeType = {
   path: string;
-  component: React.FC;
+  component: React.FC<any>;
   layout?: React.FC<{ children: ReactNode }> | null;
   private?: boolean;
 };

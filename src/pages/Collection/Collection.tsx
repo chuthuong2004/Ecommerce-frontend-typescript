@@ -8,6 +8,7 @@ import ProductItem from '../../components/ProductItem';
 import { useEffect, useState } from 'react';
 import productApi from '../../api/productApi';
 import { EGenderType, ESort, IActionFilter, IProduct } from '../../models/product.model';
+import Loading from '../../components/Loading';
 const cx = classNames.bind(styles);
 
 
@@ -256,7 +257,7 @@ const Collection = () => {
                                 </div>
                             </div>
                         </div>
-                        {loading ? <p>Loading...</p> :
+                        {loading ? <Loading /> :
                             <div className={cx('collection-list')}>
 
                                 {products.length > 0 ? products.map((product) => (

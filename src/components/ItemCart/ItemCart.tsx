@@ -26,6 +26,8 @@ import { toast } from 'react-toastify';
 import { useGetMyProfileQuery } from '../../services/authApi';
 import productApi from '../../api/productApi';
 import ReactLoading from 'react-loading';
+import Loading from '../Loading';
+import Select from '../Select';
 const cx = classNames.bind(styles);
 type Props = {
     cartItem: ICartItem;
@@ -69,9 +71,7 @@ const ItemCart: React.FC<Props> = ({
         },
     ] = useUpdateQuantityCartMutation();
 
-    const {
-        refetch: refetchProfile,
-    } = useGetMyProfileQuery({});
+    const { refetch: refetchProfile } = useGetMyProfileQuery({});
     const [
         addItemToCart,
         {
@@ -180,10 +180,11 @@ const ItemCart: React.FC<Props> = ({
 
     const handleChangeSelectedSize = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setDefaultSize(e.target.value);
-    }
+    };
 
     return (
         <div className={cx('wrapper')}>
+            {(isLoadingUpdated || isLoadingRemoved) && <Loading />}
             <div className={cx('container')}>
                 {isCart && <input type="checkbox" checked={checked} onChange={handleChangeChecked} />}
                 <Link
@@ -232,11 +233,7 @@ const ItemCart: React.FC<Props> = ({
                                     {cartItem.product.colors
                                         .find((c) => c.colorName === cartItem.color)
                                         ?.sizes.map((size) => (
-                                            <option
-                                                selected={size.size === defaultSize}
-                                                key={size._id}
-                                                value={size.size}
-                                            >
+                                            <option selected={size.size === defaultSize} key={size._id} value={size.size}>
                                                 {size.size}
                                             </option>
                                         ))}
@@ -267,30 +264,16 @@ const ItemCart: React.FC<Props> = ({
                         <div className={cx('product-actions')}>
                             {cart.cartItems.find(
                                 (item: ICartItem) =>
-                                    item.product._id === cartItem.product._id &&
-                                    item.color === cartItem.color &&
-                                    item.size === cartItem.size,
+                                    item.product._id === cartItem.product._id && item.color === cartItem.color,
                             ) ? (
                                 <Button disabled small primary children="Đã có trong giỏ hàng" />
                             ) : (
-                                <Button
-                                    onClick={() => handleCart(EActionCart.ADD)}
-                                    small
-                                    primary
-
-                                >
-
+                                <Button onClick={() => handleCart(EActionCart.ADD)} small primary>
                                     {isLoadingCart ? (
-                                        <ReactLoading
-                                            type="spinningBubbles"
-                                            color="#ffffff"
-                                            width={20}
-                                            height={20}
-                                        />
+                                        <ReactLoading type="spinningBubbles" color="#ffffff" width={20} height={20} />
                                     ) : (
                                         'Chuyển vào giỏ hàng'
                                     )}
-
                                 </Button>
                             )}
                         </div>

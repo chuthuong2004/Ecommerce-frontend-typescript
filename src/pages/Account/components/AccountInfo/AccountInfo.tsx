@@ -24,7 +24,7 @@ const AccountInfo: React.FC<Props> = ({ data }) => {
                 <Input disabled label="Sinh nhật" placeholder="Nhập ngày tháng năm" />
             </div>
             <div>
-                <Input disabled label="Giới tính" value="Nam" />
+                <Input disabled label="Giới tính" value="" />
             </div>
             <div>
                 <Input disabled label="Số điện thoại" value={data.phone} />
