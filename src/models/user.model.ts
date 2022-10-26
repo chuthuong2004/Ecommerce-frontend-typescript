@@ -46,9 +46,32 @@ export interface IAddress {
   district?: string;
   ward?: string;
   address?: string;
-  isDefault?: boolean;
   _id?: string;
 }
 export interface IAddressUser extends IAddress {
   isDefault: boolean;
+}
+
+export interface IProvince {
+  name: string;
+  code: number;
+  codename: string;
+  division_type: string;
+  phone_code: string;
+  districts: IDistrict[];
+}
+export interface IDistrict {
+  name: string;
+  code: number;
+  codename: string;
+  division_type: string;
+  short_codename: string;
+  wards: IWard[];
+}
+export interface IWard {
+  name: string;
+  code: number;
+  codename: string;
+  division_type: string;
+  short_codename: string;
 }

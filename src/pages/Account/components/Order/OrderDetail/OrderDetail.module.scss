@@ -1,0 +1,98 @@
+.order-detail {
+  font-size: 1.4rem;
+  &__meta {
+    display: flex;
+    padding: 24px 32px;
+    background-color: #f7f8f9;
+    line-height: 21px;
+    &--left {
+      flex: 1;
+      padding-right: 60px;
+      border-right: 1px dotted #2e2e2e;
+      & > div {
+        padding: 5px 0;
+      }
+      .ord-number {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        .copy-icon {
+          cursor: pointer;
+          position: relative;
+          &.isCopied .copied {
+            opacity: 1;
+          }
+          .copied {
+            position: absolute;
+            color: #f7f8f9;
+            right: -15px;
+            top: -35px;
+            background-color: #757272;
+            padding: 5px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: all 0.3s ease-in-out;
+          }
+        }
+      }
+      .payment-stt {
+      }
+      .quantity {
+      }
+    }
+    &--right {
+      flex: 2;
+      padding-left: 60px;
+      & > p {
+        padding: 5px 0;
+      }
+      .shipment-detail {
+        display: flex;
+        justify-content: space-between;
+        span {
+          color: #868d95;
+          font-weight: 700;
+          text-transform: capitalize;
+        }
+      }
+      .customer {
+      }
+      .address {
+        font-size: 1.4rem;
+      }
+    }
+  }
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px 0;
+    max-height: 56rem;
+    overflow: scroll;
+  }
+  &__summary {
+    padding: 32px 0;
+    letter-spacing: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-top: 4px solid #f7f8f9;
+  }
+  &__total {
+    font-size: 1.8rem;
+    padding-top: 3.2rem;
+    border-top: 1px solid #f7f8f9;
+  }
+  &__actions {
+    border-top: 4px solid #f7f8f9;
+    display: flex;
+    padding: 20px 0;
+    justify-content: center;
+    gap: 20px;
+    .btn {
+      padding-top: 17px;
+      padding-bottom: 17px;
+    }
+  }
+}

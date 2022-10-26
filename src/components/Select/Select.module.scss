@@ -20,6 +20,7 @@
     -moz-appearance: none; /* Firefox */
     -webkit-appearance: none; /* Safari and Chrome */
     appearance: none;
+    max-width: 800px;
     &:focus + .arrow-down {
       transform: rotate(0);
     }

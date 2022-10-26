@@ -15,7 +15,7 @@ import {
   VisaIcon,
   VNPayIcon,
 } from '../../components/Icons';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import config from '../../config';
 import { useState, useRef, useEffect } from 'react';
 import Input from '../../components/Input/Input';
@@ -25,21 +25,206 @@ import { useAppSelector } from '../../app/hooks';
 import Select from '../../components/Select';
 import { ICartItem } from '../../models/cart.model';
 import { selectCart } from '../../features/cartSlice';
+import { IAddress, IAddressUser, IDistrict, IProvince, IWard } from '../../models/user.model';
+import axiosClient from '../../api/axiosClient';
+import { useCreateNewOrderMutation, useGetMyOrderQuery } from '../../services/ordersApi';
+import { toast } from 'react-toastify';
+import { useGetMyCartQuery } from '../../services/cartsApi';
+import Loading from '../../components/Loading';
 const cx = classNames.bind(styles);
 
 type Props = {
   listCartItem: ICartItem[];
 };
+const initialValue: IAddress = {
+  firstName: '',
+  lastName: '',
+  address: '',
+  ward: '',
+  district: '',
+  province: '',
+  phone: '',
+};
 const Payment: React.FC<Props> = () => {
   const location = useLocation();
-  let { listCartItem } = location.state;
+  let { listCartItem }: { listCartItem: ICartItem[] } = location.state;
+  const navigate = useNavigate();
   const { user } = useAppSelector(selectAuth);
   const { cartItems } = useAppSelector(selectCart);
+
   const [isOpenItem, setIsOpenItem] = useState<boolean>(false);
-  console.log(listCartItem);
+  const [informationDelivery, setInformationDelivery] = useState<IAddress>(
+    user?.addresses?.find((address: IAddressUser) => address.isDefault) || initialValue,
+  );
+  const [errorsInput, setErrorsInput] = useState<IAddress>(initialValue);
+  const [provinces, setProvinces] = useState<IProvince[]>([]);
+  const [districts, setDistricts] = useState<IDistrict[]>([]);
+  const [wards, setWards] = useState<IWard[]>([]);
+  const [shipmentPrice, setShipmentPrice] = useState<number>(0);
+
+  const productItemRef = useRef<HTMLDivElement>(null);
+
+  const [createNewOrder, { data, isLoading, isError, error, isSuccess }] =
+    useCreateNewOrderMutation();
+  const { refetch: refetchCart } = useGetMyCartQuery({});
+
   if (listCartItem.length === 0) {
     listCartItem = cartItems;
   }
+
+  useEffect(() => {
+    fetch('https://provinces.open-api.vn/api/?depth=3').then(async (res) => {
+      const data: IProvince[] = await res.json();
+      const districts: IDistrict[] | undefined = data.find(
+        (province: IProvince) => province.name === informationDelivery.province,
+      )?.districts;
+      const wards = districts?.find(
+        (district: IDistrict) => district.name === informationDelivery.district,
+      )?.wards;
+      setProvinces(data);
+      if (informationDelivery.province) {
+        setDistricts(districts || []);
+      }
+      if (informationDelivery.district) {
+        setWards(wards || []);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!informationDelivery.district) {
+      setShipmentPrice(0);
+    } else if (informationDelivery.province?.includes('Hồ Chí Minh')) {
+      if (informationDelivery.district?.includes('Thủ Đức')) {
+        setShipmentPrice(10000);
+      } else {
+        setShipmentPrice(20000);
+      }
+      informationDelivery.ward?.includes('Hiệp Bình Phước') && setShipmentPrice(0);
+    } else {
+      setShipmentPrice(30000);
+    }
+    if (informationDelivery.province) {
+      const districts: IDistrict[] | undefined = provinces.find(
+        (province: IProvince) => province.name === informationDelivery.province,
+      )?.districts;
+      const wards = districts?.find(
+        (district: IDistrict) => district.name === informationDelivery.district,
+      )?.wards;
+      setDistricts(districts || []);
+      setWards(wards || []);
+    }
+    setErrorsInput({
+      ...errorsInput,
+      address: informationDelivery.address && '',
+      phone: informationDelivery.phone && '',
+      province: informationDelivery.province && '',
+      district: informationDelivery.district && '',
+      ward: informationDelivery.ward && '',
+    });
+  }, [informationDelivery]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log(data);
+
+      refetchCart();
+      toast.success('Đặt hàng thành công !');
+      navigate(config.routes.order);
+    }
+    if (isError) {
+      console.log(error);
+      toast.error((error as any).data.message);
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (isOpenItem) {
+      const heightItems = listCartItem.length * (80 + 30); // 80: heigh của 1 item, 30 là phần margin 1 item
+      if (heightItems > 500) {
+        productItemRef.current!.style.height = '530px';
+        productItemRef.current!.style.overflow = 'scroll';
+      } else {
+        productItemRef.current!.style.height = String(heightItems + 'px');
+      }
+    } else {
+      productItemRef.current!.style.height = '0';
+    }
+  }, [isOpenItem]);
+
+  const handleChangeSelectedProvince = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setInformationDelivery((prev) => ({ ...prev, province: e.target.value }));
+  };
+
+  const handleChangeSelectedDistrict = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setInformationDelivery((prev) => ({ ...prev, district: e.target.value }));
+  };
+
+  const handleChangeSelectedWard = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setInformationDelivery((prev) => ({ ...prev, ward: e.target.value }));
+  };
+  const handleChangeSelectedAddress = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (!e.target.value) {
+      setInformationDelivery(initialValue);
+      setDistricts([]);
+      setWards([]);
+    }
+    const address = user?.addresses?.find(
+      (address: IAddressUser) => address._id === e.target.value,
+    );
+    setInformationDelivery(address || initialValue);
+  };
+  const handleCreateOrder = async () => {
+    if (!informationDelivery.firstName || !informationDelivery.lastName) {
+      toast.error('Vui lòng nhập đầy đủ họ và tên.');
+      return;
+    }
+    if (!informationDelivery.phone) {
+      toast.error('Vui lòng nhập số điện thoại.');
+      return;
+    }
+    if (!informationDelivery.address) {
+      toast.error('Vui lòng nhập địa chỉ.');
+      return;
+    }
+    if (!informationDelivery.province) {
+      toast.error('Vui lòng chọn tỉnh / thành.');
+      return;
+    }
+    if (!informationDelivery.district) {
+      toast.error('Vui lòng chọn quận / huyện.');
+      return;
+    }
+    if (!informationDelivery.ward) {
+      toast.error('Vui lòng chọn phường / xã.');
+      return;
+    }
+    const cartItemsId = listCartItem.map((cartItem) => (cartItem._id ? cartItem._id : ''));
+    await createNewOrder({
+      deliveryInformation: informationDelivery,
+      cartItemsId: cartItemsId,
+      shippingPrice: shipmentPrice,
+    });
+  };
+
+  const handleChangeInputFullName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Đào Văn Quốc Trọn => ['Đào', Văn, Quốc, Trọn]
+    const charName: string[] = e.target.value.split(' ');
+    const firstName = charName.shift();
+    setInformationDelivery((prev) => ({
+      ...prev,
+      firstName: firstName ? firstName : '',
+      lastName: charName.join(' '),
+    }));
+  };
+  const handleBlurInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setErrorsInput({
+      ...errorsInput,
+      [e.target.name]: e.target.value ? '' : 'Trường này là bắt buộc !',
+    });
+  };
+  console.log(errorsInput);
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container-fluid')}>
@@ -79,16 +264,41 @@ const Payment: React.FC<Props> = () => {
                 </div>
               </div>
               <div className={cx('fieldset')}>
-                {/* <Input label="Chọn địa chỉ" /> */}
-                <Select label="Chọn địa chỉ">
+                <Select onChangeSelected={handleChangeSelectedAddress} label="Chọn địa chỉ">
                   <option value="">Địa chỉ đã lưu trữ</option>
+                  {user?.addresses &&
+                    user?.addresses?.map((address: IAddressUser) => (
+                      <option selected={address.isDefault} key={address._id} value={address._id}>
+                        {address.address}, {address.ward}, {address.district}
+                      </option>
+                    ))}
                 </Select>
                 <div className={cx('field-required')}>
                   <div className={cx('field-input')}>
-                    <Input label="họ và tên" />
+                    <Input
+                      label="họ và tên"
+                      value={
+                        informationDelivery.firstName &&
+                        informationDelivery.lastName &&
+                        informationDelivery.firstName + ' ' + informationDelivery.lastName
+                      }
+                      onChange={handleChangeInputFullName}
+                      name="firstName"
+                      onBlur={handleBlurInput}
+                      error={errorsInput}
+                    />
                   </div>
                   <div className={cx('field-input')}>
-                    <Input label="số điện thoại" />
+                    <Input
+                      label="số điện thoại"
+                      value={informationDelivery.phone}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setInformationDelivery((prev) => ({ ...prev, phone: e.target.value }))
+                      }
+                      name="phone"
+                      onBlur={handleBlurInput}
+                      error={errorsInput}
+                    />
                   </div>
                 </div>
               </div>
@@ -105,23 +315,59 @@ const Payment: React.FC<Props> = () => {
               <div className={cx('form-location-customer')}>
                 <div className={cx('field-required')}>
                   <div className={cx('field-input')}>
-                    <Input label="địa chỉ" />
+                    <Input
+                      label="địa chỉ"
+                      value={informationDelivery.address}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setInformationDelivery((prev) => ({ ...prev, address: e.target.value }))
+                      }
+                      onBlur={handleBlurInput}
+                      name="address"
+                      error={errorsInput}
+                    />
                   </div>
                   <div className={cx('field-input')}>
-                    <Select label="Tỉnh / thành">
+                    <Select label="Tỉnh / thành" onChangeSelected={handleChangeSelectedProvince}>
                       <option value="">Chọn tỉnh / thành</option>
+                      {provinces?.map((province: IProvince) => (
+                        <option
+                          key={province.code}
+                          value={province.name}
+                          selected={province.name === informationDelivery.province}
+                        >
+                          {province.name}
+                        </option>
+                      ))}
                     </Select>
                   </div>
                 </div>
                 <div className={cx('field-required')}>
                   <div className={cx('field-input')}>
-                    <Select label="Quân / huyện">
+                    <Select label="Quân / huyện" onChangeSelected={handleChangeSelectedDistrict}>
                       <option value="">Chọn quận / huyện</option>
+                      {districts?.map((district: IDistrict) => (
+                        <option
+                          key={district.code}
+                          value={district.name}
+                          selected={district.name === informationDelivery.district}
+                        >
+                          {district.name}
+                        </option>
+                      ))}
                     </Select>
                   </div>
                   <div className={cx('field-input')}>
-                    <Select label="Phường / xã">
+                    <Select label="Phường / xã" onChangeSelected={handleChangeSelectedWard}>
                       <option value="">Chọn phường / xã</option>
+                      {wards?.map((ward: IWard) => (
+                        <option
+                          key={ward.code}
+                          value={ward.name}
+                          selected={ward.name === informationDelivery.ward}
+                        >
+                          {ward.name}
+                        </option>
+                      ))}
                     </Select>
                   </div>
                 </div>
@@ -139,39 +385,43 @@ const Payment: React.FC<Props> = () => {
 
               <div className={cx('section-content')}>
                 <h2 className={cx('title')}>Phương thức vận chuyển</h2>
-                {/* <div className={cx('blank-slate')}>
-                                    <BlankSlateIcon />
-                                    <p>Vui lòng chọn tỉnh / thành để có danh sách phương thức vận chuyển</p>
-                                </div> */}
+                {wards.length > 0 ? (
+                  <div className={cx('radio-wrapper')}>
+                    <div className={cx('field-input', 'none-flex')}>
+                      <input type="radio" checked id="shipment" />
+                      <label htmlFor="shipment">Giao hàng tiêu chuẩn (3 - 5 ngày)</label>
+                    </div>
 
-                <div className={cx('radio-wrapper')}>
-                  <div className={cx('field-input', 'none-flex')}>
-                    <input type="radio" id="shipment" />
-                    <label htmlFor="shipment">Giao hàng tiêu chuẩn (3 - 5 ngày)</label>
+                    <div className={cx('radio-accessory')}>
+                      {shipmentPrice.toLocaleString('vn-VN')}₫
+                    </div>
                   </div>
-
-                  <div className={cx('radio-accessory')}>21,000₫</div>
-                </div>
+                ) : (
+                  <div className={cx('blank-slate')}>
+                    <BlankSlateIcon />
+                    <p>Vui lòng chọn tỉnh / thành để có danh sách phương thức vận chuyển</p>
+                  </div>
+                )}
               </div>
               <div className={cx('section-payment')}>
                 <h2 className={cx('title')}>Phương thức thanh toán</h2>
                 <div className={cx('field-input', 'payment-method')}>
-                  <input type="radio" id="shipment" />
-                  <label htmlFor="shipment">
+                  <input name="method-payment" type="radio" id="momo" />
+                  <label htmlFor="momo">
                     <MoMoIcon />
                     <span>Ví Momo</span>
                   </label>
                 </div>
                 <div className={cx('field-input', 'payment-method')}>
-                  <input type="radio" id="shipment" />
-                  <label htmlFor="shipment">
+                  <input name="method-payment" type="radio" id="shopeepay" />
+                  <label htmlFor="shopeepay">
                     <ShopeePayIcon />
                     <span>Ví ShopeePay</span>
                   </label>
                 </div>
                 <div className={cx('field-input', 'payment-method')}>
-                  <input type="radio" id="shipment" />
-                  <label htmlFor="shipment">
+                  <input name="method-payment" type="radio" id="vnpay" />
+                  <label htmlFor="vnpay">
                     <VNPayIcon />
                     <span>
                       <p>Thanh toán qua cổng VN Pay</p>
@@ -182,8 +432,8 @@ const Payment: React.FC<Props> = () => {
                   </label>
                 </div>
                 <div className={cx('field-input', 'payment-method')}>
-                  <input type="radio" id="shipment" />
-                  <label htmlFor="shipment">
+                  <input name="method-payment" type="radio" id="reepay" />
+                  <label htmlFor="reepay">
                     <ReePayIcon />
                     <span>
                       <p>Ree-Pay</p>
@@ -194,22 +444,22 @@ const Payment: React.FC<Props> = () => {
                   </label>
                 </div>
                 <div className={cx('field-input', 'payment-method')}>
-                  <input type="radio" id="shipment" />
-                  <label htmlFor="shipment">
+                  <input name="method-payment" type="radio" id="banking" />
+                  <label htmlFor="banking">
                     <ATMIcon />
                     <span>ATM Card / Internet Banking</span>
                   </label>
                 </div>
                 <div className={cx('field-input', 'payment-method')}>
-                  <input type="radio" id="shipment" />
-                  <label htmlFor="shipment">
+                  <input name="method-payment" type="radio" id="visa" />
+                  <label htmlFor="visa">
                     <VisaIcon />
                     <span>Visa / Master / JSB Card</span>
                   </label>
                 </div>
                 <div className={cx('field-input', 'payment-method')}>
-                  <input type="radio" id="shipment" />
-                  <label htmlFor="shipment">
+                  <input name="method-payment" type="radio" id="cod" />
+                  <label htmlFor="cod">
                     <PaymentReceived />
                     <span>Thanh toán khi nhận hàng (COD)</span>
                   </label>
@@ -240,7 +490,7 @@ const Payment: React.FC<Props> = () => {
                 ₫
               </div>
             </div>
-            <div className={cx('product-list')}>
+            <div ref={productItemRef} className={cx('product-list')}>
               {listCartItem.map((cartItem: ICartItem) => (
                 <div key={cartItem._id} className={cx('product-item')}>
                   <img
@@ -297,7 +547,10 @@ const Payment: React.FC<Props> = () => {
               </div>
               <div>
                 <span>Phí vận chuyển</span>
-                <span>+ 30,000đ</span>
+                <span>
+                  +{' '}
+                  {informationDelivery.district ? `${shipmentPrice.toLocaleString('vn-VN')}₫` : '-'}
+                </span>
               </div>
             </div>
             <div className={cx('total-price')}>
@@ -312,7 +565,7 @@ const Payment: React.FC<Props> = () => {
                         cartItem.product.price * (cartItem.product.discount / 100)) *
                         cartItem.quantity,
                     0,
-                  ) + 30000
+                  ) + shipmentPrice
                 ).toLocaleString('vn-VN')}
                 ₫
               </p>
@@ -328,12 +581,13 @@ const Payment: React.FC<Props> = () => {
             </Button>
           </div>
           <div>
-            <Button className={cx('btn')} large primary>
+            <Button onClick={handleCreateOrder} className={cx('btn')} large primary>
               Hoàn tất đặt hàng
             </Button>
           </div>
         </div>
       </div>
+      {isLoading && <Loading />}
     </div>
   );
 };

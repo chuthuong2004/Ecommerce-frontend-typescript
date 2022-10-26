@@ -1,7 +1,8 @@
 .order-search {
   position: relative;
   display: flex;
-  & > div {
+  width: 100%;
+  .search-icon {
     position: absolute;
     left: 20px;
     top: 50%;
@@ -15,6 +16,13 @@
     font-size: 14px;
     padding: 10px 20px 10px 45px;
   }
+  .loading-icon {
+    right: calc(50% + 15px);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
 }
 .list-order {
   display: flex;
@@ -27,4 +35,9 @@
       border-bottom: 4px solid #f7f8f9;
     }
   }
+}
+.order-not-found {
+  text-align: center;
+  padding-top: 50px;
+  color: #e24c4c;
 }

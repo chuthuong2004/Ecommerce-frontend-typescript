@@ -103,6 +103,9 @@
           }
         }
         .fieldset {
+          .select-address {
+            max-width: 800px;
+          }
         }
       }
       .type-address-shipping {
@@ -183,6 +186,7 @@
       height: max-content;
       flex: 2;
       padding: 56px 0;
+      // background-color: red;
       .toggle-items {
         display: flex;
         justify-content: space-between;
@@ -203,20 +207,19 @@
           text-transform: lowercase;
         }
         &.expanded + .product-list {
-          display: flex;
+          // display: flex;
         }
       }
       .product-list {
         padding: 0 16px;
-        margin-bottom: 24px;
         font-size: 1.2rem;
         display: flex;
         flex-direction: column;
-        transition: all 0.6s linear;
+        transition: all 0.5s ease-in-out;
         gap: 30px;
-        display: none;
         max-height: 450px;
-        overflow: scroll;
+        // overflow: scroll;
+        overflow: hidden;
         .product-item {
           display: flex;
           .product-thumbnail {
@@ -252,7 +255,6 @@
         }
       }
       .discount {
-        margin-top: 24px;
         display: flex;
         align-items: flex-end;
         background-color: #f7f8f9;
