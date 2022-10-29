@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../app/store';
-import { IUser } from '../models/user.model';
+import { IAddressUser, IUser } from '../models/user.model';
 import { IProduct } from '../models/product.model';
 import { ICart } from '../models/cart.model';
 export const authApi = createApi({
@@ -20,7 +20,7 @@ export const authApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['IUser', 'IProduct', 'ICart'],
+  tagTypes: ['User', 'Product', 'Cart'],
   endpoints: (builder) => ({
     loginUser: builder.mutation({
       query: (body: { email: string; password: string }) => {
@@ -65,7 +65,40 @@ export const authApi = createApi({
           url: '/me',
         };
       },
-      providesTags: ['IUser', 'IProduct', 'ICart'],
+      providesTags: ['User', 'Product', 'Cart'],
+    }),
+    updateProfile: builder.mutation<IUser, IUser | any>({
+      query: (body) => {
+        return {
+          url: `/me/update`,
+          method: 'PUT',
+          body,
+        };
+      },
+      invalidatesTags: ['User'],
+    }),
+    addAddress: builder.mutation<{ message: string }, IAddressUser>({
+      query: (body) => {
+        return {
+          url: `/me/addresses/add`,
+          method: 'POST',
+          body,
+        };
+      },
+      invalidatesTags: ['User'],
+    }),
+    updateAddress: builder.mutation<
+      { message: string },
+      { address: IAddressUser; addressId: string }
+    >({
+      query: ({ address, addressId }) => {
+        return {
+          url: `/me/addresses/${addressId}`,
+          method: 'PUT',
+          body: address,
+        };
+      },
+      invalidatesTags: ['User'],
     }),
   }),
 });
@@ -76,4 +109,7 @@ export const {
   useLogoutUserMutation,
   useGetMyProfileQuery,
   useForgotPasswordMutation,
+  useAddAddressMutation,
+  useUpdateAddressMutation,
+  useUpdateProfileMutation,
 } = authApi;

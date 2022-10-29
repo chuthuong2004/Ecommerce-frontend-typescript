@@ -27,7 +27,7 @@ export const ordersApi = createApi({
       { countDocument: number; totalAmount: number; resultPerPage: number; data: IOrder[] },
       {}
     >({
-      query: () => `/order/me`,
+      query: () => `/order/me?sort=-updatedAt`,
       providesTags: ['Order'],
     }),
     createNewOrder: builder.mutation<
@@ -52,7 +52,24 @@ export const ordersApi = createApi({
       query: ({ orderId }) => `/order/${orderId}`,
       providesTags: ['Order'],
     }),
+    cancelOrder: builder.mutation<{ message: string }, { orderId: string; canceledReason: string }>(
+      {
+        query: ({ canceledReason, orderId }) => {
+          return {
+            url: `/order/cancel/${orderId}`,
+            method: 'PUT',
+            body: { canceledReason },
+          };
+        },
+        invalidatesTags: ['Order'],
+      },
+    ),
   }),
 });
 
-export const { useGetMyOrderQuery, useCreateNewOrderMutation, useGetOrderByIdQuery } = ordersApi;
+export const {
+  useGetMyOrderQuery,
+  useCreateNewOrderMutation,
+  useGetOrderByIdQuery,
+  useCancelOrderMutation,
+} = ordersApi;

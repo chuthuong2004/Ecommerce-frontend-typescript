@@ -32,6 +32,9 @@
       &:focus {
         box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.5);
       }
+      &:disabled {
+        background-color: #f7f8f9;
+      }
     }
     .icon-eye {
       display: none;

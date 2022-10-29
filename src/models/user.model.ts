@@ -12,7 +12,7 @@ export interface IFavorite {
   quantity: number;
   _id: string;
 }
-enum EGender {
+export enum EGender {
   Male = 'Nam',
   Female = 'Nữ',
   Other = 'Other',
@@ -74,4 +74,14 @@ export interface IWard {
   codename: string;
   division_type: string;
   short_codename: string;
+}
+export interface FileResponse {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  destination: string;
+  filename: string;
+  path: string;
+  size: number;
 }

@@ -1,35 +1,64 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styles from './Address.module.scss';
 import classNames from 'classnames/bind';
 import { EditIcon, LocationEmptyIcon, PlusStrongIcon } from '../../../../components/Icons';
 import Button from '../../../../components/Button';
 import EmptyContent from '../../../../components/EmptyContent';
 import { IAddress, IAddressUser } from '../../../../models/user.model';
+import PopUp from '../../../../components/PopUp';
+import FormAddress from '../../../../components/FormEdit';
+import { useAppSelector } from '../../../../app/hooks';
+import { selectAuth } from '../../../../features/authSlice';
+import { useAddAddressMutation } from '../../../../services/authApi';
 const cx = classNames.bind(styles);
-type Props = {
-  data: IAddressUser[] | undefined;
-};
-const Address: React.FC<Props> = ({ data = [] }) => {
+type Props = {};
+const Address: React.FC<Props> = ({}) => {
+  const { user } = useAppSelector(selectAuth);
+  const [isOpenAddAddress, setIsOpenAddAddress] = useState(false);
+  const [isOpenEditAddress, setIsOpenEditAddress] = useState(false);
+  const [addressEdit, setAddressEdit] = useState<IAddressUser | undefined>(undefined);
+
+  const handleClickEdit = (address: IAddressUser) => {
+    setAddressEdit(address);
+    setIsOpenEditAddress(true);
+  };
+
+  const handleClosePopupEdit = useCallback(() => setIsOpenEditAddress(false), []);
+  const handleClosePopupAdd = useCallback(() => setIsOpenAddAddress(false), []);
   return (
     <div className={cx('account-address')}>
-      {data && data.length > 0 ? (
+      {user?.addresses && user.addresses.length > 0 ? (
         <>
-          <div className={cx('add-address')}>
-            <Button
-              className={cx('btn-add-address')}
-              leftIcon={<PlusStrongIcon color="#ffffff" />}
-              primary
-            >
-              Thêm Địa chỉ
-            </Button>
-          </div>
+          <PopUp
+            trigger={
+              <div className={cx('add-address')}>
+                <Button
+                  className={cx('btn-add-address')}
+                  leftIcon={<PlusStrongIcon color="#ffffff" />}
+                  primary
+                  onClick={() => setIsOpenAddAddress(true)}
+                >
+                  Thêm Địa chỉ
+                </Button>
+              </div>
+            }
+            isOpen={isOpenAddAddress}
+            handleClose={() => setIsOpenAddAddress(false)}
+            position="center"
+          >
+            <FormAddress
+              title="Thêm địa chỉ"
+              isOpen={isOpenAddAddress}
+              handleClosePopUp={handleClosePopupAdd}
+            />
+          </PopUp>
           <div className={cx('addresses')}>
-            {data.map((item: IAddressUser) => (
+            {user.addresses.map((item: IAddressUser) => (
               <div key={item._id} className={cx('address')}>
                 <div className={cx('address-name', item.isDefault && 'default-address')}>
                   <div className={cx('name')}>
                     <span>{`${item.firstName} ${item.lastName}`}</span>
-                    <div className={cx('edit-icon')}>
+                    <div onClick={() => handleClickEdit(item)} className={cx('edit-icon')}>
                       <EditIcon />
                     </div>
                   </div>
@@ -46,6 +75,19 @@ const Address: React.FC<Props> = ({ data = [] }) => {
               </div>
             ))}
           </div>
+          <PopUp
+            trigger={<></>}
+            isOpen={isOpenEditAddress}
+            handleClose={() => setIsOpenEditAddress(false)}
+            position="center"
+          >
+            <FormAddress
+              address={addressEdit}
+              isOpen={isOpenEditAddress}
+              title="Cập nhật địa chỉ"
+              handleClosePopUp={handleClosePopupEdit}
+            />
+          </PopUp>
         </>
       ) : (
         <EmptyContent

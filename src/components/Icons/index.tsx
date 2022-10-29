@@ -1791,16 +1791,23 @@ export const CopyIcon = ({ width = '17rem', height = '10rem' }) => (
     ></path>{' '}
   </svg>
 );
-export const MessageIcon = ({ width = '17rem', height = '10rem' }) => (
+export const MessageIcon = ({ width = '17rem', height = '10rem', color = 'white' }) => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     {' '}
     <path
       d="M3.54912 13.8276C2.6173 12.2567 2.29097 10.3998 2.6314 8.60534C2.97184 6.81093 3.95563 5.20252 5.39803 4.08212C6.84044 2.96173 8.64224 2.40643 10.4651 2.5205C12.2879 2.63457 14.0065 3.41016 15.2979 4.70163C16.5894 5.99311 17.365 7.71162 17.4791 9.53447C17.5932 11.3573 17.0379 13.1591 15.9175 14.6015C14.7971 16.044 13.1887 17.0277 11.3943 17.3682C9.59988 17.7086 7.74291 17.3823 6.17207 16.4505L6.17209 16.4504L3.58173 17.1905C3.47456 17.2211 3.36115 17.2225 3.25325 17.1946C3.14536 17.1666 3.0469 17.1103 2.96809 17.0315C2.88927 16.9527 2.83297 16.8542 2.80501 16.7463C2.77705 16.6384 2.77846 16.525 2.80908 16.4179L3.54918 13.8275L3.54912 13.8276Z"
-      stroke="white"
+      stroke={color}
       strokeLinecap="round"
       strokeLinejoin="round"
     ></path>{' '}
-    <path d="M7.5 8.75H12.5" stroke="white" strokeLinecap="round" strokeLinejoin="round"></path>{' '}
-    <path d="M7.5 11.25H12.5" stroke="white" strokeLinecap="round" strokeLinejoin="round"></path>{' '}
+    <path d="M7.5 8.75H12.5" stroke={color} strokeLinecap="round" strokeLinejoin="round"></path>{' '}
+    <path d="M7.5 11.25H12.5" stroke={color} strokeLinecap="round" strokeLinejoin="round"></path>{' '}
+  </svg>
+);
+export const CameraIcon = ({ width = '17rem', height = '10rem' }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+    <path fill="none" d="M0 0h24v24H0V0z" />
+    <circle cx="12" cy="12" r="3" />
+    <path d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
   </svg>
 );

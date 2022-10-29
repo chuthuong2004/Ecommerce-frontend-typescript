@@ -31,6 +31,7 @@ import { toast } from 'react-toastify';
 import { clearCart, selectCart, setCart } from '../../../features/cartSlice';
 import { cartsApi, useGetMyCartQuery } from '../../../services/cartsApi';
 import { ordersApi } from '../../../services/ordersApi';
+import WishList from '../../../components/WishList';
 const cx = classNames.bind(styles);
 
 function Header() {
@@ -275,28 +276,34 @@ function Header() {
               </HeadlessTippy>
             </div>
             <div className={cx('wishlist')}>
-              <Tippy
-                placement="bottom"
-                delay={100}
-                content={
-                  <span style={{ fontSize: '13px' }} className={cx('tippy-content')}>
-                    Yêu thích
-                  </span>
-                }
-              >
-                <div
-                  onClick={() => handleClickActive('wishlist')}
-                  className={cx('icons', activeWishList && 'active')}
-                >
-                  <HeartIcon className={cx('icon')} />
-                  <HeartActiveIcon className={cx('icon-active')} />
-                </div>
-              </Tippy>
               <PopUp
-                activeWishList={activeWishList}
-                handleClosePopUp={() => setActiveWishList(false)}
-                handleOpenPopUp={() => setActiveWishList(true)}
-              />
+                trigger={
+                  <Tippy
+                    placement="bottom"
+                    delay={100}
+                    content={
+                      <span style={{ fontSize: '13px' }} className={cx('tippy-content')}>
+                        Yêu thích
+                      </span>
+                    }
+                  >
+                    <div
+                      onClick={() => handleClickActive('wishlist')}
+                      className={cx('icons', activeWishList && 'active')}
+                    >
+                      <HeartIcon className={cx('icon')} />
+                      <HeartActiveIcon className={cx('icon-active')} />
+                    </div>
+                  </Tippy>
+                }
+                handleClose={() => setActiveWishList(false)}
+                isOpen={activeWishList}
+              >
+                <WishList
+                  activeWishList={activeWishList}
+                  handleClosePopUp={() => setActiveWishList(false)}
+                />
+              </PopUp>
             </div>
             <Link
               onClick={() => handleClickActive('cart')}

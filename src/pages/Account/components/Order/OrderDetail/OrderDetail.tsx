@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Popup from 'reactjs-popup';
 import styles from './OrderDetail.module.scss';
 import classNames from 'classnames/bind';
-import { useGetOrderByIdQuery } from '../../../../../services/ordersApi';
+import { useCancelOrderMutation, useGetOrderByIdQuery } from '../../../../../services/ordersApi';
 import Loading from '../../../../../components/Loading';
 import { BagIcon, CopyIcon, MessageIcon } from '../../../../../components/Icons';
 import { EOrderStatus, IOrder, IOrderItem } from '../../../../../models/order.model';
-import OrderItem from '../OrderItem';
-import OrderItemProduct from '../OrderItemProduct/OrderItemProduct';
+import OrderItemProduct from '../OrderItemProduct';
 import Button from '../../../../../components/Button';
+import PopUp from '../../../../../components/PopUp';
+import Input from '../../../../../components/Input';
+import { toast } from 'react-toastify';
+import ReactLoading from 'react-loading';
 const cx = classNames.bind(styles);
 type Props = {
   orderId: string;
@@ -16,15 +18,39 @@ type Props = {
 const OrderDetail: React.FC<Props> = ({ orderId }) => {
   const [order, setOrder] = useState<IOrder | null>(null);
   const [openPopUp, setOpenPopUp] = useState(false);
+  const [cancelReason, setCancelReason] = useState('');
+  const [cancelValueError, setCancelValueError] = useState<{ cancelReason: string }>({
+    cancelReason: '',
+  });
   const orderIDRef = useRef<HTMLDivElement>(null);
-  const { data, isLoading, isSuccess, isError, isFetching, error } = useGetOrderByIdQuery({
+  const { data, refetch, isLoading, isSuccess, isError, isFetching, error } = useGetOrderByIdQuery({
     orderId,
   });
+  const [
+    cancelOrder,
+    {
+      data: dataCancel,
+      isLoading: isLoadingCancel,
+      isError: isErrorCancel,
+      error: errorCancel,
+      isSuccess: isSuccessCancel,
+    },
+  ] = useCancelOrderMutation();
   useEffect(() => {
     if (isSuccess) {
       setOrder(data);
     }
   }, [isLoading, isFetching]);
+
+  useEffect(() => {
+    if (isSuccessCancel) {
+      refetch();
+      toast.success(dataCancel?.message);
+    }
+    if (isErrorCancel) {
+      toast.error((error as any).data.message);
+    }
+  }, [isLoadingCancel]);
 
   const handleCopyOrderID = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -33,8 +59,19 @@ const OrderDetail: React.FC<Props> = ({ orderId }) => {
       orderIDRef.current?.classList.remove(cx('isCopied'));
     }, 1000);
   };
-  const handleCancelOrder = () => {
-    setOpenPopUp(true);
+  const handleCancelOrder = async () => {
+    if (!cancelReason) {
+      setCancelValueError({ cancelReason: 'Trường này là bắt buộc' });
+      return;
+    }
+    await cancelOrder({ orderId, canceledReason: cancelReason });
+  };
+
+  const handleBlurInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCancelValueError({
+      ...cancelValueError,
+      [e.target.name]: e.target.value ? '' : 'Trường này là bắt buộc !',
+    });
   };
   console.log({ data, isLoading, isSuccess, isError, isFetching, error });
 
@@ -118,22 +155,48 @@ const OrderDetail: React.FC<Props> = ({ orderId }) => {
           <div className={cx('order-detail__actions')}>
             {order?.orderStatus === EOrderStatus.Processing && (
               <div className={cx('btn-cancel')}>
-                <Popup
+                <PopUp
                   trigger={
-                    <Button className={cx('btn')} primary>
+                    <Button onClick={() => setOpenPopUp(true)} className={cx('btn')} primary>
                       Hủy đơn hàng
                     </Button>
                   }
-                  position="bottom center"
-                  modal
-                  nested
+                  position="center"
+                  isOpen={openPopUp}
+                  handleClose={() => setOpenPopUp(false)}
                 >
-                  <div style={{ backgroundColor: 'red', zIndex: 10000 }}>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis in nesciunt
-                    quidem et neque. Numquam delectus sit voluptatibus ipsum assumenda. Nam iste,
-                    velit minus perspiciatis fugiat est id error molestias.
+                  <div className={cx('cancel-order', !openPopUp && 'closed')}>
+                    <h2>Thông tin hủy đơn hàng</h2>
+                    <div className={cx('form-cancel')}>
+                      <div className={cx('cancel-input')}>
+                        <Input
+                          value={cancelReason}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            setCancelReason(e.target.value)
+                          }
+                          onBlur={handleBlurInput}
+                          error={cancelValueError}
+                          label="lý do hủy đơn hàng"
+                          name="cancelReason"
+                        />
+                      </div>
+                      <div className={cx('cancel-btn')}>
+                        <Button onClick={handleCancelOrder} primary>
+                          {isLoadingCancel ? (
+                            <ReactLoading
+                              type="spinningBubbles"
+                              color="#ffffff"
+                              width={20}
+                              height={20}
+                            />
+                          ) : (
+                            'Xác nhận hủy đơn'
+                          )}
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                </Popup>
+                </PopUp>
               </div>
             )}
             <div className={cx('btn-contract')}>

@@ -1,7 +1,7 @@
 .container {
   width: 100vw;
   background-color: var(--white);
-  z-index: 1000;
+  z-index: 10;
   transition: all 0.2s linear;
   &.sticky {
     position: fixed;

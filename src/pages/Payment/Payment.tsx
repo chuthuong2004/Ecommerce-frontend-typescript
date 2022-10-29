@@ -36,7 +36,11 @@ const cx = classNames.bind(styles);
 type Props = {
   listCartItem: ICartItem[];
 };
-const initialValue: IAddress = {
+interface IAddressInput extends IAddress {
+  fullName?: string;
+  isDefault?: boolean;
+}
+const initialValue: IAddressInput = {
   firstName: '',
   lastName: '',
   address: '',
@@ -44,6 +48,7 @@ const initialValue: IAddress = {
   district: '',
   province: '',
   phone: '',
+  fullName: '',
 };
 const Payment: React.FC<Props> = () => {
   const location = useLocation();
@@ -53,10 +58,17 @@ const Payment: React.FC<Props> = () => {
   const { cartItems } = useAppSelector(selectCart);
 
   const [isOpenItem, setIsOpenItem] = useState<boolean>(false);
-  const [informationDelivery, setInformationDelivery] = useState<IAddress>(
-    user?.addresses?.find((address: IAddressUser) => address.isDefault) || initialValue,
-  );
-  const [errorsInput, setErrorsInput] = useState<IAddress>(initialValue);
+  const [informationDelivery, setInformationDelivery] = useState<IAddressInput>(() => {
+    const addressDefault = user?.addresses?.find((address: IAddressUser) => address.isDefault);
+    if (!addressDefault) {
+      return initialValue;
+    }
+    return {
+      ...addressDefault,
+      fullName: addressDefault.firstName + ' ' + addressDefault.lastName,
+    };
+  });
+  const [errorsInput, setErrorsInput] = useState<IAddressInput>(initialValue);
   const [provinces, setProvinces] = useState<IProvince[]>([]);
   const [districts, setDistricts] = useState<IDistrict[]>([]);
   const [wards, setWards] = useState<IWard[]>([]);
@@ -116,6 +128,7 @@ const Payment: React.FC<Props> = () => {
     }
     setErrorsInput({
       ...errorsInput,
+      fullName: informationDelivery?.fullName && '',
       address: informationDelivery.address && '',
       phone: informationDelivery.phone && '',
       province: informationDelivery.province && '',
@@ -123,6 +136,24 @@ const Payment: React.FC<Props> = () => {
       ward: informationDelivery.ward && '',
     });
   }, [informationDelivery]);
+  useEffect(() => {
+    const fullName: string[] | undefined = informationDelivery.fullName?.split(' ');
+    if (fullName && fullName.length > 1) {
+      const firstName = fullName?.shift();
+      setInformationDelivery((prev) => ({
+        ...prev,
+        firstName: firstName ? firstName : '',
+        lastName: fullName.join(' '),
+      }));
+    }
+    if (!informationDelivery.fullName) {
+      setInformationDelivery((prev) => ({
+        ...prev,
+        firstName: '',
+        lastName: '',
+      }));
+    }
+  }, [informationDelivery.fullName]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -152,18 +183,7 @@ const Payment: React.FC<Props> = () => {
     }
   }, [isOpenItem]);
 
-  const handleChangeSelectedProvince = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setInformationDelivery((prev) => ({ ...prev, province: e.target.value }));
-  };
-
-  const handleChangeSelectedDistrict = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setInformationDelivery((prev) => ({ ...prev, district: e.target.value }));
-  };
-
-  const handleChangeSelectedWard = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setInformationDelivery((prev) => ({ ...prev, ward: e.target.value }));
-  };
-  const handleChangeSelectedAddress = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChangeAddress = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (!e.target.value) {
       setInformationDelivery(initialValue);
       setDistricts([]);
@@ -172,7 +192,11 @@ const Payment: React.FC<Props> = () => {
     const address = user?.addresses?.find(
       (address: IAddressUser) => address._id === e.target.value,
     );
-    setInformationDelivery(address || initialValue);
+    address &&
+      setInformationDelivery({
+        ...address,
+        fullName: address.firstName + ' ' + address.lastName,
+      });
   };
   const handleCreateOrder = async () => {
     if (!informationDelivery.firstName || !informationDelivery.lastName) {
@@ -201,30 +225,30 @@ const Payment: React.FC<Props> = () => {
     }
     const cartItemsId = listCartItem.map((cartItem) => (cartItem._id ? cartItem._id : ''));
     await createNewOrder({
-      deliveryInformation: informationDelivery,
+      deliveryInformation: {
+        firstName: informationDelivery.firstName,
+        lastName: informationDelivery.lastName,
+        phone: informationDelivery.phone,
+        province: informationDelivery.province,
+        district: informationDelivery.district,
+        ward: informationDelivery.ward,
+        address: informationDelivery.address,
+      },
       cartItemsId: cartItemsId,
       shippingPrice: shipmentPrice,
     });
   };
 
-  const handleChangeInputFullName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Đào Văn Quốc Trọn => ['Đào', Văn, Quốc, Trọn]
-    const charName: string[] = e.target.value.split(' ');
-    const firstName = charName.shift();
-    setInformationDelivery((prev) => ({
-      ...prev,
-      firstName: firstName ? firstName : '',
-      lastName: charName.join(' '),
-    }));
-  };
   const handleBlurInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorsInput({
       ...errorsInput,
       [e.target.name]: e.target.value ? '' : 'Trường này là bắt buộc !',
     });
   };
-  console.log(errorsInput);
-
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+    setInformationDelivery((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+  console.log(informationDelivery);
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container-fluid')}>
@@ -253,7 +277,13 @@ const Payment: React.FC<Props> = () => {
               <div className={cx('logged-in-customer-information')}>
                 <div className={cx('logged-in-customer-information-avatar')}>
                   <span>{user?.firstName ? user?.firstName[0] : user?.username[0]}</span>
-                  {user?.avatar && <img className={cx('img')} src={user.avatar} alt="" />}
+                  {user?.avatar && (
+                    <img
+                      className={cx('img')}
+                      src={process.env.REACT_APP_API_URL + user.avatar}
+                      alt=""
+                    />
+                  )}
                 </div>
                 <div className={cx('logged-in-customer-information-paragraph')}>
                   <div className={cx('infor-account')}>
@@ -264,12 +294,26 @@ const Payment: React.FC<Props> = () => {
                 </div>
               </div>
               <div className={cx('fieldset')}>
-                <Select onChangeSelected={handleChangeSelectedAddress} label="Chọn địa chỉ">
+                <Select onChangeSelected={handleChangeAddress} label="Chọn địa chỉ">
                   <option value="">Địa chỉ đã lưu trữ</option>
                   {user?.addresses &&
                     user?.addresses?.map((address: IAddressUser) => (
                       <option selected={address.isDefault} key={address._id} value={address._id}>
-                        {address.address}, {address.ward}, {address.district}
+                        {address.phone}, {address.address},{' '}
+                        {address.ward?.includes('Phường') && address.ward.replace('Phường', '')}
+                        {address.ward?.includes('Xã') && address.ward.replace('Xã', '')}
+                        {address.ward?.includes('Thị trấn') && address.ward.replace('Thị trấn', '')}
+                        ,
+                        {address.district?.includes('Quận') && address.district.replace('Quận', '')}
+                        {address.district?.includes('Huyện') &&
+                          address.district.replace('Huyện', '')}
+                        {address.district?.includes('Thành phố') &&
+                          address.district.replace('Thành phố', '')}
+                        ,
+                        {address.province?.includes('Thành phố') &&
+                          address.province?.replace('Thành phố', '')}
+                        {address.province?.includes('Tỉnh') &&
+                          address.province?.replace('Tỉnh', '')}
                       </option>
                     ))}
                 </Select>
@@ -277,13 +321,9 @@ const Payment: React.FC<Props> = () => {
                   <div className={cx('field-input')}>
                     <Input
                       label="họ và tên"
-                      value={
-                        informationDelivery.firstName &&
-                        informationDelivery.lastName &&
-                        informationDelivery.firstName + ' ' + informationDelivery.lastName
-                      }
-                      onChange={handleChangeInputFullName}
-                      name="firstName"
+                      value={informationDelivery.fullName}
+                      onChange={handleChange}
+                      name="fullName"
                       onBlur={handleBlurInput}
                       error={errorsInput}
                     />
@@ -292,9 +332,7 @@ const Payment: React.FC<Props> = () => {
                     <Input
                       label="số điện thoại"
                       value={informationDelivery.phone}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setInformationDelivery((prev) => ({ ...prev, phone: e.target.value }))
-                      }
+                      onChange={handleChange}
                       name="phone"
                       onBlur={handleBlurInput}
                       error={errorsInput}
@@ -318,16 +356,14 @@ const Payment: React.FC<Props> = () => {
                     <Input
                       label="địa chỉ"
                       value={informationDelivery.address}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setInformationDelivery((prev) => ({ ...prev, address: e.target.value }))
-                      }
+                      onChange={handleChange}
                       onBlur={handleBlurInput}
                       name="address"
                       error={errorsInput}
                     />
                   </div>
                   <div className={cx('field-input')}>
-                    <Select label="Tỉnh / thành" onChangeSelected={handleChangeSelectedProvince}>
+                    <Select label="Tỉnh / thành" name="province" onChangeSelected={handleChange}>
                       <option value="">Chọn tỉnh / thành</option>
                       {provinces?.map((province: IProvince) => (
                         <option
@@ -343,7 +379,7 @@ const Payment: React.FC<Props> = () => {
                 </div>
                 <div className={cx('field-required')}>
                   <div className={cx('field-input')}>
-                    <Select label="Quân / huyện" onChangeSelected={handleChangeSelectedDistrict}>
+                    <Select label="Quân / huyện" name="district" onChangeSelected={handleChange}>
                       <option value="">Chọn quận / huyện</option>
                       {districts?.map((district: IDistrict) => (
                         <option
@@ -357,7 +393,7 @@ const Payment: React.FC<Props> = () => {
                     </Select>
                   </div>
                   <div className={cx('field-input')}>
-                    <Select label="Phường / xã" onChangeSelected={handleChangeSelectedWard}>
+                    <Select label="Phường / xã" name="ward" onChangeSelected={handleChange}>
                       <option value="">Chọn phường / xã</option>
                       {wards?.map((ward: IWard) => (
                         <option
@@ -388,7 +424,7 @@ const Payment: React.FC<Props> = () => {
                 {wards.length > 0 ? (
                   <div className={cx('radio-wrapper')}>
                     <div className={cx('field-input', 'none-flex')}>
-                      <input type="radio" checked id="shipment" />
+                      <input type="radio" defaultChecked id="shipment" />
                       <label htmlFor="shipment">Giao hàng tiêu chuẩn (3 - 5 ngày)</label>
                     </div>
 
