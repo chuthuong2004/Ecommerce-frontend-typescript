@@ -28,6 +28,7 @@ import productApi from '../../api/productApi';
 import ReactLoading from 'react-loading';
 import Loading from '../Loading';
 import Select from '../Select';
+import Dialog from '../Dialog';
 const cx = classNames.bind(styles);
 type Props = {
   cartItem: ICartItem;
@@ -48,6 +49,8 @@ const ItemCart: React.FC<Props> = ({
   const cart = useAppSelector(selectCart);
 
   const [checked, setChecked] = useState(false);
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
+  const [isLoadingRemoveFavorite, setIsLoadingRemoveFavorite] = useState(false);
   const [defaultSize, setDefaultSize] = useState<string | number>(cartItem.size);
   const [
     removeItemFromCart,
@@ -124,19 +127,34 @@ const ItemCart: React.FC<Props> = ({
 
   const handleRemoveFavorite = async () => {
     try {
+      setIsLoadingRemoveFavorite(true);
       const res = await productApi.removeFavorite(cartItem.product._id);
+      setIsLoadingRemoveFavorite(false);
+      refetchProfile();
+    } catch (error: any) {
+      toast.error(error.data.message);
+    }
+  };
+  const handleAddFavorite = async () => {
+    try {
+      const res = await productApi.addFavorite(cartItem.product._id);
       refetchProfile();
     } catch (error: any) {
       toast.error(error.data.message);
     }
   };
   const handleAddToCart = async () => {
-    handleRemoveFavorite();
-    await addItemToCart({
-      product: cartItem.product._id,
-      color: cartItem.color,
-      size: defaultSize,
-    });
+    if (!isCart) {
+      handleRemoveFavorite();
+      await addItemToCart({
+        product: cartItem.product._id,
+        color: cartItem.color,
+        size: defaultSize,
+      });
+    } else {
+      handleRemoveFromCart();
+      handleAddFavorite();
+    }
   };
   const handleDecreaseCart = async () => {
     await updateQuantityCart({
@@ -195,9 +213,34 @@ const ItemCart: React.FC<Props> = ({
             <Link to={config.routes.trademark} className={cx('brand')}>
               {cartItem.product.brand.name}
             </Link>
-            <div onClick={() => handleCart(EActionCart.REMOVE)} className={cx('close')}>
+            <div onClick={() => setIsOpenDialog(true)} className={cx('close')}>
               <CloseIcon />
             </div>
+            <Dialog
+              title="Xóa sản phẩm?"
+              description={`Bạn chắc chắn muốn xóa sản phẩm này khỏi ${
+                isCart ? 'Giỏ Hàng' : 'danh sách Yêu Thích'
+              }?`}
+              isOpenDialog={isOpenDialog}
+              handleCloseDialog={() => setIsOpenDialog(false)}
+            >
+              <Button onClick={() => handleCart(EActionCart.ADD)} border small primary>
+                {isLoadingCart && !isCart ? (
+                  <ReactLoading type="spinningBubbles" color="#ffffff" width={20} height={20} />
+                ) : isCart ? (
+                  'Chuyển vào Yêu Thích'
+                ) : (
+                  'Chuyển vào giỏ hàng'
+                )}
+              </Button>
+              <Button onClick={() => handleCart(EActionCart.REMOVE)} small>
+                {isLoadingRemoveFavorite && !isCart && !isLoadingCart ? (
+                  <ReactLoading type="spinningBubbles" color="#2e2e2e" width={20} height={20} />
+                ) : (
+                  'Xóa'
+                )}
+              </Button>
+            </Dialog>
           </div>
           <Link
             to={config.routes.product + '/' + cartItem.product.slug}

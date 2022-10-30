@@ -14,6 +14,7 @@ export type Props = {
   large?: boolean;
   small?: boolean;
   rounded?: boolean;
+  border?: boolean;
   children: ReactNode;
   className?: string;
   icon?: ReactNode;
@@ -36,6 +37,7 @@ const Button: React.FC<Props> = ({
   className,
   leftIcon,
   rightIcon,
+  border,
   icon,
   onClick,
   ...passProps
@@ -71,6 +73,7 @@ const Button: React.FC<Props> = ({
     text,
     disabled,
     rounded,
+    border,
     [className ? className : '']: className,
   });
   return (

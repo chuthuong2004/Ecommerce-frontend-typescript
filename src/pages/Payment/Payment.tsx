@@ -287,7 +287,7 @@ const Payment: React.FC<Props> = () => {
                 </div>
                 <div className={cx('logged-in-customer-information-paragraph')}>
                   <div className={cx('infor-account')}>
-                    <div className={cx('name')}>Đào Văn Thương</div>
+                    <div className={cx('name')}>{user?.firstName + ' ' + user?.lastName}</div>
                     <div className={cx('email')}>({user?.email})</div>
                   </div>
                   <div className={cx('logout')}>Đăng xuất</div>

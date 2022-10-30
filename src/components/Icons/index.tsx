@@ -278,7 +278,12 @@ export const SearchIcon: React.FC<Props> = ({
     ></path>
   </svg>
 );
-export const CloseIcon: React.FC<Props> = ({ width = '2.4rem', height = '2.4rem', className }) => (
+export const CloseIcon: React.FC<Props> = ({
+  width = '2.4rem',
+  height = '2.4rem',
+  className,
+  color = '#2e2e2e',
+}) => (
   <svg
     width={width}
     height={height}
@@ -289,14 +294,14 @@ export const CloseIcon: React.FC<Props> = ({ width = '2.4rem', height = '2.4rem'
   >
     <path
       d="M18 6L6 18"
-      stroke="#2e2e2e"
+      stroke={color}
       strokeWidth="1"
       strokeLinecap="round"
       strokeLinejoin="round"
     ></path>
     <path
       d="M6 6L18 18"
-      stroke="#2e2e2e"
+      stroke={color}
       strokeWidth="1"
       strokeLinecap="round"
       strokeLinejoin="round"

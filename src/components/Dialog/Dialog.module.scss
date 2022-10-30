@@ -1,0 +1,62 @@
+.container {
+  position: absolute;
+  top: 30px;
+  bottom: 0;
+  right: 0;
+  width: 90%;
+  height: max-content;
+  background-color: var(--primary);
+  color: #ffffff;
+  font-size: 1.4rem;
+  text-align: center;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+  z-index: -10;
+  &.active {
+    z-index: 100;
+    opacity: 1;
+    border-radius: 20px;
+  }
+  .close-icon {
+    position: absolute;
+    cursor: pointer;
+    content: ' ';
+    width: 35px;
+    height: 50px;
+    top: -30px;
+    right: 0px;
+    background-color: var(--primary);
+    display: flex;
+    padding-top: 5px;
+    justify-content: center;
+    transition: all 0.5s ease-in-out;
+  }
+  &.active > .close-icon {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+  .header {
+    padding: 25px 15px;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #d3d3d3;
+    gap: 20px;
+    .title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .description {
+      font-size: 1.4rem;
+      padding: 0 20px;
+    }
+  }
+  .actions {
+    padding: 25px 15px;
+    display: flex;
+    gap: 7.5px;
+    .btn-add-to-cart {
+      border: 1px solid #ffffff;
+    }
+  }
+}

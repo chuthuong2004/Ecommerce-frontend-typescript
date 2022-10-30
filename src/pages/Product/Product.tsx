@@ -45,6 +45,7 @@ const Product = () => {
   const [defaultColor, setDefaultColor] = useState<IColor | undefined>(undefined);
   const [defaultSize, setDefaultSize] = useState<ISize | undefined>(undefined);
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
+  const [isLoadingBuyNow, setIsLoadingBuyNow] = useState<boolean>(false);
   let settings = {
     dots: false,
     infinite: defaultColor && defaultColor.images.length > 6,
@@ -229,7 +230,9 @@ const Product = () => {
     }
   };
   const handleBuyNow = async () => {
+    setIsLoadingBuyNow(true);
     await handleAddToCart();
+    setIsLoadingBuyNow(false);
     navigate(config.routes.cart);
   };
   console.log('re product', product?.favorites);
@@ -437,12 +440,21 @@ const Product = () => {
                 <div className={cx('details__actions_available')}>
                   <div onClick={handleBuyNow} className={cx('btn')}>
                     <Button className={cx('buy-now')} large primary>
-                      mua ngay
+                      {isLoadingBuyNow ? (
+                        <ReactLoading
+                          type="spinningBubbles"
+                          color="#2e2e2e"
+                          width={20}
+                          height={20}
+                        />
+                      ) : (
+                        'mua ngay'
+                      )}
                     </Button>
                   </div>
                   <div className={cx('btn')}>
                     <Button large primary onClick={handleAddToCart}>
-                      {isLoadingAddToCart ? (
+                      {isLoadingAddToCart && !isLoadingBuyNow ? (
                         <ReactLoading
                           type="spinningBubbles"
                           color="#ffffff"
