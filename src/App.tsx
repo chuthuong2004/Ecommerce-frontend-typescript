@@ -8,6 +8,9 @@ import { privateRoutes, publicRoutes } from './routes';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+// 258122201888-nki79uqhlu4g7tbmj5cukepcqvcs2d5u.apps.googleusercontent.com
+// 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
 const App: React.FC = () => {
 
   return (

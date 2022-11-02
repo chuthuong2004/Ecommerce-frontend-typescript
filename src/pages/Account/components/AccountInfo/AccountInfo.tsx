@@ -28,11 +28,11 @@ const AccountInfo: React.FC<Props> = ({}) => {
           disabled
           label="sinh nhật"
           placeholder="Nhập ngày tháng năm"
-          value={moment(user?.dateOfBirth).format('DD/MM/YYYY')}
+          value={user?.dateOfBirth ? moment(user.dateOfBirth).format('DD/MM/YYYY') : ''}
         />
       </div>
       <div>
-        <Input disabled label="giới tính" value={user?.gender} />
+        <Input disabled label="giới tính" placeholder="Chọn giới tính" value={user?.gender} />
       </div>
       <div>
         <Input disabled label="số điện thoại" value={user?.phone} />

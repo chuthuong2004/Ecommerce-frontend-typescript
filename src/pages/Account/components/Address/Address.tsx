@@ -27,31 +27,30 @@ const Address: React.FC<Props> = ({}) => {
   const handleClosePopupAdd = useCallback(() => setIsOpenAddAddress(false), []);
   return (
     <div className={cx('account-address')}>
+      <PopUp
+        trigger={<></>}
+        isOpen={isOpenAddAddress}
+        handleClose={() => setIsOpenAddAddress(false)}
+        position="center"
+      >
+        <FormAddress
+          title="Thêm địa chỉ"
+          isOpen={isOpenAddAddress}
+          handleClosePopUp={handleClosePopupAdd}
+        />
+      </PopUp>
       {user?.addresses && user.addresses.length > 0 ? (
         <>
-          <PopUp
-            trigger={
-              <div className={cx('add-address')}>
-                <Button
-                  className={cx('btn-add-address')}
-                  leftIcon={<PlusStrongIcon color="#ffffff" />}
-                  primary
-                  onClick={() => setIsOpenAddAddress(true)}
-                >
-                  Thêm Địa chỉ
-                </Button>
-              </div>
-            }
-            isOpen={isOpenAddAddress}
-            handleClose={() => setIsOpenAddAddress(false)}
-            position="center"
-          >
-            <FormAddress
-              title="Thêm địa chỉ"
-              isOpen={isOpenAddAddress}
-              handleClosePopUp={handleClosePopupAdd}
-            />
-          </PopUp>
+          <div className={cx('add-address')}>
+            <Button
+              className={cx('btn-add-address')}
+              leftIcon={<PlusStrongIcon color="#ffffff" />}
+              primary
+              onClick={() => setIsOpenAddAddress(true)}
+            >
+              Thêm Địa chỉ
+            </Button>
+          </div>
           <div className={cx('addresses')}>
             {user.addresses.map((item: IAddressUser) => (
               <div key={item._id} className={cx('address')}>
@@ -96,6 +95,7 @@ const Address: React.FC<Props> = ({}) => {
           content1="Không có địa chỉ lưu sẵn"
           content2="Lưu sẵn địa chỉ ở đây để rút ngắn thời gian đặt hàng."
           iconBtn={<PlusStrongIcon color="#ffffff" />}
+          onClickButton={() => setIsOpenAddAddress(true)}
         />
       )}
     </div>

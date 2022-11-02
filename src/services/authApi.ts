@@ -32,6 +32,16 @@ export const authApi = createApi({
         };
       },
     }),
+    loginWithGoogle: builder.mutation({
+      query: (body: { tokenId: string }) => {
+        return {
+          url: '/auth/google',
+          method: 'POST',
+          body,
+          // credentials: 'include',
+        };
+      },
+    }),
     registerUser: builder.mutation({
       query: (body: { email: string; password: string; phone: string }) => {
         return {
@@ -105,6 +115,7 @@ export const authApi = createApi({
 
 export const {
   useLoginUserMutation,
+  useLoginWithGoogleMutation,
   useRegisterUserMutation,
   useLogoutUserMutation,
   useGetMyProfileQuery,

@@ -280,7 +280,11 @@ const Payment: React.FC<Props> = () => {
                   {user?.avatar && (
                     <img
                       className={cx('img')}
-                      src={process.env.REACT_APP_API_URL + user.avatar}
+                      src={
+                        user.avatar.startsWith('/')
+                          ? process.env.REACT_APP_API_URL + user.avatar
+                          : user.avatar
+                      }
                       alt=""
                     />
                   )}

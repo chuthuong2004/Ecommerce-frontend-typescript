@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import { CredentialResponse, GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FacebookIcon, GoogleIcon, LeftIcon, LogoIcon } from '../../components/Icons';
 import styles from './Login.module.scss';
@@ -9,17 +10,19 @@ import Button from '../../components/Button';
 import {
   useForgotPasswordMutation,
   useLoginUserMutation,
+  useLoginWithGoogleMutation,
   useRegisterUserMutation,
 } from '../../services/authApi';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setCredentials } from '../../features/authSlice';
 
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAddItemToCartMutation, useGetMyCartQuery } from '../../services/cartsApi';
-import { clearCart, selectCart, setCart } from '../../features/cartSlice';
+import { useAddItemToCartMutation } from '../../services/cartsApi';
+import { clearCart, selectCart } from '../../features/cartSlice';
 import { ICartItem } from '../../models/cart.model';
 import ReactLoading from 'react-loading';
+import jwt_decode from 'jwt-decode';
 
 const cx = classNames.bind(styles);
 
@@ -55,6 +58,16 @@ const Login = () => {
       error: loginError,
     },
   ] = useLoginUserMutation();
+  const [
+    loginWithGoogle,
+    {
+      data: dataGoogle,
+      isLoading: isLoadingGoogle,
+      isSuccess: isSuccessGoogle,
+      isError: isErrorGoogle,
+      error: errorGoogle,
+    },
+  ] = useLoginWithGoogleMutation();
   const [
     registerUser,
     {
@@ -178,6 +191,26 @@ const Login = () => {
       });
     }
   }, [isLoadingLogin, isLoadingRegister]);
+  useEffect(() => {
+    if (isSuccessGoogle) {
+      const { accessToken, refreshToken, ...user } = dataGoogle;
+      dispatch(setCredentials({ user: { ...user }, token: { accessToken, refreshToken } }));
+      if (cart.cartItems && cart.cartItems.length > 0) {
+        setCartItems(cart.cartItems);
+        dispatch(clearCart());
+        cartItems.forEach(async (cartItem: ICartItem) => {
+          const newCart = await addToCart(cartItem.product._id, cartItem.color, cartItem.size);
+          console.log(newCart);
+        });
+      }
+      toast.success('Đăng nhập thành công !');
+      navigate(from.pathname);
+    }
+
+    if (isErrorGoogle) {
+      console.log(errorGoogle);
+    }
+  }, [isLoadingGoogle]);
 
   useEffect(() => {
     isSuccessForgotPassword && toast.info(dataForgotPassword.message);
@@ -193,7 +226,15 @@ const Login = () => {
         : 'Trường này là bắt buộc.!!!',
     });
   };
-  console.log('c', cartItems);
+  const handleSuccessLoginGoogle = async (credentialResponse: CredentialResponse) => {
+    console.log(credentialResponse);
+    const decoded = jwt_decode(credentialResponse?.credential || '');
+    console.log(decoded);
+    await loginWithGoogle({ tokenId: credentialResponse?.credential || '' });
+  };
+  const login = useGoogleLogin({
+    onSuccess: (tokenResponse) => console.log(tokenResponse),
+  });
 
   return (
     <section className={cx('login-section')}>
@@ -215,17 +256,15 @@ const Login = () => {
             <div className={cx('customer-actions__wrapper')}>
               <div className={cx('customer-actions__form', openForgotPassword && 'show')}>
                 <div className={cx('login-n-signup')}>
-                  <div className={cx('nav-links')}>
+                  <div className={cx('nav-links', activeSignup ? 'sign-up' : 'sign-in')}>
                     <Link
                       to={config.routes.login}
-                      onClick={() => setActiveSignup(false)}
                       className={cx('nav-link', !activeSignup && 'active')}
                     >
                       Đăng nhập
                     </Link>
                     <Link
                       to={config.routes.register}
-                      onClick={() => setActiveSignup(true)}
                       className={cx('nav-link', activeSignup && 'active')}
                     >
                       Đăng ký
@@ -338,13 +377,45 @@ const Login = () => {
                       </Button>
                     </div>
                     <div className={cx('btn')}>
-                      <Button
+                      {/* <Button
                         className={cx('btn__google')}
                         large
                         primary
                         icon={<GoogleIcon width="18" height="18" />}
                       >
-                        Đăng nhập bằng google
+                        <GoogleLogin
+                          onSuccess={handleSuccessLoginGoogle}
+                          onError={() => {
+                            console.log('Login Failed');
+                          }}
+                          useOneTap
+                          text="signin_with"
+                          type="standard"
+                          locale="VN-vi"
+                          cancel_on_tap_outside={false}
+                          itp_support
+                          shape="circle"
+                          ux_mode="popup"
+                          width="1px"
+                        />
+                      </Button> */}
+                      <Button
+                        className={cx('btn__google')}
+                        small
+                        primary
+                        icon={<GoogleIcon width="18" height="18" />}
+                      >
+                        <GoogleLogin
+                          onSuccess={handleSuccessLoginGoogle}
+                          onError={() => {
+                            console.log('Login Failed');
+                          }}
+                          useOneTap
+                          text="signin_with"
+                          locale="VN-vi"
+                          size="large"
+                          width="1px"
+                        />
                       </Button>
                     </div>
                   </div>
