@@ -20,17 +20,18 @@ import config from '../../config';
 import { useState, useRef, useEffect } from 'react';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
-import { selectAuth } from '../../features/authSlice';
-import { useAppSelector } from '../../app/hooks';
+import { logout, selectAuth } from '../../features/authSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Select from '../../components/Select';
 import { ICartItem } from '../../models/cart.model';
-import { selectCart } from '../../features/cartSlice';
+import { clearCart, selectCart } from '../../features/cartSlice';
 import { IAddress, IAddressUser, IDistrict, IProvince, IWard } from '../../models/user.model';
 import axiosClient from '../../api/axiosClient';
 import { useCreateNewOrderMutation, useGetMyOrderQuery } from '../../services/ordersApi';
 import { toast } from 'react-toastify';
 import { useGetMyCartQuery } from '../../services/cartsApi';
 import Loading from '../../components/Loading';
+import { useLogoutUserMutation } from '../../services/authApi';
 const cx = classNames.bind(styles);
 
 type Props = {
@@ -53,6 +54,7 @@ const initialValue: IAddressInput = {
 const Payment: React.FC<Props> = () => {
   const location = useLocation();
   let { listCartItem }: { listCartItem: ICartItem[] } = location.state;
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user } = useAppSelector(selectAuth);
   const { cartItems } = useAppSelector(selectCart);
@@ -79,7 +81,16 @@ const Payment: React.FC<Props> = () => {
   const [createNewOrder, { data, isLoading, isError, error, isSuccess }] =
     useCreateNewOrderMutation();
   const { refetch: refetchCart } = useGetMyCartQuery({});
-
+  const [
+    logoutUser,
+    {
+      data: logoutData,
+      isLoading: isLoadingLogout,
+      isSuccess: isLogoutSuccess,
+      isError: isLogoutError,
+      error: logoutError,
+    },
+  ] = useLogoutUserMutation();
   if (listCartItem.length === 0) {
     listCartItem = cartItems;
   }
@@ -183,6 +194,18 @@ const Payment: React.FC<Props> = () => {
     }
   }, [isOpenItem]);
 
+  useEffect(() => {
+    if (isLogoutSuccess) {
+      dispatch(logout());
+      dispatch(clearCart());
+      navigate(config.routes.login);
+      toast.success((logoutData as any).message);
+    }
+    if (isLogoutError) {
+      console.log(logoutError);
+      toast.error((logoutError as any).data.message);
+    }
+  }, [isLoadingLogout]);
   const handleChangeAddress = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (!e.target.value) {
       setInformationDelivery(initialValue);
@@ -248,6 +271,9 @@ const Payment: React.FC<Props> = () => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     setInformationDelivery((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+  const handleLogout = async () => {
+    await logoutUser({});
+  };
   console.log(informationDelivery);
   return (
     <div className={cx('wrapper')}>
@@ -275,7 +301,10 @@ const Payment: React.FC<Props> = () => {
             <h2 className={cx('title')}>Thông tin giao hàng</h2>
             <div className={cx('main-content', 'customer-information')}>
               <div className={cx('logged-in-customer-information')}>
-                <div className={cx('logged-in-customer-information-avatar')}>
+                <Link
+                  to={config.routes.account}
+                  className={cx('logged-in-customer-information-avatar')}
+                >
                   <span>{user?.firstName ? user?.firstName[0] : user?.username[0]}</span>
                   {user?.avatar && (
                     <img
@@ -288,13 +317,15 @@ const Payment: React.FC<Props> = () => {
                       alt=""
                     />
                   )}
-                </div>
+                </Link>
                 <div className={cx('logged-in-customer-information-paragraph')}>
-                  <div className={cx('infor-account')}>
+                  <Link to={config.routes.account} className={cx('infor-account')}>
                     <div className={cx('name')}>{user?.firstName + ' ' + user?.lastName}</div>
                     <div className={cx('email')}>({user?.email})</div>
+                  </Link>
+                  <div onClick={handleLogout} className={cx('logout')}>
+                    Đăng xuất
                   </div>
-                  <div className={cx('logout')}>Đăng xuất</div>
                 </div>
               </div>
               <div className={cx('fieldset')}>
@@ -544,13 +575,16 @@ const Payment: React.FC<Props> = () => {
                       <span className={cx('product-title')}>{cartItem.product.name}</span>
                     </div>
                     <div className={cx('product-price')}>
-                      <span>
-                        {(
-                          cartItem.product.price -
-                          cartItem.product!.price * (cartItem.product!.discount / 100)
-                        ).toLocaleString('vn-VN')}
-                        ₫
-                      </span>
+                      <div className={cx('price', { hasSale: cartItem.product.discount > 0 })}>
+                        <span className={cx('current-price')}>
+                          {(
+                            cartItem.product.price -
+                            cartItem.product!.price * (cartItem.product!.discount / 100)
+                          ).toLocaleString('vn-VN')}
+                          ₫
+                        </span>
+                        <del>{cartItem.product.price.toLocaleString('vn-VN')}₫</del>
+                      </div>
                       <span>Số lượng: {cartItem.quantity}</span>
                     </div>
                   </div>

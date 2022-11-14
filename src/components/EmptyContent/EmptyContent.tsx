@@ -28,17 +28,19 @@ const EmptyContent: React.FC<Props> = ({
       <div>
         <div className={cx('content-1')}>{content1}</div>
         <p className="content-2">{content2}</p>
-        <Button
-          to={
-            titleBtn.toLowerCase().includes('dạo một vòng') ? config.routes.newArrival : undefined
-          }
-          className={cx('btn--content')}
-          leftIcon={iconBtn}
-          primary
-          onClick={onClickButton}
-        >
-          {titleBtn}
-        </Button>
+        {titleBtn && (
+          <Button
+            to={
+              titleBtn.toLowerCase().includes('dạo một vòng') ? config.routes.newArrival : undefined
+            }
+            className={cx('btn--content')}
+            leftIcon={iconBtn}
+            primary
+            onClick={onClickButton}
+          >
+            {titleBtn}
+          </Button>
+        )}
       </div>
     </div>
   );

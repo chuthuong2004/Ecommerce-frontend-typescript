@@ -54,6 +54,8 @@ const publicRoutes: Array<routeType> = [
     path: config.routes.payment,
     component: Payment,
     layout: null,
+
+    private: true,
   },
   {
     path: config.routes.login,

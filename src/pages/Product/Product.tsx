@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { IColor, IProduct, ISize } from '../../models/product.model';
 import {
+  CloseIcon,
   HeartActiveIcon,
   HeartIcon,
   NextArrowIcon,
@@ -20,7 +21,7 @@ import { MagnifierContainer, MagnifierPreview, MagnifierZoom } from 'react-image
 import Button from '../../components/Button';
 import config from '../../config';
 import SlideProduct from '../../components/SlideProduct';
-import { trademarkProducts } from '../Home/components/Men/dataMen';
+import { brandsMen } from '../Home/components/Men/dataMen';
 import productApi from '../../api/productApi';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addToCart, setCart } from '../../features/cartSlice';
@@ -33,6 +34,8 @@ import { useGetMyProfileQuery } from '../../services/authApi';
 import { IFavorite } from '../../models/user.model';
 import ReactLoading from 'react-loading';
 import Loading from '../../components/Loading';
+import PopUp from '../../components/PopUp';
+import GuideSize from '../../components/GuideSize/GuideSize';
 const cx = classNames.bind(styles);
 
 const Product = () => {
@@ -45,6 +48,7 @@ const Product = () => {
   const [defaultColor, setDefaultColor] = useState<IColor | undefined>(undefined);
   const [defaultSize, setDefaultSize] = useState<ISize | undefined>(undefined);
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
+  const [isOpenGuideSize, setIsOpenGuideSize] = useState<boolean>(false);
   const [isLoadingBuyNow, setIsLoadingBuyNow] = useState<boolean>(false);
   let settings = {
     dots: false,
@@ -138,17 +142,21 @@ const Product = () => {
           (favorite: IFavorite) => favorite.product._id === prev._id,
         );
         const userInProduct = prev.favorites.find((favorite: string) => favorite === user._id);
+        console.log({ productInUser, userInProduct });
 
         if (!productInUser && userInProduct) {
           newFavorites = prev.favorites.filter((favorite: string) => favorite !== userInProduct);
           setIsFavorited(false);
+        } else {
+          newFavorites.push(user._id);
+          setIsFavorited(true);
         }
         return {
           ...prev,
           favorites: newFavorites,
         };
       });
-  }, [user]);
+  }, [user?.favorites]);
   const handleSetColor = (color: IColor) => {
     setDefaultColor(color);
     setDefaultSize(color.sizes[0]);
@@ -382,10 +390,27 @@ const Product = () => {
                 <div className={cx('details__sizes')}>
                   <label className={cx('d-flex', 'justify-content-between', 'align-items-center')}>
                     <b>KÍCH CỠ</b>
-                    <div className={cx('size-guide')}>
-                      <SizeChartIcon />
-                      <span>Hướng Dẫn Chọn Size</span>
-                    </div>
+                    {product?.category.catalog === '632f35fab1734732d9dc8821' && (
+                      <PopUp
+                        isOpen={isOpenGuideSize}
+                        trigger={
+                          <div
+                            className={cx('size-guide')}
+                            onClick={() => setIsOpenGuideSize(true)}
+                          >
+                            <SizeChartIcon />
+                            <span>Hướng Dẫn Chọn Size</span>
+                          </div>
+                        }
+                        position="center"
+                        handleClose={() => setIsOpenGuideSize(false)}
+                      >
+                        <GuideSize
+                          isOpen={isOpenGuideSize}
+                          handleClose={() => setIsOpenGuideSize(false)}
+                        />
+                      </PopUp>
+                    )}
                   </label>
                   <div className={cx('details__sizes-data')}>
                     {defaultColor?.sizes.map((size: ISize) => (
@@ -500,21 +525,21 @@ const Product = () => {
             <SlideProduct
               title="Sản phẩm bạn đã xem"
               showBtn={false}
-              products={trademarkProducts[0].products}
+              products={brandsMen[0].products}
             />
           </div>
           <div className={cx('container-fluid')}>
             <SlideProduct
               title="Có thể bạn cũng thích"
               showBtn={false}
-              products={trademarkProducts[0].products}
+              products={brandsMen[0].products}
             />
           </div>
           <div className={cx('container-fluid')}>
             <SlideProduct
               title="Sản phẩm cùng thương hiệu"
               showBtn={false}
-              products={trademarkProducts[0].products}
+              products={brandsMen[0].products}
             />
           </div>
         </>

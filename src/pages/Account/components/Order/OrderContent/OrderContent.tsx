@@ -6,6 +6,7 @@ import { CloseIcon, SearchIcon } from '../../../../../components/Icons';
 import OrderItem from '../OrderItem';
 import { useDebounce } from '../../../../../hooks';
 import ReactLoading from 'react-loading';
+import SearchInput from '../../../../../components/SearchInput';
 const cx = classNames.bind(styles);
 
 type Props = {
@@ -45,27 +46,14 @@ const OrderContent: React.FC<Props> = ({ data }) => {
 
   return (
     <div>
-      <div className={cx('order-search')}>
-        <div className={cx('search-icon')}>
-          <SearchIcon width="20" height="20" color="#868D95" />
-        </div>
-        <input
-          className={cx('search-input')}
-          type="text"
+      <div className={cx('search-order')}>
+        <SearchInput
           value={searchInput}
-          placeholder="Tìm kiếm theo mã đơn hàng hoặc tên sản phẩm"
+          loading={loading}
           onChange={(e) => setSearchInput(e.target.value)}
+          handleClearInput={() => setSearchInput('')}
+          placeholder="Tìm kiếm theo mã đơn hàng hoặc tên sản phẩm"
         />
-        {!loading && searchInput && (
-          <div onClick={() => setSearchInput('')} className={cx('loading-icon')}>
-            <CloseIcon />
-          </div>
-        )}
-        {loading && (
-          <div className={cx('loading-icon')}>
-            <ReactLoading type="spinningBubbles" color="#2e2e2e" width={20} height={20} />
-          </div>
-        )}
       </div>
       <div className={cx('list-order')}>
         {searchInput

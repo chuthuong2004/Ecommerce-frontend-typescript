@@ -1,4 +1,5 @@
 import { IBrand } from './brand.model';
+import { ICategory } from './category.model';
 
 export enum EGenderType {
   Woman = 'women',
@@ -24,7 +25,7 @@ export interface IProduct {
   description: string;
   price: number;
   discount: number;
-  category: string;
+  category: ICategory;
   likeCount: number;
   quantitySold: number;
   favorites: string[];
@@ -62,14 +63,14 @@ export enum ESort {
   PRICE_DECREASE = '-price',
 }
 export interface IFilter {
-  gender?: string;
-  brand?: string;
-  category?: string;
-  color?: string;
-  size?: string;
-  price?: number;
+  gender: string;
+  brand: string[];
+  category: string[];
+  color: string;
+  size: string;
+  price: string;
 }
 export interface IActionFilter {
-  sort?: string;
+  sort: string;
   filter?: IFilter;
 }

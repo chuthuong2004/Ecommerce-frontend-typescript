@@ -278,6 +278,26 @@ export const SearchIcon: React.FC<Props> = ({
     ></path>
   </svg>
 );
+export const SearchIconLarge = ({ width = '17rem', height = '10rem' }) => (
+  <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    {' '}
+    <path
+      d="M36.2499 62.5C50.7474 62.5 62.4999 50.7475 62.4999 36.25C62.4999 21.7525 50.7474 10 36.2499 10C21.7524 10 9.99988 21.7525 9.99988 36.25C9.99988 50.7475 21.7524 62.5 36.2499 62.5Z"
+      fill="#F7F8F9"
+      stroke="#868D95"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    ></path>{' '}
+    <path
+      d="M54.8105 54.8125L69.9982 70.0002"
+      stroke="#868D95"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    ></path>{' '}
+  </svg>
+);
 export const CloseIcon: React.FC<Props> = ({
   width = '2.4rem',
   height = '2.4rem',

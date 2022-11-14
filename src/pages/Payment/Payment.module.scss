@@ -252,8 +252,27 @@
               width: 100%;
               // background-color: blue;
               justify-content: space-between;
+              align-items: center;
               margin-bottom: 5px;
               font-weight: 700;
+              .price {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                del {
+                  font-size: 12px;
+                  margin-left: 5px;
+                  display: none;
+                  font-weight: 500;
+                }
+                &.hasSale > .current-price {
+                  background-color: #faff19;
+                  padding: 5px 10px;
+                }
+                &.hasSale > del {
+                  display: block;
+                }
+              }
             }
           }
         }

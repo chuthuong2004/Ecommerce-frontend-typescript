@@ -28,7 +28,6 @@ root.render(
         </PersistGate>
       </Provider>
     </GoogleOAuthProvider>
-    ;
   </React.StrictMode>,
 );
 

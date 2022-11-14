@@ -172,7 +172,7 @@ const Login = () => {
         });
       }
       toast.success('Đăng nhập thành công !');
-      navigate(from.pathname);
+      navigate(from.pathname === config.routes.payment ? config.routes.cart : from.pathname);
     }
 
     if (isLoginError) {
@@ -204,7 +204,7 @@ const Login = () => {
         });
       }
       toast.success('Đăng nhập thành công !');
-      navigate(from.pathname);
+      navigate(from.pathname === config.routes.payment ? config.routes.cart : from.pathname);
     }
 
     if (isErrorGoogle) {

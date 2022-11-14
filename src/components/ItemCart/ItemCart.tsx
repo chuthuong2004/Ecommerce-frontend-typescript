@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './ItemCart.module.scss';
 import { CloseIcon, MinusIcon, PlusIcon, PlusStrongIcon } from '../Icons';
 import Button from '../Button/Button';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import config from '../../config/index';
 import React, { useEffect, useState, memo } from 'react';
 import { EActionCart, ICartItem } from '../../models/cart.model';
@@ -44,10 +44,11 @@ const ItemCart: React.FC<Props> = ({
   isSelected = false,
   isCart = true,
 }) => {
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(selectAuth);
   const cart = useAppSelector(selectCart);
-
+  const navigate = useNavigate();
   const [checked, setChecked] = useState(false);
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const [isLoadingRemoveFavorite, setIsLoadingRemoveFavorite] = useState(false);
@@ -183,6 +184,7 @@ const ItemCart: React.FC<Props> = ({
       action === EActionCart.INCREASE && handleIncreaseCart();
       action === EActionCart.REMOVE && handleRemoveFromCart();
     } else {
+      action === EActionCart.ADD && navigate(config.routes.login, { state: { from: location } });
       action === EActionCart.DECREASE && dispatch(decreaseCart(cartItem));
       action === EActionCart.INCREASE && dispatch(increaseCart(cartItem));
       action === EActionCart.REMOVE && dispatch(removeFromCart(cartItem));

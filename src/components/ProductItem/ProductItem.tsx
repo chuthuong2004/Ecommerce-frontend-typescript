@@ -38,8 +38,13 @@ const ProductItem: React.FC<Props> = ({ product }) => {
         console.log(error);
       }
     };
-    fetchProduct();
-  }, [user]);
+    const favorite = user?.favorites?.find(
+      (favorite) => favorite.product._id === currentProduct._id,
+    );
+    if ((!isLiked && favorite) || (isLiked && !favorite)) {
+      fetchProduct();
+    }
+  }, [user?.favorites]);
   const handleFavorite = () => {
     if (!user) navigate(config.routes.login, { state: { from: location } });
     else {
