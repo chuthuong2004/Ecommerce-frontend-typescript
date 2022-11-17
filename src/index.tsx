@@ -8,6 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import SocketsProvider from './context/socket.context';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
@@ -22,9 +23,11 @@ root.render(
     >
       <Provider store={store}>
         <PersistGate persistor={persistor}>
-          <GlobalStyles>
-            <App />
-          </GlobalStyles>
+          <SocketsProvider>
+            <GlobalStyles>
+              <App />
+            </GlobalStyles>
+          </SocketsProvider>
         </PersistGate>
       </Provider>
     </GoogleOAuthProvider>

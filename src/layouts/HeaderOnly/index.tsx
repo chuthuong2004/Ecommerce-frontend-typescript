@@ -3,18 +3,17 @@ import Header from '../components/Header/Header';
 import React, { ReactNode } from 'react';
 
 type Props = {
-    children: ReactNode;
+  children: ReactNode;
 };
-const HeaderOnly: React.FC<Props> = ({children})=> {
-    return (
-        <div>
-            <ScrollToTop />
-            <Header />
-            <div className="container">
-                <div className="content"> {children} </div>
-            </div>
-        </div>
-    );
-}
+const HeaderOnly: React.FC<Props> = ({ children }) => {
+  return (
+    <div>
+      <Header />
+      <div className="container">
+        <div className="content"> {children} </div>
+      </div>
+    </div>
+  );
+};
 
 export default HeaderOnly;

@@ -11,6 +11,7 @@ import PopUp from '../../../../../components/PopUp';
 import Input from '../../../../../components/Input';
 import { toast } from 'react-toastify';
 import ReactLoading from 'react-loading';
+import { useSockets } from '../../../../../context/socket.context';
 const cx = classNames.bind(styles);
 type Props = {
   orderId: string;
@@ -74,7 +75,10 @@ const OrderDetail: React.FC<Props> = ({ orderId }) => {
     });
   };
   console.log({ data, isLoading, isSuccess, isError, isFetching, error });
-
+  const handleOpenContact = () => {
+    const btn = document.getElementById('messenger');
+    btn?.click();
+  };
   return (
     <div className={cx('order-detail')}>
       {isLoading ? (
@@ -200,7 +204,7 @@ const OrderDetail: React.FC<Props> = ({ orderId }) => {
               </div>
             )}
             <div className={cx('btn-contract')}>
-              <Button leftIcon={<MessageIcon />} primary>
+              <Button onClick={handleOpenContact} leftIcon={<MessageIcon />} primary>
                 Liên hệ hỗ trợ
               </Button>
             </div>

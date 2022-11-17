@@ -26,7 +26,7 @@ export interface IUser {
   avatar?: string;
   firstName?: string;
   lastName?: string;
-  gender?: EGender;
+  gender?: string;
   dateOfBirth?: string;
   orders?: string[];
   reviews?: string[];

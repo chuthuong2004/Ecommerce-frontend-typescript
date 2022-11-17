@@ -42,7 +42,6 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  font-weight: 700;
 }
 
 .account-address .addresses .address-name .name {
@@ -50,6 +49,10 @@
   display: -ms-flexbox;
   display: flex;
   gap: 10px;
+}
+
+.account-address .addresses .address-name .name span {
+  font-weight: 700;
 }
 
 .account-address .addresses .address-name .name .edit-icon {

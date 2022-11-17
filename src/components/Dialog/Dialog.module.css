@@ -1,0 +1,86 @@
+.container {
+  position: absolute;
+  top: 30px;
+  bottom: 0;
+  right: 0;
+  width: 90%;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  background-color: var(--primary);
+  color: #ffffff;
+  font-size: 1.4rem;
+  text-align: center;
+  opacity: 0;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  z-index: -10;
+}
+
+.container.active {
+  z-index: 100;
+  opacity: 1;
+  border-radius: 20px;
+}
+
+.container .close-icon {
+  position: absolute;
+  cursor: pointer;
+  content: ' ';
+  width: 35px;
+  height: 50px;
+  top: -30px;
+  right: 0px;
+  background-color: var(--primary);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding-top: 5px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+
+.container.active > .close-icon {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.container .header {
+  padding: 25px 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  border-bottom: 1px solid #d3d3d3;
+  gap: 20px;
+}
+
+.container .header .title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.container .header .description {
+  font-size: 1.4rem;
+  padding: 0 20px;
+}
+
+.container .actions {
+  padding: 25px 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 7.5px;
+}
+
+.container .actions .btn-add-to-cart {
+  border: 1px solid #ffffff;
+}
+/*# sourceMappingURL=Dialog.module.css.map */

@@ -16,6 +16,8 @@ import { privateRoutes, publicRoutes } from './routes';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Messenger from './components/Messenger';
+import ScrollToTop from './layouts/components/ScrollToTop';
 
 // 258122201888-nki79uqhlu4g7tbmj5cukepcqvcs2d5u.apps.googleusercontent.com
 // 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
@@ -23,6 +25,8 @@ const App: React.FC = () => {
   return (
     <Router>
       <ToastContainer autoClose={3000} />
+      <ScrollToTop />
+      <Messenger />
       <Routes>
         {publicRoutes.map((route, index) => {
           const Page = route.component;

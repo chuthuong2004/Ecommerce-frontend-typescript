@@ -38,6 +38,7 @@
   line-height: 120px;
   font-size: 64px;
   font-weight: bold;
+  text-transform: uppercase;
 }
 
 .wrapper .container .col-3 .account-avatar .avatar .img {
@@ -47,6 +48,24 @@
   top: 0;
   left: 0;
   border-radius: 50%;
+}
+
+.wrapper .container .col-3 .account-avatar .avatar .camera-icon {
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+  background-color: #f7f8f9;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.wrapper .container .col-3 .account-avatar .avatar .camera-icon input {
+  display: none;
+}
+
+.wrapper .container .col-3 .account-avatar .avatar .camera-icon label {
+  cursor: pointer;
 }
 
 .wrapper .container .col-3 .account-avatar .name {

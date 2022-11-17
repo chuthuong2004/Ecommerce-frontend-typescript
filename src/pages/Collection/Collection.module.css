@@ -97,12 +97,19 @@
   transition: all 0.4s linear;
   padding: 120px 0 117px 5px;
   width: 100%;
-  height: 100%;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
+  height: 100vh;
   bottom: 0;
   overflow-y: scroll;
+}
+
+.container .wrapper .content .collection-sidebar::-webkit-scrollbar {
+  display: none;
 }
 
 .container .wrapper .content .collection-sidebar.active {
@@ -180,7 +187,7 @@
 }
 
 .container .wrapper .content .collection-sidebar .sort-by-filter.open {
-  height: 310px;
+  height: calc(280px + var(--line-height-title));
 }
 
 .container .wrapper .content .collection-sidebar .filter-collection-item-list {
@@ -209,7 +216,20 @@
   height: 110px;
 }
 
+.container .wrapper .content .collection-sidebar .filter-collection-item-list .filter-collection-item.brand-filter {
+  -webkit-transition: height 0.4s linear;
+  transition: height 0.4s linear;
+  height: calc(21px + 40px);
+}
+
+.container .wrapper .content .collection-sidebar .filter-collection-item-list .filter-collection-item.type-filter {
+  -webkit-transition: height 0.4s linear;
+  transition: height 0.4s linear;
+  height: calc(21px + 40px);
+}
+
 .container .wrapper .content .collection-sidebar .content-filter {
+  margin-top: 10px;
   height: 0;
   -webkit-transition: height 0.4s linear;
   transition: height 0.4s linear;
@@ -228,15 +248,16 @@
       flex-wrap: wrap;
   font-size: 14px;
   letter-spacing: 1px;
-  margin: 15px -5px;
+  margin: 15px 0px;
+  gap: 10px;
 }
 
-.container .wrapper .content .collection-sidebar .content-filter .filter-container .gender {
+.container .wrapper .content .collection-sidebar .content-filter .gender {
   padding: 5px;
   height: 100%;
 }
 
-.container .wrapper .content .collection-sidebar .content-filter .filter-container .gender-sw {
+.container .wrapper .content .collection-sidebar .content-filter .gender-sw {
   min-width: 60px;
   background-color: #f7f8f9;
   color: var(--primary);
@@ -249,9 +270,55 @@
   transition: all 0.4s ease-in-out;
 }
 
-.container .wrapper .content .collection-sidebar .content-filter .filter-container .gender input[type='radio']:checked ~ .gender-sw {
+.container .wrapper .content .collection-sidebar .content-filter .gender input[type='radio']:checked ~ .gender-sw {
   color: #fff;
   background-color: var(--primary);
+}
+
+.container .wrapper .content .collection-sidebar .content-filter .brand {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.container .wrapper .content .collection-sidebar .content-filter .brand-label {
+  min-width: 60px;
+  background-color: #f7f8f9;
+  color: var(--primary);
+  padding: 10px 16px;
+  border-radius: 4px;
+  text-transform: capitalize;
+  cursor: pointer;
+  font-weight: 500;
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+}
+
+.container .wrapper .content .collection-sidebar .content-filter .brand input[type='checkbox']:checked ~ .brand-label {
+  color: #fff;
+  background-color: var(--primary);
+}
+
+.container .wrapper .content .collection-sidebar .content-filter .type-filter-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-transform: none;
+  font-weight: normal;
+}
+
+.container .wrapper .content .collection-sidebar .content-filter .type-filter-item label {
+  padding: 14px;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  cursor: pointer;
 }
 
 .container .wrapper .content .collection-right {
