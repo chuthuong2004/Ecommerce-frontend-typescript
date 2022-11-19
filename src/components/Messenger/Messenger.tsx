@@ -20,11 +20,13 @@ import { selectAuth } from '../../features/authSlice';
 import { IMessage } from '../../models/message.model';
 import { IConversation } from '../../models/conversation.model';
 import messageApi from '../../api/messageApi';
-import { IUser } from '../../models/user.model';
+import { FileResponse, IUser } from '../../models/user.model';
 import conversationApi from '../../api/conversationApi';
 import { toast } from 'react-toastify';
 import config from '../../config';
 import { useSockets } from '../../context/socket.context';
+import { MdClose } from 'react-icons/md';
+import axiosClient from '../../api/axiosClient';
 
 const cx = classNames.bind(styles);
 const Messenger = () => {
@@ -35,12 +37,25 @@ const Messenger = () => {
   const [newMessage, setNewMessage] = useState('');
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [receiver, setReceiver] = useState<IUser | undefined>(undefined);
-
+  const [fileImages, setFileImages] = useState<File[]>([]);
   const { socket } = useSockets();
   const messageInputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   console.log(socket.id);
   useEffect(() => {
+    window.addEventListener('paste', (e: any) => {
+      if (e.clipboardData.files[0] as File) {
+        setFileImages((prev) => {
+          const isExist = prev.find(
+            (fileImage) => fileImage.size === (e.clipboardData.files[0] as File).size,
+          );
+          if (isExist) {
+            return prev;
+          }
+          return [...prev, e.clipboardData.files[0] as File];
+        });
+      }
+    });
     socket.on(config.socketEvents.SERVER.GET_MESSAGE, ({ message }: { message: IMessage }) => {
       setMessages((prev) => {
         const lastPrevMessage = prev[prev.length - 1];
@@ -117,13 +132,34 @@ const Messenger = () => {
   // };
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newMessage) {
+    let createMessage: {
+      conversation?: string;
+      sender?: string;
+      text: string;
+      images?: string[];
+    } = {
+      conversation: conversation?._id,
+      sender: user?._id,
+      text: '',
+    };
+    if (fileImages.length > 0) {
+      let formData = new FormData();
+      fileImages.map((image) => {
+        formData.append('imageMessage', image);
+      });
+      const res = await axiosClient.post('/upload/messages', formData);
+      console.log(res.data.imageMessage);
+      const images = res.data.imageMessage.map(
+        (image: FileResponse) => '/public/messages/' + image.filename,
+      );
+      createMessage.images = images;
+    }
+    console.log(createMessage);
+
+    if (newMessage || (createMessage?.images && createMessage?.images?.length > 0)) {
       try {
-        const message: IMessage = await messageApi.create({
-          conversation: conversation?._id,
-          sender: user?._id,
-          text: newMessage,
-        });
+        if (newMessage) createMessage.text = newMessage;
+        const message: IMessage = await messageApi.create(createMessage);
         if (message) {
           setMessages((prev) => [...prev, message]);
           socket.emit(config.socketEvents.CLIENT.SEND_MESSAGE, {
@@ -131,6 +167,7 @@ const Messenger = () => {
             receiverId: receiver?._id,
           });
           setNewMessage('');
+          setFileImages([]);
           messageInputRef.current?.focus();
         }
       } catch (error) {}
@@ -144,6 +181,11 @@ const Messenger = () => {
       senderId: user?._id || '',
       conversationId: conversation?._id || '',
       receiverId: receiver?._id || '',
+    });
+  };
+  const handleRemoveImageFile = (file: File) => {
+    setFileImages((prev) => {
+      return prev.filter((fileImage) => fileImage !== file);
     });
   };
   // console.log('current: ', conversation);
@@ -214,6 +256,21 @@ const Messenger = () => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.target.value)}
                 onKeyDown={handleKeyDown}
               />
+              {fileImages.length > 0 && (
+                <div className={cx('prev-image-container')}>
+                  {fileImages.map((fileImage, i) => (
+                    <div className={cx('chat-image-input')} key={i}>
+                      <img src={URL.createObjectURL(fileImage)} alt="" />
+                      <span
+                        onClick={() => handleRemoveImageFile(fileImage)}
+                        className={cx('close-icon')}
+                      >
+                        <MdClose />
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
               <div className={cx('icon', 'emoji')}>
                 <FaSmile />
               </div>

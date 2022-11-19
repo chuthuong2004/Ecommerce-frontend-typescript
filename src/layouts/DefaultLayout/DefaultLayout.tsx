@@ -34,6 +34,8 @@ const DefaultLayout: React.FC<Props> = ({ children }) => {
   return (
     <div className={cx('wrapper')}>
       {/* Header */}
+      <ScrollToTop />
+      <Messenger />
       <Header />
       {/* Container */}
       <div className={cx('container')}>

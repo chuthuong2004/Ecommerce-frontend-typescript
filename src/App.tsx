@@ -25,8 +25,6 @@ const App: React.FC = () => {
   return (
     <Router>
       <ToastContainer autoClose={3000} />
-      <ScrollToTop />
-      <Messenger />
       <Routes>
         {publicRoutes.map((route, index) => {
           const Page = route.component;

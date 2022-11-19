@@ -5,10 +5,11 @@ export interface IMessage {
   conversation: string;
   sender: IUser;
   text: string;
-  image?: string;
+  images?: string[];
   seen: boolean;
   createdAt: string;
   updatedAt: string;
   seenAt?: string;
   __v: number;
+  isLoading?: boolean;
 }
