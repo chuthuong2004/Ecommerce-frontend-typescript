@@ -2,10 +2,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { IBrand } from '../../../../models/brand.model';
 import { ICatalog } from '../../../../models/catalog.model';
 export const slides = [
-  {
-    _id: uuidv4(),
-    img: 'https://file.hstatic.net/1000284478/file/main_31948aae340b48a294d6a19761a2a008.png',
-  },
+  // {
+  //   _id: uuidv4(),
+  //   img: 'https://file.hstatic.net/1000284478/file/main_31948aae340b48a294d6a19761a2a008.png',
+  // },
   {
     _id: uuidv4(),
     img: 'https://file.hstatic.net/1000284478/file/pedro-nam_3b684b081b924c6d83cd1ab85c21374d.png',

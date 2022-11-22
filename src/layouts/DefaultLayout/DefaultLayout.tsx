@@ -27,10 +27,10 @@ const DefaultLayout: React.FC<Props> = ({ children }) => {
       document.body.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
     handleScrollTop();
-  }, [pathname, query]);
+  }, [pathname]);
   useEffect(() => {
     socket.emit(config.socketEvents.CLIENT.ADD_USER, user?._id);
-  }, [user?._id]);
+  }, [user?._id, socket]);
   return (
     <div className={cx('wrapper')}>
       {/* Header */}

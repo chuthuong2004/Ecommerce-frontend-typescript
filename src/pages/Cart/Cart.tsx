@@ -102,7 +102,7 @@ const Cart = () => {
                     <span>Bạn có thể nhập mã giảm giá ở trang thanh toán</span>
                   </div>
                   <div className={cx('note-cart')}>
-                    Vui lòng liên hệ 1900252538 hoặc inbox fanpage Maison Online <b>tại đây</b> nếu
+                    Vui lòng liên hệ 1900252538 hoặc inbox fanpage Koga Clothes <b>tại đây</b> nếu
                     Quý khách có yêu cầu đặc biệt với đơn hàng này.
                   </div>
                 </div>

@@ -26,8 +26,9 @@
   &-top {
     display: flex;
     align-items: flex-end;
-    max-width: 60%;
+    max-width: 70%;
     overflow: hidden;
+    font-size: 14px;
     border-radius: 5px;
     .content {
       position: relative;
@@ -44,6 +45,7 @@
         }
         img {
           min-width: 150px;
+          cursor: pointer;
         }
       }
       .message-img-text {
@@ -140,6 +142,17 @@
   &-bottom {
     font-size: 12px;
     margin-top: 10px;
+  }
+}
+.popup-image {
+  position: fixed;
+  background-color: red;
+  z-index: 100;
+  display: flex;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  img {
   }
 }
 @keyframes dots {

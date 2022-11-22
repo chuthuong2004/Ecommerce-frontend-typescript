@@ -6,10 +6,10 @@ export interface ISlide {
   img: string;
 }
 export const slides: ISlide[] = [
-  {
-    _id: uuidv4(),
-    img: 'https://file.hstatic.net/1000284478/file/main_31948aae340b48a294d6a19761a2a008.png',
-  },
+  // {
+  //   _id: uuidv4(),
+  //   img: 'https://file.hstatic.net/1000284478/file/main_31948aae340b48a294d6a19761a2a008.png',
+  // },
   {
     _id: uuidv4(),
     img: 'https://file.hstatic.net/1000284478/file/mlb-nu_84a893335c4e47f79382b617076a97bd.png',

@@ -177,19 +177,19 @@ const Collection = () => {
         />
         <h1 className={cx('collection-title')}>{slugCollection}</h1>
         <div className={cx('collection-desc')}>
-          <strong>Goodbye Summer</strong>
-          <div>15.08 - 18.08</div>
-          <div>&nbsp;</div>
+          <strong>Teacher's Day</strong>
+          <div>18.11 - 20.11</div>
+          {/* <div>&nbsp;</div>
           <div>Mai sơn Online tặng bạn</div>
-          <div>&nbsp;</div>
+          <div>&nbsp;</div> */}
 
           <div>
             <strong style={{ fontSize: 18, textTransform: 'uppercase' }}>
-              01 Kem mắt AHC trị giá 840k
+              Dành tặng giftset SVR trị giá 499K
             </strong>
           </div>
           <div>&nbsp;</div>
-          <div>Khi mua hóa đơn bất kỳ từ 2.690K</div>
+          <div>cho đơn hàng bất kỳ từ 1.590K</div>
           <div>&nbsp;</div>
           <div className={cx('note')}>
             <div>
@@ -198,11 +198,11 @@ const Collection = () => {
             <div>
               <span>Số lượng quà tặng có hạn</span>
             </div>
-            <div>
+            {/* <div>
               <span>Quà tặng sẽ được chuyển tới quý khách sau khi đơn hàng hoàn tất</span>
-            </div>
+            </div> */}
             <div>
-              <span>Ưu đãi không áp dụng đồng thời với chương trình khác tại Maison Online</span>
+              <span>Ưu đãi không áp dụng đồng thời với chương trình khác tại Koga Clothes</span>
             </div>
           </div>
         </div>
