@@ -5,15 +5,14 @@ import Button from '../Button';
 import { CloseIcon, HeartFragileIcon } from '../Icons';
 import RecommendedProduct from '../RecommendedProduct';
 import EmptyContent from '../EmptyContent';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
 import { IFavorite } from '../../models/user.model';
 import { toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
 import { useAddItemToCartMutation } from '../../services/cartsApi';
 import productApi from '../../api/productApi';
 import { useGetMyProfileQuery } from '../../services/authApi';
-import { setCart } from '../../features/cartSlice';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { selectAuth } from '../../features/authSlice';
 import { ICartItem } from '../../models/cart.model';
 import config from '../../config';
@@ -25,55 +24,32 @@ type Props = {
 };
 const WishList: React.FC<Props> = ({ activeWishList, handleClosePopUp = () => {} }) => {
   const location = useLocation();
-  const dispatch = useAppDispatch();
   const { user } = useAppSelector(selectAuth);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const [
-    addItemToCart,
-    {
-      data: dataCart,
-      isLoading: isLoadingCart,
-      isSuccess: isSuccessCart,
-      isError: isErrorCart,
-      error: errorCart,
-    },
-  ] = useAddItemToCartMutation();
+  const [addItemToCart] = useAddItemToCartMutation();
 
   const { refetch: refetchProfile } = useGetMyProfileQuery({});
-
-  useEffect(() => {
-    if (isSuccessCart) {
-      if (dataCart?.data) {
-        dispatch(setCart(dataCart.data.cartItems));
-        toast.success(dataCart?.message);
-      }
-    }
-    if (isErrorCart) {
-      toast.error((errorCart as any).data.message);
-    }
-  }, [isLoadingCart]);
 
   const handleRemoveFavorite = async (productId: string) => {
     try {
       const res = await productApi.removeFavorite(productId);
-      refetchProfile();
     } catch (error: any) {
       toast.error(error.data.message);
     }
   };
-
-  const handleAddAllToCart = () => {
+  const handleAddAllToCart = async () => {
     if (user?.favorites && user.favorites.length > 0) {
-      user.favorites.forEach(async (favorite: IFavorite) => {
+      location.pathname === config.routes.cart && handleClosePopUp();
+      for (const favorite of user.favorites) {
         await handleRemoveFavorite(favorite.product._id);
         await addItemToCart({
           product: favorite.product._id,
           color: favorite.color,
           size: favorite.size,
         });
-      });
-      location.pathname === config.routes.cart && handleClosePopUp();
+      }
+      refetchProfile();
     }
   };
   return (

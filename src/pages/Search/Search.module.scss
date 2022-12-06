@@ -1,0 +1,62 @@
+.products {
+  padding: 15px 0 60px;
+  display: grid;
+  gap: 40px 20px;
+  transition: all 0.5s ease-in-out;
+  grid-template-columns: repeat(4, 1fr);
+}
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+.btn-sort {
+  display: flex;
+  position: relative;
+  .icon {
+    font-size: 22px;
+    color: var(--primary);
+  }
+  button {
+    background-color: #f7f8f9;
+    padding: 13px 20px;
+    border-radius: 30px;
+    display: flex !important;
+    align-items: center !important;
+    font-size: 14px;
+    text-transform: none;
+    font-weight: 500;
+    min-width: 0;
+  }
+}
+.menu-more {
+  background-color: var(--primary);
+  width: 200px;
+  border-radius: 10px;
+  text-align: center;
+  .action-more {
+    .sort-list {
+      li {
+        color: #ffffff;
+        width: 100%;
+        display: flex;
+        cursor: pointer;
+        input {
+          display: none;
+        }
+        input:checked ~ label {
+          font-weight: 700;
+        }
+        label {
+          transition: all 0.3s ease-in-out;
+          width: 100%;
+          font-size: 1.4rem;
+          text-transform: capitalize;
+          padding: 10px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

@@ -271,11 +271,11 @@ const ItemCart: React.FC<Props> = ({
               {isCart ? (
                 <div>{cartItem.size}</div>
               ) : (
-                <select name="" id="" onChange={handleChangeSelectedSize}>
+                <select name="" id="" value={defaultSize} onChange={handleChangeSelectedSize}>
                   {cartItem.product.colors
                     .find((c) => c.colorName === cartItem.color)
                     ?.sizes.map((size) => (
-                      <option selected={size.size === defaultSize} key={size._id} value={size.size}>
+                      <option key={size._id} value={size.size}>
                         {size.size}
                       </option>
                     ))}

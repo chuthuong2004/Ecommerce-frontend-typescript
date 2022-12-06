@@ -12,6 +12,7 @@ import { memo } from 'react';
 import { selectAuth } from '../../features/authSlice';
 import { useAddAddressMutation, useUpdateAddressMutation } from '../../services/authApi';
 import ReactLoading from 'react-loading';
+import provinceApi from '../../api/provinceApi';
 
 const cx = classNames.bind(styles);
 
@@ -59,19 +60,20 @@ const EditAddress: React.FC<Props> = ({ address, handleClosePopUp }) => {
   ] = useUpdateAddressMutation();
 
   useEffect(() => {
-    const fetchProvince = () => {
-      fetch('https://provinces.open-api.vn/api/?depth=3').then(async (res) => {
-        const data: IProvince[] = await res.json();
-        const districts: IDistrict[] | undefined = data.find(
+    const fetchProvince = async () => {
+      try {
+        const res = await provinceApi.getAll();
+        const dataProvinces = res.data as IProvince[];
+        const districts: IDistrict[] | undefined = dataProvinces.find(
           (province: IProvince) => province.name === currentAddress.province,
         )?.districts;
         const wards = districts?.find(
           (district: IDistrict) => district.name === currentAddress.district,
         )?.wards;
-        setProvinces(data);
+        setProvinces(dataProvinces);
         setDistricts(districts || []);
         setWards(wards || []);
-      });
+      } catch (error) {}
     };
     fetchProvince();
   }, []);

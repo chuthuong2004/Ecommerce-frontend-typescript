@@ -39,15 +39,18 @@ const initialState: InputAuth = {
 const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const cart = useAppSelector(selectCart);
 
-  const dispatch = useAppDispatch();
   const { from } = location.state || { from: { pathname: '/' } };
+
   const [formValue, setFormValue] = useState(initialState);
   const [activeSignup, setActiveSignup] = useState(false);
   const [errorInput, setErrorInput] = useState<InputAuth>(initialState);
   const [openForgotPassword, setOpenForgotPassword] = useState(false);
   const [cartItems, setCartItems] = useState(cart?.cartItems);
+
   const [
     loginUser,
     {
@@ -58,6 +61,7 @@ const Login = () => {
       error: loginError,
     },
   ] = useLoginUserMutation();
+
   const [
     loginWithGoogle,
     {
@@ -68,6 +72,7 @@ const Login = () => {
       error: errorGoogle,
     },
   ] = useLoginWithGoogleMutation();
+
   const [
     registerUser,
     {
@@ -78,6 +83,7 @@ const Login = () => {
       error: registerError,
     },
   ] = useRegisterUserMutation();
+
   const [
     forgotPassword,
     {
@@ -90,86 +96,25 @@ const Login = () => {
   ] = useForgotPasswordMutation();
 
   const [addItemToCart] = useAddItemToCartMutation();
+
   useEffect(() => {
     location.pathname === config.routes.login ? setActiveSignup(false) : setActiveSignup(true);
     setFormValue(initialState);
     setErrorInput(initialState);
   }, [location.pathname, openForgotPassword]);
-  const handleChangeInput = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormValue({
-        ...formValue,
-        [e.target.name]: e.target.value,
-      });
-    },
-    [formValue],
-  );
-  const checkInputEmpty = (data: InputAuth) => {
-    setErrorInput({
-      email: !data.email ? 'Vui lòng nhập email.' : '',
-      password: !data.password
-        ? 'Vui lòng nhập mật khẩu.'
-        : data.password && data.password.length < 6
-        ? 'Mật khẩu phải có ít nhất 6 ký tự.'
-        : '',
-      phone: !data.phone ? 'Vui lòng nhập số điện thoại.' : '',
-    });
-  };
-  const handleLogin = async () => {
-    if (formValue.email && formValue.password && formValue.password.length >= 6) {
-      await loginUser({ email: formValue.email, password: formValue.password });
-    }
-    checkInputEmpty(formValue);
-  };
-  const handleRegister = async () => {
-    if (
-      formValue.email &&
-      formValue.phone &&
-      formValue.password &&
-      formValue.password.length >= 6
-    ) {
-      await registerUser({
-        email: formValue.email,
-        password: formValue.password,
-        phone: formValue.phone,
-      });
-    }
-    checkInputEmpty(formValue);
-  };
-  const handleForgotPassword = async () => {
-    if (formValue.email) {
-      await forgotPassword({
-        email: formValue.email,
-      });
-    }
-    checkInputEmpty(formValue);
-  };
-  const handleSubmit = () => {
-    if (location.pathname === config.routes.login) {
-      handleLogin();
-    } else {
-      handleRegister();
-    }
-  };
-  const addToCart = async (productId: string, color: string, size: string | number) => {
-    const cart = await addItemToCart({
-      product: productId,
-      color,
-      size,
-    });
-    return cart;
-  };
+
   useEffect(() => {
     if (isLoginSuccess) {
+      const handleAddAllToCart = async () => {
+        for(const cartItem of cartItems) {
+          await addToCart(cartItem.product._id, cartItem.color, cartItem.size);
+        }
+      }
       const { accessToken, refreshToken, ...user } = loginData;
       dispatch(setCredentials({ user: { ...user }, token: { accessToken, refreshToken } }));
       if (cart.cartItems && cart.cartItems.length > 0) {
         setCartItems(cart.cartItems);
         dispatch(clearCart());
-        cartItems.forEach(async (cartItem: ICartItem) => {
-          const newCart = await addToCart(cartItem.product._id, cartItem.color, cartItem.size);
-          console.log(newCart);
-        });
       }
       toast.success('Đăng nhập thành công !');
       navigate(from.pathname === config.routes.payment ? config.routes.cart : from.pathname);
@@ -191,6 +136,7 @@ const Login = () => {
       });
     }
   }, [isLoadingLogin, isLoadingRegister]);
+
   useEffect(() => {
     if (isSuccessGoogle) {
       const { accessToken, refreshToken, ...user } = dataGoogle;
@@ -216,6 +162,77 @@ const Login = () => {
     isSuccessForgotPassword && toast.info(dataForgotPassword.message);
     isErrorForgotPassword && toast.error((errorForgotPassword as any).data.message);
   }, [isLoadingForgotPassword]);
+
+  const handleChangeInput = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormValue({
+        ...formValue,
+        [e.target.name]: e.target.value,
+      });
+    },
+    [formValue],
+  );
+
+  const checkInputEmpty = (data: InputAuth) => {
+    setErrorInput({
+      email: !data.email ? 'Vui lòng nhập email.' : '',
+      password: !data.password
+        ? 'Vui lòng nhập mật khẩu.'
+        : data.password && data.password.length < 6
+        ? 'Mật khẩu phải có ít nhất 6 ký tự.'
+        : '',
+      phone: !data.phone ? 'Vui lòng nhập số điện thoại.' : '',
+    });
+  };
+
+  const handleLogin = async () => {
+    if (formValue.email && formValue.password && formValue.password.length >= 6) {
+      await loginUser({ email: formValue.email, password: formValue.password });
+    }
+    checkInputEmpty(formValue);
+  };
+
+  const handleRegister = async () => {
+    if (
+      formValue.email &&
+      formValue.phone &&
+      formValue.password &&
+      formValue.password.length >= 6
+    ) {
+      await registerUser({
+        email: formValue.email,
+        password: formValue.password,
+        phone: formValue.phone,
+      });
+    }
+    checkInputEmpty(formValue);
+  };
+
+  const handleForgotPassword = async () => {
+    if (formValue.email) {
+      await forgotPassword({
+        email: formValue.email,
+      });
+    }
+    checkInputEmpty(formValue);
+  };
+
+  const handleSubmit = () => {
+    if (location.pathname === config.routes.login) {
+      handleLogin();
+    } else {
+      handleRegister();
+    }
+  };
+
+  const addToCart = async (productId: string, color: string, size: string | number) => {
+    const cart = await addItemToCart({
+      product: productId,
+      color,
+      size,
+    });
+  };
+
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     setErrorInput({
       ...errorInput,
@@ -226,15 +243,13 @@ const Login = () => {
         : 'Trường này là bắt buộc.!!!',
     });
   };
+
   const handleSuccessLoginGoogle = async (credentialResponse: CredentialResponse) => {
     console.log(credentialResponse);
     const decoded = jwt_decode(credentialResponse?.credential || '');
     console.log(decoded);
     await loginWithGoogle({ tokenId: credentialResponse?.credential || '' });
   };
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => console.log(tokenResponse),
-  });
 
   return (
     <section className={cx('login-section')}>

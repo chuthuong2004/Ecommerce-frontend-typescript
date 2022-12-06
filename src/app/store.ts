@@ -3,7 +3,7 @@ import { setupListeners } from '@reduxjs/toolkit/dist/query';
 import { authApi } from '../services/authApi';
 import authReducer from '../features/authSlice';
 
-import { persistStore, persistReducer } from 'redux-persist';
+import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { cartsApi } from '../services/cartsApi';
 import cartReducer from '../features/cartSlice';
@@ -26,11 +26,10 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }).concat([
-      authApi.middleware,
-      cartsApi.middleware,
-      ordersApi.middleware,
-    ]),
+    getDefaultMiddleware({
+      immutableCheck: false,
+      serializableCheck: false,
+    }).concat([authApi.middleware, cartsApi.middleware, ordersApi.middleware]),
 });
 
 export type AppDispatch = typeof store.dispatch;

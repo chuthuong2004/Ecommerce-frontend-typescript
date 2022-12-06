@@ -1,6 +1,7 @@
 import React, { useState, ReactNode, memo, useEffect } from 'react';
 import styles from './TabContent.module.scss';
 import classNames from 'classnames/bind';
+import parse from 'html-react-parser';
 import { ArrowDownIcon } from '../Icons';
 const cx = classNames.bind(styles);
 
@@ -27,7 +28,7 @@ const TabContent: React.FC<Props> = ({ contents }) => {
             <div
               key={navItem._id}
               onClick={() => setTabSelected(navItem)}
-              className={cx('nav-item', tabSelected?.content === navItem.content && 'active')}
+              className={cx('nav-item', tabSelected.content === navItem.content && 'active')}
             >
               {navItem.title}
             </div>
@@ -36,7 +37,11 @@ const TabContent: React.FC<Props> = ({ contents }) => {
         </div>
       </div>
       <div className={cx('tab-content')}>
-        <div>{tabSelected?.content}</div>
+        {typeof tabSelected.content === 'string' ? (
+          <div>{parse(tabSelected.content)}</div>
+        ) : (
+          <div>{tabSelected.content}</div>
+        )}
       </div>
       <div className={cx('product-desc__show-more', 'd-none')}>
         <span>

@@ -13,6 +13,7 @@ import { HeaderOnly } from '../layouts';
 import Policy from '../pages/Policy';
 import React, { ReactNode } from 'react';
 import NoPageFound from '../pages/NoPageFound';
+import Search from '../pages/Search';
 // import NoPageFound from '../pages/NoPageFound';
 
 type routeType = {
@@ -70,6 +71,10 @@ const publicRoutes: Array<routeType> = [
   {
     path: `${config.routes.collections}/:slugCollection`,
     component: Collection,
+  },
+  {
+    path: config.routes.search,
+    component: Search,
   },
   {
     path: config.routes.account,

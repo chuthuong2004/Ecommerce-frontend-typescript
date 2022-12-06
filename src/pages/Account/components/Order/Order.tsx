@@ -25,12 +25,16 @@ const Order: React.FC = () => {
 
   const {
     data: dataOrder,
+    refetch,
     isFetching,
     isError,
     isSuccess,
     isLoading,
     error,
   } = useGetMyOrderQuery({});
+  useEffect(() => {
+    refetch();
+  }, []);
   useEffect(() => {
     if (isSuccess) {
       setProcessing(

@@ -10,6 +10,7 @@ import FormAddress from '../../../../components/FormEdit';
 import { useAppSelector } from '../../../../app/hooks';
 import { selectAuth } from '../../../../features/authSlice';
 import { useAddAddressMutation } from '../../../../services/authApi';
+import FormEdit from '../../../../components/FormEdit';
 const cx = classNames.bind(styles);
 type Props = {};
 const Address: React.FC<Props> = ({}) => {
@@ -17,6 +18,10 @@ const Address: React.FC<Props> = ({}) => {
   const [isOpenAddAddress, setIsOpenAddAddress] = useState(false);
   const [isOpenEditAddress, setIsOpenEditAddress] = useState(false);
   const [addressEdit, setAddressEdit] = useState<IAddressUser | undefined>(undefined);
+
+  useEffect(() => {
+    !isOpenEditAddress && setAddressEdit(undefined);
+  }, [isOpenEditAddress]);
 
   const handleClickEdit = (address: IAddressUser) => {
     setAddressEdit(address);
@@ -33,10 +38,11 @@ const Address: React.FC<Props> = ({}) => {
         handleClose={() => setIsOpenAddAddress(false)}
         position="center"
       >
-        <FormAddress
+        <FormEdit
           title="Thêm địa chỉ"
           isOpen={isOpenAddAddress}
           handleClosePopUp={handleClosePopupAdd}
+          action="address"
         />
       </PopUp>
       {user?.addresses && user.addresses.length > 0 ? (
@@ -80,11 +86,12 @@ const Address: React.FC<Props> = ({}) => {
             handleClose={() => setIsOpenEditAddress(false)}
             position="center"
           >
-            <FormAddress
+            <FormEdit
               address={addressEdit}
               isOpen={isOpenEditAddress}
               title="Cập nhật địa chỉ"
               handleClosePopUp={handleClosePopupEdit}
+              action="address"
             />
           </PopUp>
         </>

@@ -12,21 +12,33 @@ import Input from '../../../../../components/Input';
 import { toast } from 'react-toastify';
 import ReactLoading from 'react-loading';
 import { useSockets } from '../../../../../context/socket.context';
+import { useAddItemToCartMutation } from '../../../../../services/cartsApi';
+import config from '../../../../../config';
+import { useNavigate } from 'react-router-dom';
+import FormEdit from '../../../../../components/FormEdit';
 const cx = classNames.bind(styles);
 type Props = {
   orderId: string;
 };
 const OrderDetail: React.FC<Props> = ({ orderId }) => {
+  const navigate = useNavigate();
   const [order, setOrder] = useState<IOrder | null>(null);
-  const [openPopUp, setOpenPopUp] = useState(false);
+  const [openPopUp, setOpenPopUp] = useState({
+    cancel: false,
+    evaluate: false,
+  });
   const [cancelReason, setCancelReason] = useState('');
   const [cancelValueError, setCancelValueError] = useState<{ cancelReason: string }>({
     cancelReason: '',
   });
+  const [isLoadingAddAllToCart, setIsLoadingAddAllToCart] = useState(false);
+
   const orderIDRef = useRef<HTMLDivElement>(null);
+
   const { data, refetch, isLoading, isSuccess, isError, isFetching, error } = useGetOrderByIdQuery({
     orderId,
   });
+
   const [
     cancelOrder,
     {
@@ -37,6 +49,16 @@ const OrderDetail: React.FC<Props> = ({ orderId }) => {
       isSuccess: isSuccessCancel,
     },
   ] = useCancelOrderMutation();
+
+  const [addItemToCart] = useAddItemToCartMutation();
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  useEffect(() => {
+    refetch();
+  }, [openPopUp.evaluate]);
+
   useEffect(() => {
     if (isSuccess) {
       setOrder(data);
@@ -60,6 +82,7 @@ const OrderDetail: React.FC<Props> = ({ orderId }) => {
       orderIDRef.current?.classList.remove(cx('isCopied'));
     }, 1000);
   };
+
   const handleCancelOrder = async () => {
     if (!cancelReason) {
       setCancelValueError({ cancelReason: 'Trường này là bắt buộc' });
@@ -74,13 +97,30 @@ const OrderDetail: React.FC<Props> = ({ orderId }) => {
       [e.target.name]: e.target.value ? '' : 'Trường này là bắt buộc !',
     });
   };
-  console.log({ data, isLoading, isSuccess, isError, isFetching, error });
+
   const handleOpenContact = () => {
     const btn = document.getElementById('messenger');
     btn?.click();
   };
+
+  const handleBuyBack = async () => {
+    if (order?.orderItems && order.orderItems.length > 0) {
+      setIsLoadingAddAllToCart(true);
+      for (const orderItem of order?.orderItems) {
+        await addItemToCart({
+          product: orderItem.product,
+          color: orderItem.color,
+          size: orderItem.size,
+        });
+      }
+      setIsLoadingAddAllToCart(false);
+      navigate(config.routes.cart);
+    }
+  };
+
   return (
     <div className={cx('order-detail')}>
+      {isLoadingAddAllToCart && <Loading />}
       {isLoading ? (
         <Loading />
       ) : (
@@ -161,15 +201,19 @@ const OrderDetail: React.FC<Props> = ({ orderId }) => {
               <div className={cx('btn-cancel')}>
                 <PopUp
                   trigger={
-                    <Button onClick={() => setOpenPopUp(true)} className={cx('btn')} primary>
+                    <Button
+                      onClick={() => setOpenPopUp((prev) => ({ ...prev, cancel: true }))}
+                      className={cx('btn')}
+                      primary
+                    >
                       Hủy đơn hàng
                     </Button>
                   }
                   position="center"
-                  isOpen={openPopUp}
-                  handleClose={() => setOpenPopUp(false)}
+                  isOpen={openPopUp.cancel}
+                  handleClose={() => setOpenPopUp((prev) => ({ ...prev, cancel: false }))}
                 >
-                  <div className={cx('cancel-order', !openPopUp && 'closed')}>
+                  <div className={cx('cancel-order', !openPopUp.cancel && 'closed')}>
                     <h2>Thông tin hủy đơn hàng</h2>
                     <div className={cx('form-cancel')}>
                       <div className={cx('cancel-input')}>
@@ -203,11 +247,50 @@ const OrderDetail: React.FC<Props> = ({ orderId }) => {
                 </PopUp>
               </div>
             )}
+            {!order?.isEvaluated && order?.orderStatus === EOrderStatus.Delivered && (
+              <PopUp
+                trigger={
+                  <div>
+                    <Button
+                      onClick={() => setOpenPopUp((prev) => ({ ...prev, evaluate: true }))}
+                      primary
+                      className={cx('btn')}
+                    >
+                      Đánh giá
+                    </Button>
+                  </div>
+                }
+                isOpen={openPopUp.evaluate}
+                handleClose={() => setOpenPopUp((prev) => ({ ...prev, evaluate: false }))}
+                position="center"
+              >
+                <FormEdit
+                  isOpen={openPopUp.evaluate}
+                  title="Đánh giá sản phẩm"
+                  handleClosePopUp={() => setOpenPopUp((prev) => ({ ...prev, evaluate: false }))}
+                  action="evaluate"
+                  orderItems={order?.orderItems}
+                />
+              </PopUp>
+            )}
             <div className={cx('btn-contract')}>
               <Button onClick={handleOpenContact} leftIcon={<MessageIcon />} primary>
                 Liên hệ hỗ trợ
               </Button>
             </div>
+            {(order?.orderStatus === EOrderStatus.Delivered ||
+              order?.orderStatus === EOrderStatus.Canceled) && (
+              <div>
+                <Button
+                  onClick={handleBuyBack}
+                  border={!order?.isEvaluated}
+                  primary={order.isEvaluated}
+                  className={cx('btn')}
+                >
+                  Mua lại
+                </Button>
+              </div>
+            )}
           </div>
         </>
       )}

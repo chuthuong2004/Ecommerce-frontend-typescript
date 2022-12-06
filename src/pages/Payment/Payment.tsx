@@ -32,6 +32,7 @@ import { toast } from 'react-toastify';
 import { useGetMyCartQuery } from '../../services/cartsApi';
 import Loading from '../../components/Loading';
 import { useLogoutUserMutation } from '../../services/authApi';
+import provinceApi from '../../api/provinceApi';
 const cx = classNames.bind(styles);
 
 type Props = {
@@ -96,22 +97,26 @@ const Payment: React.FC<Props> = () => {
   }
 
   useEffect(() => {
-    fetch('https://provinces.open-api.vn/api/?depth=3').then(async (res) => {
-      const data: IProvince[] = await res.json();
-      const districts: IDistrict[] | undefined = data.find(
-        (province: IProvince) => province.name === informationDelivery.province,
-      )?.districts;
-      const wards = districts?.find(
-        (district: IDistrict) => district.name === informationDelivery.district,
-      )?.wards;
-      setProvinces(data);
-      if (informationDelivery.province) {
-        setDistricts(districts || []);
-      }
-      if (informationDelivery.district) {
-        setWards(wards || []);
-      }
-    });
+    const fetchProvince = async () => {
+      try {
+        const res = await provinceApi.getAll();
+        const dataProvinces = res.data as IProvince[];
+        const districts: IDistrict[] | undefined = dataProvinces.find(
+          (province: IProvince) => province.name === informationDelivery.province,
+        )?.districts;
+        const wards = districts?.find(
+          (district: IDistrict) => district.name === informationDelivery.district,
+        )?.wards;
+        setProvinces(dataProvinces);
+        if (informationDelivery.province) {
+          setDistricts(districts || []);
+        }
+        if (informationDelivery.district) {
+          setWards(wards || []);
+        }
+      } catch (error) {}
+    };
+    fetchProvince();
   }, []);
 
   useEffect(() => {

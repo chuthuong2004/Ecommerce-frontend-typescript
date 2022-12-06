@@ -5,10 +5,10 @@ import Button from '../../../../components/Button';
 import React, { useState } from 'react';
 import { IAddress } from '../../../../models/user.model';
 import PopUp from './../../../../components/PopUp/PopUp';
-import FormAddress from '../../../../components/FormEdit';
 import { useAppSelector } from '../../../../app/hooks';
 import { selectAuth } from '../../../../features/authSlice';
 import moment from 'moment';
+import FormEdit from '../../../../components/FormEdit';
 const cx = classNames.bind(styles);
 type Props = {};
 
@@ -51,11 +51,11 @@ const AccountInfo: React.FC<Props> = ({}) => {
           handleClose={() => setIsOpenPopup(false)}
           position="center"
         >
-          <FormAddress
+          <FormEdit
             isOpen={isOpenPopup}
             title="Cập nhật thông tin"
             handleClosePopUp={() => setIsOpenPopup(false)}
-            editAccount={true}
+            action="account"
           />
         </PopUp>
       </div>

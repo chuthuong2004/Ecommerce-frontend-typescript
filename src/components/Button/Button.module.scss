@@ -14,6 +14,7 @@
   background-color: var(--white);
   user-select: none;
   position: relative;
+  border: 1px solid transparent;
   + .wrapper {
     margin-left: 8px;
   }
@@ -28,9 +29,6 @@
     top: 50%;
     left: 2rem;
     transform: translateY(-50%);
-  }
-  &.border {
-    border: 1px solid #ffffff;
   }
 }
 
@@ -64,9 +62,16 @@
   //     border-color: var(--primary);
   //     background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), #fe2c55;
   // }
+  &.border {
+    border-color: var(--white);
+  }
 }
 .border {
-  border: 1px solid transparent;
+  border: 1px solid var(--primary);
+  &:hover {
+    background-color: var(--primary);
+    color: #ffffff;
+  }
 }
 .outline {
   color: var(--primary);

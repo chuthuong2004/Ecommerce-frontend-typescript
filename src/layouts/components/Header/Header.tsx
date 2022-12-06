@@ -35,6 +35,8 @@ import WishList from '../../../components/WishList';
 const cx = classNames.bind(styles);
 
 function Header() {
+  const useQuery = () => new URLSearchParams(useLocation().search);
+  let query: URLSearchParams = useQuery();
   const { user } = useAppSelector(selectAuth);
   let cart = useAppSelector(selectCart);
   const dispatch = useAppDispatch();
@@ -211,7 +213,7 @@ function Header() {
           <div className={cx('nav-right')}>
             <div onClick={() => setOpenSearch(true)} className={cx('search')}>
               <SearchIcon width="2rem" height="2rem" />
-              <span>Tìm kiếm</span>
+              <span>{query.get('q') || 'Tìm kiếm'}</span>
             </div>
             {openSearch && <Search handleClose={() => setOpenSearch(false)} />}
             <div className={cx('profile')}>

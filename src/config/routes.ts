@@ -7,6 +7,7 @@ const routes = {
   sale: '/collections/special-deal',
   newArrival: '/collections/new-arrival',
   collections: '/collections',
+  search: '/search',
   login: '/tai-khoan/dang-nhap',
   register: '/tai-khoan/dang-ky',
   product: '/san-pham',

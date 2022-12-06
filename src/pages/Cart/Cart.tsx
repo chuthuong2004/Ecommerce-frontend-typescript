@@ -9,14 +9,12 @@ import Footer from '../../layouts/components/Footer';
 import config from '../../config';
 import EmptyContent from '../../components/EmptyContent';
 import RecommendedProduct from '../../components/RecommendedProduct/RecommendedProduct';
-import { useGetMyCartQuery } from '../../services/cartsApi';
-import { ICart, ICartItem } from '../../models/cart.model';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectCart, setCart } from '../../features/cartSlice';
+import { ICartItem } from '../../models/cart.model';
+import { useAppSelector } from '../../app/hooks';
+import { selectCart } from '../../features/cartSlice';
 import { useEffect, useState } from 'react';
 const cx = classNames.bind(styles);
 const Cart = () => {
-  const dispatch = useAppDispatch();
   let cart = useAppSelector(selectCart);
   const [selectedAll, setSelectedAll] = useState<boolean>(true);
   const [selectedCart, setSelectedCart] = useState<ICartItem[]>(cart?.cartItems || []);
@@ -29,14 +27,12 @@ const Cart = () => {
       });
   };
   useEffect(() => {
-    console.log('isselec', selectedCart);
-
     if (selectedCart?.length < cart?.cartItems.length) {
       setSelectedAll(false);
     } else {
       setSelectedAll(true);
     }
-  }, [selectedCart]);
+  }, [selectedCart, cart?.cartItems]);
   useEffect(() => {
     !cart && setSelectedCart([]);
     if (cart) {
@@ -52,8 +48,6 @@ const Cart = () => {
     !e.target.checked && setSelectedCart([]);
     e.target.checked && setSelectedCart(cart?.cartItems);
   };
-  console.log('cart', cart);
-  console.log('sele', selectedCart);
   return (
     <div className={cx('wrapper')}>
       {cart?.cartItems.length === 0 ? (

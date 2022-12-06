@@ -9,8 +9,25 @@ import CategoryContainer from '../../../../components/CategoryContainer';
 import { features } from '../Kids/dataKids';
 import { IBrand } from '../../../../models/brand.model';
 import { ICatalog } from '../../../../models/catalog.model';
+import { useEffect, useState } from 'react';
+import { IProduct } from '../../../../models/product.model';
+import productApi from '../../../../api/productApi';
 const cx = classNames.bind(styles);
 const Men = () => {
+  // const [productOfMlb, setProductOfMlb] = useState<IProduct[]>([])
+  // useEffect(() =>{
+  //   const fetchProducts = async() => {
+  //     try {
+  //       const res = await productApi.getAll({})
+  //       if(res.data.length > 0) {
+  //         setProductOfMlb(res.data.filter((product: IProduct) => product.brand.name === 'MLB'));
+  //       }
+  //     } catch (error) {
+
+  //     }
+  //   }
+  //   fetchProducts()
+  // }, [])
   const categoriesMen = catalogs.map((catalog: ICatalog) => {
     return {
       ...catalog,

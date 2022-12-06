@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import classNames from 'classnames/bind';
 import styles from './Search.module.scss';
@@ -53,7 +53,14 @@ const product = [
   },
 ];
 const Search: React.FC<Props> = ({ handleClose }) => {
+  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>('');
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    navigate(config.routes.search + `?q=${searchValue}`);
+    handleClose();
+  };
+  // const []
   return (
     <div className={cx('container')}>
       <div className={cx('nav-logo')}>
@@ -63,14 +70,14 @@ const Search: React.FC<Props> = ({ handleClose }) => {
       </div>
       <div className={cx('wrapper')}>
         <div className={cx('search-header')}>
-          <div className={cx('nav-input')}>
+          <form onSubmit={handleSubmit} className={cx('nav-input')}>
             <SearchInput
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               handleClearInput={() => setSearchValue('')}
               loading={false}
             />
-          </div>
+          </form>
           <div className={cx('nav-close')}>
             <div onClick={handleClose} className={cx('close')}>
               ĐÓNG
@@ -81,7 +88,7 @@ const Search: React.FC<Props> = ({ handleClose }) => {
         <div className={cx('search-bar-result')}>
           <div className={cx('search-bar-result-wrapper', 'hasHistory', 'topSearch')}>
             <div className={cx('search-bar-result-left')}>
-              {/* <div className={cx('history')}>
+              <div className={cx('history')}>
                 <div className={cx('header')}>
                   <h5>Tìm kiếm gần đây</h5>
                   <span className={cx('clear-all-search')}>Xóa tất cả</span>
@@ -94,19 +101,19 @@ const Search: React.FC<Props> = ({ handleClose }) => {
                     </span>
                   </div>
                   <div className={cx('item-key-search')}>
-                    <span>áo đen</span>{' '}
+                    <span>MLB</span>{' '}
                     <span>
                       <CloseIcon />
                     </span>
                   </div>
                   <div className={cx('item-key-search')}>
-                    <span>áo đen</span>{' '}
+                    <span>áo hoodie</span>{' '}
                     <span>
                       <CloseIcon />
                     </span>
                   </div>
                   <div className={cx('item-key-search')}>
-                    <span>áo đen</span>{' '}
+                    <span>giày tây</span>{' '}
                     <span>
                       <CloseIcon />
                     </span>
@@ -116,21 +123,21 @@ const Search: React.FC<Props> = ({ handleClose }) => {
               <div className={cx('top-search')}>
                 <h5>Được tìm kiếm nhiều</h5>
                 <div className={cx('active')}>
-                  <span>Quần jogger abc xyz clas adkfhs dskhdfg skhsd fhkb</span>
+                  <span>Quần jogger </span>
                   <span>Áo Hoodie</span>
                   <span>Nón bóng chày</span>
                   <span>Áo thun</span>
                   <span>Giày Chunky</span>
                 </div>
-              </div> */}
-              <div className={cx('empty-result')}>
+              </div>
+              {/* <div className={cx('empty-result')}>
                 <EmptyContent
                   icon={<SearchIconLarge />}
                   content1="Không có kết quả phù hợp"
                   content2="Hãy thử lại với từ khóa khác hoặc tham khảo các gợi ý nhé."
                   titleBtn=""
                 />
-              </div>
+              </div> */}
             </div>
             <div className={cx('search-bar-result-right')}>
               <h5>Gợi ý cho bạn</h5>

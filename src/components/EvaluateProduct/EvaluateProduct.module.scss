@@ -1,0 +1,57 @@
+.container {
+  width: 700px;
+  .wrapper {
+    max-height: 600px;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
+    &:not(:last-child) {
+      border-bottom: 4px solid rgb(240, 239, 239);
+    }
+    .product {
+      display: flex;
+      font-size: 1.4rem;
+      gap: 10px;
+      &-info {
+        display: flex;
+        flex-direction: column;
+      }
+      &-name {
+        font-weight: 700;
+      }
+      &-type {
+        color: gray;
+      }
+      img {
+        width: 100px;
+        border: 1px solid rgb(240, 235, 235);
+      }
+    }
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .input-evaluate {
+      outline: none;
+      padding: 20px;
+      font-size: 1.4rem;
+      border-radius: 6px;
+      border-color: rgb(240, 235, 235);
+    }
+  }
+  .action {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+}

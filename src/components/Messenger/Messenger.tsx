@@ -54,6 +54,7 @@ const Messenger = () => {
   useEffect(() => {
     socket.on(config.socketEvents.SERVER.GET_MESSAGE, ({ message }: { message: IMessage }) => {
       message.sender._id !== user?._id && setReceiver(message.sender);
+      if (!activeMessenger) setActiveMessenger(true);
       setMessages((prev) => {
         const lastPrevMessage = prev[prev.length - 1];
         if (
@@ -175,7 +176,7 @@ const Messenger = () => {
         if (newMessage) createMessage.text = newMessage;
         const message: IMessage = await messageApi.create(createMessage);
         if (message) {
-          // setMessages((prev) => [...prev, message]);
+          setMessages((prev) => [...prev, message]);
           socket.emit(config.socketEvents.CLIENT.SEND_MESSAGE, {
             message,
             receiverId: receiver?._id,
@@ -380,7 +381,6 @@ const Messenger = () => {
               <span className={cx('line-short')}></span>
             </div>
           </div>
-          <span className={cx('new-message')}></span>
         </div>
       )}
     </div>
