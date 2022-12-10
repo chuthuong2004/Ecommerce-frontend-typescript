@@ -560,7 +560,7 @@ const ReturnPolicy = () => {
         &nbsp;- Phụ kiện: Vớ, Khăn, Trang sức, Móc khóa, Ốp lưng, Shoecare, Khẩu trang,...&nbsp;
       </p>
       <p className="p10">
-        &nbsp;- Không áp dụng cho các sản phẩm mua trực tiếp tại hệ thống cửa hàng của Maison.
+        &nbsp;- Không áp dụng cho các sản phẩm mua trực tiếp tại hệ thống cửa hàng của Koga.
       </p>
       <ul>
         <li className="p10">
