@@ -81,13 +81,13 @@ const Product = () => {
     {
       _id: uuidv4(),
       title: 'Chi tiết sản phẩm',
-      content: product?.description.replaceAll('\n', '</hr>') || '',
+      content: product?.description.replaceAll('\n', '</br>') || '',
     },
     {
       _id: uuidv4(),
       title: 'Thông tin bảo quản',
       content: product?.preserveInformation
-        ? product.preserveInformation.replaceAll('\n', '</hr>')
+        ? product.preserveInformation.replaceAll('\n', '</br>')
         : '',
     },
     {
