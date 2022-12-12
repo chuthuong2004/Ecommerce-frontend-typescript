@@ -26,11 +26,10 @@ const Search = () => {
         const params = {
           limit: 0,
           page: 1,
-          search: query.get('q'),
           sort: actionSort,
         };
         setLoading(true);
-        const res = await productApi.getAll(params);
+        const res = await productApi.search(query.get('q'), params);
         setProducts(res.data);
         setLoading(false);
       } catch (error) {

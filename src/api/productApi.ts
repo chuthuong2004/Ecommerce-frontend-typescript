@@ -24,5 +24,9 @@ const productApi = {
     const url = `products/favorite/remove/${productId}`;
     return axiosClient.put(url);
   },
+  search: (search: string | null, params: any): Promise<{ data: IProduct[] }> => {
+    const url = `products/search?search=${search}`;
+    return axiosClient.get(url, { params });
+  },
 };
 export default productApi;
