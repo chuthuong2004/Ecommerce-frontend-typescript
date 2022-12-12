@@ -61,6 +61,7 @@ const Collection = () => {
         const params = {
           limit: 0,
           page: 1,
+          sort: 'name',
         };
         const res = await categoryApi.getAll(params);
         console.log(res);
@@ -76,6 +77,7 @@ const Collection = () => {
         const params = {
           limit: 0,
           page: 1,
+          sort: 'name',
         };
         const res = await brandApi.getAll(params);
         console.log(res);
