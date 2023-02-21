@@ -7,22 +7,28 @@
 .container {
   position: fixed;
   top: var(--top-height-modal);
+  max-height: calc(100vh - (var(--top-height-modal) * 2));
   left: 50%;
   line-height: 1.4;
   z-index: 9999;
   transform: translate(-50%, 0);
-  overflow-y: auto;
+  overflow-y: scroll;
   transition: all 0.6s ease-in-out;
   animation: fadeIn 0.6s ease-in-out;
+  border-radius: 15px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   &.closed {
     animation: fadeOut 0.6s ease-in-out;
   }
   .form-address {
-    min-width: 28vw;
+    min-width: 30vw;
     background-color: #fff;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
+
     .form-header {
       display: flex;
       align-items: center;
