@@ -117,6 +117,7 @@ const Payment: React.FC<Props> = () => {
       } catch (error) {}
     };
     fetchProvince();
+    document.title = 'Thanh toán - Koga-clothes.shop';
   }, []);
 
   useEffect(() => {

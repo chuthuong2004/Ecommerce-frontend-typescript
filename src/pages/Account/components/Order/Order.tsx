@@ -91,6 +91,7 @@ const Order: React.FC = () => {
           ),
       },
     ]);
+    document.title = 'Đơn hàng của bạn - Koga-clothes.shop';
   }, [orders]);
   console.log({
     data: dataOrder,

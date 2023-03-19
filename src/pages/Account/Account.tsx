@@ -77,8 +77,10 @@ const Account = () => {
     };
     avatar && uploadAvatar();
   }, [avatar]);
+  useEffect(() => {
+    document.title = 'Tài khoản Koga-clothes.shop';
+  }, [pathname]);
   console.log(avatar);
-
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container-fluid')}>

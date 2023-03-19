@@ -118,7 +118,8 @@ const Product = () => {
       }
     };
     fetchProduct();
-  }, [slug]);
+    document.title = product?.brand.name + ' - ' + product?.name;
+  }, [slug, product?.brand.name, product?.name]);
   useEffect(() => {
     if (user && product) {
       // refetch profile để update state cho user

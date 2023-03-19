@@ -108,6 +108,7 @@ function Header() {
       setActiveProfile(false);
     }
     setActiveWishList(false);
+    document.title = 'Koga-clothes.shop';
   }, [location.pathname]);
 
   const handleScrollTop = () => {

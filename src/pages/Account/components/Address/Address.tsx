@@ -22,7 +22,9 @@ const Address: React.FC<Props> = ({}) => {
   useEffect(() => {
     !isOpenEditAddress && setAddressEdit(undefined);
   }, [isOpenEditAddress]);
-
+  useEffect(() => {
+    document.title = 'Địa chỉ - Koga-clothes.shop';
+  }, []);
   const handleClickEdit = (address: IAddressUser) => {
     setAddressEdit(address);
     setIsOpenEditAddress(true);

@@ -42,6 +42,7 @@ const Cart = () => {
         );
       });
     }
+    document.title = 'Giỏ hàng của bạn - Koga-clothes.shop';
   }, [cart]);
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedAll(e.target.checked);
