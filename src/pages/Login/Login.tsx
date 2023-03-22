@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FacebookIcon, GoogleIcon, LeftIcon, LogoIcon } from '../../components/Icons';
 import styles from './Login.module.scss';
 import config from '../../config';
-import { useState, useEffect, useCallback, FocusEvent } from 'react';
+import { useState, useEffect, useCallback, FocusEvent, useRef } from 'react';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import {
@@ -51,6 +51,7 @@ const Login = () => {
   const [openForgotPassword, setOpenForgotPassword] = useState(false);
   const [cartItems, setCartItems] = useState(cart?.cartItems);
 
+  const btnGoogleRef = useRef<HTMLDivElement>(null);
   const [
     loginUser,
     {
@@ -106,10 +107,10 @@ const Login = () => {
   useEffect(() => {
     if (isLoginSuccess) {
       const handleAddAllToCart = async () => {
-        for(const cartItem of cartItems) {
+        for (const cartItem of cartItems) {
           await addToCart(cartItem.product._id, cartItem.color, cartItem.size);
         }
-      }
+      };
       const { accessToken, refreshToken, ...user } = loginData;
       dispatch(setCredentials({ user: { ...user }, token: { accessToken, refreshToken } }));
       if (cart.cartItems && cart.cartItems.length > 0) {
@@ -391,46 +392,35 @@ const Login = () => {
                         Đăng nhập bằng facebook
                       </Button>
                     </div>
+                    <div
+                      className={cx('btn', 'hide')}
+                      id="google-login1111111111"
+                      style={{ display: 'flex', background: 'red' }}
+                    >
+                      <GoogleLogin
+                        onSuccess={handleSuccessLoginGoogle}
+                        onError={() => {
+                          console.log('Login Failed');
+                        }}
+                        useOneTap
+                        text="signin_with"
+                        locale="VN-vi"
+                        size="large"
+                        width="100%"
+                      />
+                    </div>
                     <div className={cx('btn')}>
-                      {/* <Button
+                      <Button
                         className={cx('btn__google')}
                         large
                         primary
                         icon={<GoogleIcon width="18" height="18" />}
+                        onClick={() => {
+                          document.querySelector('.S9gUrf-YoZ4jf')?.classList.add('ok');
+                          console.log(document.querySelector('#container'));
+                        }}
                       >
-                        <GoogleLogin
-                          onSuccess={handleSuccessLoginGoogle}
-                          onError={() => {
-                            console.log('Login Failed');
-                          }}
-                          useOneTap
-                          text="signin_with"
-                          type="standard"
-                          locale="VN-vi"
-                          cancel_on_tap_outside={false}
-                          itp_support
-                          shape="circle"
-                          ux_mode="popup"
-                          width="1px"
-                        />
-                      </Button> */}
-                      <Button
-                        className={cx('btn__google')}
-                        small
-                        primary
-                        icon={<GoogleIcon width="18" height="18" />}
-                      >
-                        <GoogleLogin
-                          onSuccess={handleSuccessLoginGoogle}
-                          onError={() => {
-                            console.log('Login Failed');
-                          }}
-                          useOneTap
-                          text="signin_with"
-                          locale="VN-vi"
-                          size="large"
-                          width="1px"
-                        />
+                        Đăng nhập bằng Google
                       </Button>
                     </div>
                   </div>
