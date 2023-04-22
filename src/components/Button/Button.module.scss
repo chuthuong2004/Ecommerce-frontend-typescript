@@ -5,18 +5,18 @@
   width: 100%;
   font-size: 1.4rem;
   font-weight: 700;
-  min-width: 100px;
-  padding: 15px 12px;
-  border-radius: 2px;
-  letter-spacing: 1px;
+  min-width: 10rem;
+  padding: 1.5rem 1.2rem;
+  border-radius: 0.2rem;
+  letter-spacing: 0.1rem;
   cursor: pointer;
   text-transform: uppercase;
   background-color: var(--white);
   user-select: none;
   position: relative;
-  border: 1px solid transparent;
+  border: 0.1rem solid transparent;
   + .wrapper {
-    margin-left: 8px;
+    margin-left: 0.8rem;
   }
   &.disabled {
     pointer-events: none;
@@ -34,12 +34,12 @@
 
 .icon + .title,
 .title + .icon {
-  margin-left: 8px;
+  margin-left: 0.8rem;
 }
 
 .icon {
   display: inline-block;
-  width: 24px;
+  width: 2.4rem;
   text-align: center;
 }
 
@@ -47,7 +47,7 @@
 .rounded {
   border-radius: 999px;
   border-color: rgba(22, 24, 25, 0.12);
-  box-shadow: 0 2px 8px rgba(0 0 0 / 6%);
+  box-shadow: 0 0.2rem 0.8rem rgba(0 0 0 / 6%);
   &:hover {
     border-color: rgba(22, 24, 35, 0.2);
     background-color: rgba(22, 24, 25, 0.03);
@@ -90,13 +90,13 @@
 // Disabled
 // Button sizes
 .small {
-  min-width: 88px;
-  padding: 10px;
-  font-size: 12px;
+  min-width: 8.8rem;
+  padding: 1rem;
+  font-size: 1.2rem;
   font-weight: 700;
 }
 
 .large {
   min-width: 148px;
-  padding: 20px 16px;
+  padding: 2rem 1.6rem;
 }
