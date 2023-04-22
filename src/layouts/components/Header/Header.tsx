@@ -14,14 +14,13 @@ import {
   HeartActiveIcon,
   HeartIcon,
   LogoIcon,
+  MenuIcon,
   SearchIcon,
   UserActiveIcon,
   UserIcon,
 } from '../../../components/Icons';
-import Button from '../../../components/Button';
-import PopUp from '../../../components/PopUp';
-import MenuSub from './MenuSub';
-import Search from './Search';
+import { Button, PopUp, WishList } from '../../../components';
+import { MenuMobile, MenuSub, Search } from './components';
 import { headerLinks } from '../../../assets/headerLinks';
 import { SideBarItem, sidebars } from '../../../assets/sidebars';
 import { logout, selectAuth, setCredentials } from '../../../features/authSlice';
@@ -31,7 +30,7 @@ import { toast } from 'react-toastify';
 import { clearCart, selectCart, setCart } from '../../../features/cartSlice';
 import { cartsApi, useGetMyCartQuery } from '../../../services/cartsApi';
 import { ordersApi } from '../../../services/ordersApi';
-import WishList from '../../../components/WishList';
+import { isMobile } from 'react-device-detect';
 const cx = classNames.bind(styles);
 
 function Header() {
@@ -46,6 +45,7 @@ function Header() {
   const [activeWishList, setActiveWishList] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
   const [currentPageYOffset, setCurrentPageYOffset] = useState<number>(0);
+  const [openMenuMobile, setOpenMenuMobile] = useState(false);
 
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -166,12 +166,14 @@ function Header() {
       console.log(errorCart);
     }
   }, [isLoadingCart, isFetchingCart]);
-  console.log({ cart: dataCart, profile: dataProfile });
-
   return (
     <div
       ref={headerRef}
-      className={cx('container', isScrollUp && 'sticky', isScrollDown && 'out-top')}
+      className={cx(
+        'container',
+        isMobile ? 'sticky' : isScrollDown && 'out-top',
+        isScrollUp && 'sticky',
+      )}
     >
       {/* banner */}
       <img
@@ -181,6 +183,20 @@ function Header() {
       />
       <header className={cx('wrapper')}>
         <div className={cx('inner')}>
+          {isMobile && (
+            <PopUp
+              trigger={
+                <div onClick={() => setOpenMenuMobile(true)}>
+                  <MenuIcon />
+                </div>
+              }
+              isOpen={openMenuMobile}
+              handleClose={() => setOpenMenuMobile(false)}
+              position="left"
+            >
+              <MenuMobile isOpen={openMenuMobile} onClose={() => setOpenMenuMobile(false)} />
+            </PopUp>
+          )}
           <div className={cx('nav-left')}>
             <Link to={config.routes.home} className={cx('logo')}>
               <LogoIcon height="40" />
@@ -217,6 +233,11 @@ function Header() {
               <span>{query.get('q') || 'Tìm kiếm'}</span>
             </div>
             {openSearch && <Search handleClose={() => setOpenSearch(false)} />}
+            {isMobile && (
+              <div className={cx('icons')}>
+                <SearchIcon width="2.4rem" height="2.4rem" />
+              </div>
+            )}
             <div className={cx('profile')}>
               <HeadlessTippy
                 delay={[0, 50]}

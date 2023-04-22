@@ -3,12 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import classNames from 'classnames/bind';
 import styles from './Search.module.scss';
-import { CloseIcon, LogoIcon, SearchIcon, SearchIconLarge } from '../../../../components/Icons';
-import config from '../../../../config';
-import Input from '../../../../components/Input';
-import SearchInput from '../../../../components/SearchInput';
-import OrderItemProduct from '../../../../pages/Account/components/Order/OrderItemProduct';
-import EmptyContent from '../../../../components/EmptyContent';
+import { CloseIcon, LogoIcon, SearchIcon, SearchIconLarge } from '../../../../../components/Icons';
+import config from '../../../../../config';
+import Input from '../../../../../components/Input';
+import SearchInput from '../../../../../components/SearchInput';
+import OrderItemProduct from '../../../../../pages/Account/components/Order/OrderItemProduct';
+import EmptyContent from '../../../../../components/EmptyContent';
 
 const cx = classNames.bind(styles);
 type Props = {

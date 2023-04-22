@@ -19,7 +19,7 @@
     left: 0;
     right: 0;
     margin: 0;
-    margin-bottom: 98px;
+    margin-bottom: 9.8rem;
     opacity: 0;
     transform: translateY(-100%);
   }
@@ -59,7 +59,7 @@
         ul {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 1rem;
           li {
             text-transform: uppercase;
             font-weight: 600;
@@ -67,7 +67,7 @@
             font-weight: 500;
             padding: 1rem;
             line-height: 2rem;
-            letter-spacing: 1px;
+            letter-spacing: 0.1rem;
             color: var(--primary);
             position: relative;
             transition: all 0.4s ease-in-out;
@@ -94,30 +94,26 @@
       .nav-right {
         display: flex;
         align-items: center;
+        gap: 2.4rem;
         .search {
           display: flex;
           align-items: center;
           background-color: #f7f8f9;
           margin-right: 5rem;
-          padding: 10px 65px 10px 20px;
-          border-radius: 25px;
-          height: 40px;
+          padding: 1rem 6.5rem 1rem 2rem;
+          border-radius: 2.5rem;
+          height: 4rem;
           cursor: pointer;
           span {
-            margin-left: 8px;
-            letter-spacing: 2px;
-            font-size: 14px;
+            margin-left: 0.8rem;
+            letter-spacing: 0.2rem;
+            font-size: 1.4rem;
           }
-        }
-        .wishlist,
-        .profile,
-        .cart {
-          margin-right: 2.4rem;
         }
         .profile {
           position: relative;
           .tippy-content {
-            font-size: 80px !important;
+            font-size: 8rem !important;
             color: var(--primary) !important;
           }
           .user-links {
@@ -125,11 +121,11 @@
             width: 100%;
             background-color: red;
             .user-link {
-              font-size: 14px;
+              font-size: 1.4rem;
               text-align: left;
               font-weight: 400;
-              padding: 5px 0;
-              border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+              padding: 0.5rem 0;
+              border-bottom: 0.1rem solid rgba(0, 0, 0, 0.1);
               color: rgba(0, 0, 0, 0.7);
               &:first-child {
                 color: rgba(0, 0, 0, 1);
@@ -144,7 +140,7 @@
               }
               a {
                 display: block;
-                padding-right: 25px;
+                padding-right: 2.5rem;
               }
             }
           }
@@ -153,11 +149,11 @@
             flex-direction: column;
             li {
               flex: 1;
-              font-size: 14px;
+              font-size: 1.4rem;
               text-align: left;
               font-weight: 500;
-              padding: 5px 0;
-              border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+              padding: 0.5rem 0;
+              border-bottom: 0.1rem solid rgba(0, 0, 0, 0.1);
               color: rgba(0, 0, 0, 0.7);
               &:first-child {
                 color: rgba(0, 0, 0, 1);
@@ -172,13 +168,13 @@
               }
               a {
                 display: block;
-                padding-right: 25px;
+                padding-right: 2.5rem;
               }
             }
           }
           .buttons {
             width: 100%;
-            margin-top: 10px;
+            margin-top: 1rem;
             display: flex;
             flex-direction: column;
           }
@@ -211,9 +207,9 @@
           }
           .quantity-item {
             position: absolute;
-            top: -2px;
-            right: -4px;
-            font-size: 10px;
+            top: -0.2rem;
+            right: -0.4rem;
+            font-size: 1rem;
             min-width: 1.5rem;
             height: 1.5rem;
             display: flex;
@@ -221,8 +217,8 @@
             align-items: center;
             border-radius: 50%;
             background-color: var(--primary);
-            border: 1px solid transparent;
-            padding: 2px;
+            border: 0.1rem solid transparent;
+            padding: 0.2rem;
             color: white;
             transition: all 0.6s ease-in-out;
             &.active {
@@ -244,7 +240,34 @@
 }
 
 @media screen and (max-width: 991px) {
-  .wrapper {
-    display: none;
+  .container {
+    width: 100%;
+    .img-banner {
+      display: none;
+    }
+    .wrapper {
+      width: 100%;
+      background-color: var(--red);
+      color: white;
+      padding: 0 1rem;
+      .inner {
+        padding: 0;
+        .nav-left {
+          // display: none;
+        }
+        .nav-center {
+          display: none;
+        }
+        .nav-right {
+          gap: 1.3rem;
+          .search {
+            display: none;
+          }
+          .profile {
+            display: none;
+          }
+        }
+      }
+    }
   }
 }
