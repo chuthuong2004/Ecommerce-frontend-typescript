@@ -1,25 +1,25 @@
 .wrapper {
-    color: var(--primary);
-    font-size: 14px;
-    letter-spacing: 1px;
+  color: var(--primary);
+  font-size: 1.4rem;
+  letter-spacing: 0.1rem;
+  display: flex;
+  justify-content: center;
+  padding: 6rem 0;
+  .container {
+    padding: 0 1.2rem;
+    width: var(--default-layout-width);
     display: flex;
-    justify-content: center;
-    padding: 60px 0;
-    .container {
-        padding: 0 12px;
-        width: var(--default-layout-width);
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-        & > h1 {
-            font-size: 40px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-        & > strong {
-            font-weight: 700;
-            text-transform: uppercase;
-        }
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.6rem;
+    & > h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      text-transform: uppercase;
     }
+    & > strong {
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+  }
 }

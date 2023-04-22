@@ -4,10 +4,10 @@
   background-color: #e5e5e5;
   .state-banner-inner {
     width: 100%;
-    padding: 20px 10px 0;
+    padding: 2rem 1rem 0;
     .state-banner-container {
       display: flex;
-      gap: 20px;
+      gap: 2rem;
       width: 100%;
       height: 100%;
       .state-banner-item {
@@ -17,13 +17,13 @@
         position: relative;
         cursor: pointer;
         .state-banner-title {
-          top: 20px;
-          left: 30px;
-          font-size: 18px;
+          top: 2rem;
+          left: 3rem;
+          font-size: 1.8rem;
           color: #ffffff;
           font-weight: 700;
-          letter-spacing: 1px;
-          line-height: 44px;
+          letter-spacing: 0.1rem;
+          line-height: 4.4rem;
           position: absolute;
         }
         .state-banner-img {
@@ -38,6 +38,26 @@
           transition: all 0.3s ease-in-out;
           &:hover {
             background-color: rgba(0, 0, 0, 0.2);
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 911px) {
+  .state-banner {
+    .state-banner-inner {
+      .state-banner-container {
+        flex-direction: column;
+        .state-banner-item {
+          flex: 1;
+          .state-banner-title {
+          }
+          .state-banner-img {
+          }
+          .overlay {
+            &:hover {
+            }
           }
         }
       }

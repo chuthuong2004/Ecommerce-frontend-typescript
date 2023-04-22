@@ -1,9 +1,15 @@
 .slider {
-    background-color: #fff;
+  background-color: #fff;
 }
 .img-intro-women {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    cursor: pointer;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  cursor: pointer;
+}
+@media screen and (max-width: 991px) {
+  .img-intro-women {
+    width: 100%;
+    height: 100%;
+  }
 }

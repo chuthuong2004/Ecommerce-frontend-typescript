@@ -1,5 +1,5 @@
 :root {
-  --line-height-title: 30px;
+  --line-height-title: 3rem;
 }
 .container {
   .wrapper {
@@ -10,9 +10,9 @@
     .collection-title {
       font-size: 2.4rem;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 0.1rem;
       line-height: var(--line-height-title);
-      margin: 40px 15px 25px;
+      margin: 4rem 1.5rem 2.5rem;
       text-align: center;
       text-transform: uppercase;
     }
@@ -22,16 +22,16 @@
       justify-content: center;
       align-items: center;
       position: relative;
-      line-height: 23px;
-      letter-spacing: 1px;
-      padding: 30px 0;
-      margin: 70px 0;
+      line-height: 2.3rem;
+      letter-spacing: 0.1rem;
+      padding: 3rem 0;
+      margin: 7rem 0;
       &::before,
       &::after {
         content: '';
         position: absolute;
-        width: 160px;
-        height: 1px;
+        width: 16rem;
+        height: 0.1rem;
         background-color: var(--primary);
         left: 50%;
         transform: translateX(-50%);
@@ -53,20 +53,20 @@
         justify-content: center;
         flex-direction: column;
         color: #c0392b;
-        font-size: 11px;
+        font-size: 1.1rem;
       }
     }
     .content {
-      padding: 0 80px;
-      letter-spacing: 1px;
-      line-height: 21px;
+      padding: 0 8rem;
+      letter-spacing: 0.1rem;
+      line-height: 2.1rem;
       color: var(--primary);
       display: flex;
       width: 100vw;
       .collection-sidebar {
         flex-basis: 25%;
         transition: all 0.4s linear;
-        padding: 120px 0 117px 5px;
+        padding: 12rem 0 11.7rem 0.5rem;
         width: 100%;
         height: max-content;
         position: sticky;
@@ -79,37 +79,37 @@
         }
         &.active {
           flex-basis: 0;
-          transform: translateX(-500px);
+          transform: translateX(-50rem);
         }
         .btn-clear-filter {
           width: max-content;
-          margin-bottom: 32px;
-          margin-top: 10px;
+          margin-bottom: 3.2rem;
+          margin-top: 1rem;
           button {
             background-color: #f7f8f9;
-            padding: 13px 20px;
-            border-radius: 30px;
+            padding: 1.3rem 2rem;
+            border-radius: 3rem;
             display: flex !important;
             align-items: center !important;
-            font-size: 14px;
+            font-size: 1.4rem;
             text-transform: none;
             font-weight: 500;
             min-width: 0;
             .hide-btn {
-              margin-left: -8px;
+              margin-left: -0.8rem;
             }
           }
         }
         .title-filter {
-          margin-bottom: 16px;
+          margin-bottom: 1.6rem;
           line-height: var(--line-height-title);
-          letter-spacing: 4px;
+          letter-spacing: 0.4rem;
           font-weight: 700;
-          font-size: 20px;
+          font-size: 2rem;
           text-transform: uppercase;
         }
         .sort-by-filter {
-          margin-bottom: 20px;
+          margin-bottom: 2rem;
           transition: height 0.4s linear;
           height: var(--line-height-title);
           .sort-list {
@@ -118,48 +118,48 @@
               align-items: center;
               text-align: left;
               input[type='radio'] {
-                font-size: 14px;
-                margin-right: 16px;
+                font-size: 1.4rem;
+                margin-right: 1.6rem;
                 cursor: pointer;
               }
               label {
                 text-transform: capitalize;
-                padding: 14px 14px 14px 0;
-                margin: 2px 0;
+                padding: 1.4rem 1.4rem 1.4rem 0;
+                margin: 0.2rem 0;
                 cursor: pointer;
               }
             }
           }
           &.open {
-            height: calc(280px + var(--line-height-title));
+            height: calc(28rem + var(--line-height-title));
           }
         }
 
         .filter-collection-item-list {
           text-transform: uppercase;
-          font-size: 14px;
+          font-size: 1.4rem;
           font-weight: 700;
-          line-height: 21px;
+          line-height: 2.1rem;
           .filter-collection-item {
             &:not(:last-child) {
-              border-bottom: 1px solid #f7f8f9;
+              border-bottom: 0.1rem solid #f7f8f9;
             }
-            padding: 20px 0;
-            margin-bottom: 2px;
+            padding: 2rem 0;
+            margin-bottom: 0.2rem;
             &.gender-filter {
               transition: height 0.4s linear;
-              height: calc(21px + 40px);
+              height: calc(2.1rem + 4rem);
               &.open {
-                height: 110px;
+                height: 11rem;
               }
             }
             &.brand-filter {
               transition: height 0.4s linear;
-              height: calc(21px + 40px);
+              height: calc(2.1rem + 4rem);
             }
             &.type-filter {
               transition: height 0.4s linear;
-              height: calc(21px + 40px);
+              height: calc(2.1rem + 4rem);
               &.open {
                 // height: 350px;
                 // height: 100%;
@@ -168,7 +168,7 @@
           }
         }
         .content-filter {
-          margin-top: 10px;
+          margin-top: 1rem;
           height: 0;
           transition: height 0.4s linear;
           overflow: hidden;
@@ -178,20 +178,20 @@
           .filter-container {
             display: flex;
             flex-wrap: wrap;
-            font-size: 14px;
-            letter-spacing: 1px;
-            margin: 15px 0px;
-            gap: 10px;
+            font-size: 1.4rem;
+            letter-spacing: 0.1rem;
+            margin: 1.5rem 0;
+            gap: 1rem;
           }
           .gender {
-            padding: 5px;
+            padding: 0.5rem;
             height: 100%;
             &-sw {
-              min-width: 60px;
+              min-width: 6rem;
               background-color: #f7f8f9;
               color: var(--primary);
-              padding: 10px 16px;
-              border-radius: 4px;
+              padding: 1rem 1.6rem;
+              border-radius: 0.4rem;
               text-transform: capitalize;
               cursor: pointer;
               font-weight: 500;
@@ -206,11 +206,11 @@
             display: flex;
             align-items: center;
             &-label {
-              min-width: 60px;
+              min-width: 6rem;
               background-color: #f7f8f9;
               color: var(--primary);
-              padding: 10px 16px;
-              border-radius: 4px;
+              padding: 1rem 1.6rem;
+              border-radius: 0.4rem;
               text-transform: capitalize;
               cursor: pointer;
               font-weight: 500;
@@ -227,7 +227,7 @@
             text-transform: none;
             font-weight: normal;
             label {
-              padding: 14px;
+              padding: 1.4rem;
               flex: 1;
               cursor: pointer;
             }
@@ -242,18 +242,18 @@
         width: 100%;
         flex-direction: column;
         .collection-outer-heading {
-          padding: 15px 0;
+          padding: 1.5rem 0;
           position: sticky;
-          top: -80px;
+          top: -8rem;
           left: 0;
           z-index: 6;
           -webkit-transition: all 0.5s ease-in-out;
           -moz-transition: all 0.5s ease-in-out;
           transition: all 0.5s ease-in-out;
-          padding: 15px 0;
+          padding: 1.5rem 0;
           background-color: #ffffff;
           &.active {
-            top: calc(var(--default-layout-header-height) + 50px);
+            top: calc(var(--default-layout-header-height) + 5rem);
           }
           .collection-inner-heading {
             display: flex;
@@ -263,25 +263,25 @@
               display: flex;
               button {
                 background-color: #f7f8f9;
-                padding: 13px 20px;
-                border-radius: 30px;
+                padding: 1.3rem 2rem;
+                border-radius: 3rem;
                 display: flex !important;
                 align-items: center !important;
-                font-size: 14px;
+                font-size: 1.4rem;
                 text-transform: none;
                 font-weight: 500;
                 min-width: 0;
                 .hide-btn {
-                  margin-left: -8px;
+                  margin-left: -0.8rem;
                 }
               }
             }
           }
         }
         .collection-list {
-          padding: 15px 0 60px;
+          padding: 1.5rem 0 6rem;
           display: grid;
-          gap: 40px 10px;
+          gap: 4rem 1rem;
           transition: all 0.5s ease-in-out;
           grid-template-columns: repeat(3, 1fr);
         }
