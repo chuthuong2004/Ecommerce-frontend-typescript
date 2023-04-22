@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,YAAY,CAAC;EACX,OAAO,EAAE,IAAI;CACd;;AACD,AAAA,oBAAoB,AAAA,aAAa,CAAC,YAAY,CAAC;EAC7C,MAAM,EAAE,KAAK;CACd;;AACD,AAAA,wBAAwB,AAAA,UAAU,CAAC;EACjC,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,IAAI;CACb;;AACD,AAAA,wBAAwB,AAAA,SAAS,CAAC;EAChC,KAAK,EAAE,IAAI;CACZ;;AACD,AAAA,wBAAwB,AAAA,SAAS,CAAC;EAChC,IAAI,EAAE,IAAI;CACX",
-    "sources": [
-        "ProductImageColor.scss"
-    ],
-    "names": [],
-    "file": "ProductImageColor.css"
-}

@@ -36,6 +36,7 @@ import ReactLoading from 'react-loading';
 import Loading from '../../components/Loading';
 import PopUp from '../../components/PopUp';
 import GuideSize from '../../components/GuideSize/GuideSize';
+import { Helmet } from '../../components';
 const cx = classNames.bind(styles);
 
 const Product = () => {
@@ -60,14 +61,14 @@ const Product = () => {
     autoplaySpeed: 3000,
     draggable: true,
     focusOnSelect: false,
-    nextArrow:
-      defaultColor && defaultColor.images.length > 6 ? (
-        <NextArrow classNames="btn-arrow-product-slide" />
-      ) : undefined,
-    prevArrow:
-      defaultColor && defaultColor.images.length > 6 ? (
-        <PrevArrow classNames="btn-arrow-product-slide" />
-      ) : undefined,
+    // nextArrow:
+    //   defaultColor && defaultColor.images.length > 6 ? (
+    //     <NextArrow classNames="btn-arrow-product-slide" />
+    //   ) : undefined,
+    // prevArrow:
+    //   defaultColor && defaultColor.images.length > 6 ? (
+    //     <PrevArrow classNames="btn-arrow-product-slide" />
+    //   ) : undefined,
     className: 'slide-image-product',
   };
   const [product, setProduct] = useState<IProduct | null>(null);
@@ -107,7 +108,7 @@ const Product = () => {
         const res = await productApi.getBySlug(slug);
         if (res) {
           console.log(res);
-          setProduct(res);
+          if (user) setProduct(res);
           setDefaultColor(location.state?.colorSelected || res.colors[0]);
           setDefaultSize(location.state?.colorSelected.sizes[0] || res.colors[0].sizes[0]);
           setIsFavorited(res.favorites.includes(user?._id || ''));
@@ -115,17 +116,17 @@ const Product = () => {
         }
       } catch (error) {
         console.log(error);
+        navigate(location.pathname + '/not-found');
       }
     };
     fetchProduct();
-    document.title = product?.brand.name + ' - ' + product?.name;
-  }, [slug, product?.brand.name, product?.name]);
+  }, [location.state?.colorSelected, slug, user]);
   useEffect(() => {
     if (user && product) {
       // refetch profile để update state cho user
       refetch();
     }
-  }, [product]);
+  }, [product, user]);
   useEffect(() => {
     user &&
       setProduct((prev: IProduct | null) => {
@@ -138,7 +139,6 @@ const Product = () => {
         );
         const userInProduct = prev.favorites.find((favorite: string) => favorite === user._id);
         console.log({ productInUser, userInProduct });
-
         if (!productInUser && userInProduct) {
           newFavorites = prev.favorites.filter((favorite: string) => favorite !== userInProduct);
           setIsFavorited(false);
@@ -156,7 +156,7 @@ const Product = () => {
     setDefaultColor(color);
     setDefaultSize(color.sizes[0]);
   };
-  const handleAddToCart = async () => {
+  async function handleAddToCart() {
     if (product && defaultColor && defaultSize) {
       if (user) {
         await addItemToCart({
@@ -177,8 +177,8 @@ const Product = () => {
     } else {
       toast.warn('Vui lòng chọn màu sắc và kích cỡ !');
     }
-  };
-  const handleWishList = () => {
+  }
+  function handleWishList() {
     if (!user) navigate(config.routes.login, { state: { from: location } });
     else {
       const addFavoriteHandler = async () => {
@@ -231,315 +231,328 @@ const Product = () => {
         addFavoriteHandler();
       }
     }
-  };
-  const handleBuyNow = async () => {
+  }
+  async function handleBuyNow() {
     setIsLoadingBuyNow(true);
     await handleAddToCart();
     setIsLoadingBuyNow(false);
     navigate(config.routes.cart);
-  };
+  }
   console.log('re product', product?.favorites);
   return (
-    <div className={cx('wrapper')}>
-      {loading ? (
-        <Loading />
-      ) : (
-        <>
-          <div className={cx('container-fluid')}>
-            <div className={cx('product-details')}>
-              <div className={cx('gallery')}>
-                <div className={cx('images')}>
-                  <div className={cx('featured-images')}>
-                    <div className={cx('image')}>
-                      <MagnifierContainer autoInPlace={false}>
-                        <MagnifierPreview
-                          overlayOpacity={0}
-                          imageSrc={
-                            defaultColor
-                              ? process.env.REACT_APP_API_URL + defaultColor.images[0]
-                              : ''
-                          }
-                        />
-                        <MagnifierZoom
-                          className={cx('image-zoom')}
-                          imageSrc={
-                            defaultColor
-                              ? process.env.REACT_APP_API_URL + defaultColor.images[0]
-                              : ''
-                          }
-                        />
-                      </MagnifierContainer>
+    <Helmet
+      title={product?.brand.name && product.name ? `${product?.brand.name} - ${product?.name}` : ''}
+    >
+      <div className={cx('wrapper')}>
+        {loading ? (
+          <Loading />
+        ) : (
+          <>
+            <div className={cx('container-fluid')}>
+              <div className={cx('product-details')}>
+                <div className={cx('gallery')}>
+                  <div className={cx('images')}>
+                    <div className={cx('featured-images')}>
+                      <div className={cx('image')}>
+                        <MagnifierContainer autoInPlace={false}>
+                          <MagnifierPreview
+                            overlayOpacity={0}
+                            imageSrc={
+                              defaultColor
+                                ? process.env.REACT_APP_API_URL + defaultColor.images[0]
+                                : ''
+                            }
+                          />
+                          <MagnifierZoom
+                            className={cx('image-zoom')}
+                            imageSrc={
+                              defaultColor
+                                ? process.env.REACT_APP_API_URL + defaultColor.images[0]
+                                : ''
+                            }
+                          />
+                        </MagnifierContainer>
+                      </div>
+                      <div className={cx('image')}>
+                        <MagnifierContainer autoInPlace={true}>
+                          <MagnifierPreview
+                            overlayOpacity={0}
+                            imageSrc={
+                              defaultColor
+                                ? process.env.REACT_APP_API_URL + defaultColor.images[1]
+                                : ''
+                            }
+                          />
+                          <MagnifierZoom
+                            className={cx('image-zoom')}
+                            imageSrc={
+                              defaultColor
+                                ? process.env.REACT_APP_API_URL + defaultColor.images[1]
+                                : ''
+                            }
+                          />
+                        </MagnifierContainer>
+                      </div>
                     </div>
-                    <div className={cx('image')}>
-                      <MagnifierContainer autoInPlace={true}>
-                        <MagnifierPreview
-                          overlayOpacity={0}
-                          imageSrc={
-                            defaultColor
-                              ? process.env.REACT_APP_API_URL + defaultColor.images[1]
-                              : ''
-                          }
-                        />
-                        <MagnifierZoom
-                          className={cx('image-zoom')}
-                          imageSrc={
-                            defaultColor
-                              ? process.env.REACT_APP_API_URL + defaultColor.images[1]
-                              : ''
-                          }
-                        />
-                      </MagnifierContainer>
-                    </div>
-                  </div>
-                  <div className={cx('thumb-images')}>
-                    {defaultColor && defaultColor.images.length >= 7 ? (
-                      <div className={cx('slider')}>
-                        <Slider {...settings}>
+                    <div className={cx('thumb-images')}>
+                      {defaultColor && defaultColor.images.length >= 7 ? (
+                        <div className={cx('slider')}>
+                          <Slider {...settings}>
+                            {defaultColor?.images
+                              .filter((image, i) => i !== 0 && i !== 1)
+                              .map((image, i) => (
+                                <div key={i} className={cx('image')}>
+                                  <div>
+                                    <MagnifierContainer autoInPlace={false}>
+                                      <MagnifierPreview
+                                        className={cx('zoom-img')}
+                                        overlayOpacity={0}
+                                        imageSrc={process.env.REACT_APP_API_URL + image}
+                                      />
+                                      <MagnifierZoom
+                                        className={cx('image-zoom-slide')}
+                                        imageSrc={process.env.REACT_APP_API_URL + image}
+                                      />
+                                    </MagnifierContainer>
+                                  </div>
+                                </div>
+                              ))}
+                          </Slider>
+                        </div>
+                      ) : (
+                        <div className={cx('slider', 'no-slide')}>
                           {defaultColor?.images
                             .filter((image, i) => i !== 0 && i !== 1)
                             .map((image, i) => (
                               <div key={i} className={cx('image')}>
-                                <div>
-                                  <MagnifierContainer autoInPlace={false}>
-                                    <MagnifierPreview
-                                      className={cx('zoom-img')}
-                                      overlayOpacity={0}
-                                      imageSrc={process.env.REACT_APP_API_URL + image}
-                                    />
-                                    <MagnifierZoom
-                                      className={cx('image-zoom-slide')}
-                                      imageSrc={process.env.REACT_APP_API_URL + image}
-                                    />
-                                  </MagnifierContainer>
-                                </div>
+                                <MagnifierContainer autoInPlace={true}>
+                                  <MagnifierPreview
+                                    overlayOpacity={0}
+                                    imageSrc={process.env.REACT_APP_API_URL + image}
+                                  />
+                                  <MagnifierZoom
+                                    className={cx('image-zoom')}
+                                    imageSrc={process.env.REACT_APP_API_URL + image}
+                                  />
+                                </MagnifierContainer>
                               </div>
                             ))}
-                        </Slider>
-                      </div>
-                    ) : (
-                      <div className={cx('slider', 'no-slide')}>
-                        {defaultColor?.images
-                          .filter((image, i) => i !== 0 && i !== 1)
-                          .map((image, i) => (
-                            <div key={i} className={cx('image')}>
-                              <MagnifierContainer autoInPlace={true}>
-                                <MagnifierPreview
-                                  overlayOpacity={0}
-                                  imageSrc={process.env.REACT_APP_API_URL + image}
-                                />
-                                <MagnifierZoom
-                                  className={cx('image-zoom')}
-                                  imageSrc={process.env.REACT_APP_API_URL + image}
-                                />
-                              </MagnifierContainer>
-                            </div>
-                          ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className={cx('variants')}>
-                  <div className={cx('variants-images')}>
-                    {product?.colors.map((color) => (
-                      <div key={color._id} className={cx('image')}>
-                        <input
-                          type="radio"
-                          className={cx('d-none')}
-                          id={color._id}
-                          value={defaultColor?.colorName}
-                          name="product-choose-color"
-                          checked={color._id === defaultColor?._id}
-                          onChange={() => handleSetColor(color)}
-                        />
-                        <label className={cx('color')} htmlFor={color._id}>
-                          <img src={process.env.REACT_APP_API_URL + color.imageMedium} alt="" />
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className={cx('details')}>
-                <div className={cx('details__text-content')}>
-                  <h3 className={cx('details__brand')}>{product?.brand.name}</h3>
-                  <h1 className={cx('details__prd-title')}>{product?.name}</h1>
-                  <div className={cx('details__sku')}>Style Code: 3ASMB0323</div>
-                  <div
-                    className={cx(
-                      `details__prd-price`,
-                      product && product.discount > 0 && 'hasSale',
-                    )}
-                  >
-                    <div className={cx('price')}>
-                      {product &&
-                        (product.price - product!.price * (product!.discount / 100)).toLocaleString(
-                          'vn-VN',
-                        )}
-                      ₫
-                    </div>
-                    <del>{product?.price.toLocaleString('vn-VN')}₫</del>
-                    <div className={cx('sale')}>-{product?.discount}%</div>
-                  </div>
-                </div>
-                <div className={cx('details__sizes')}>
-                  <label className={cx('d-flex', 'justify-content-between', 'align-items-center')}>
-                    <b>KÍCH CỠ</b>
-                    {product?.category.catalog === '632f35fab1734732d9dc8821' && (
-                      <PopUp
-                        isOpen={isOpenGuideSize}
-                        trigger={
-                          <div
-                            className={cx('size-guide')}
-                            onClick={() => setIsOpenGuideSize(true)}
-                          >
-                            <SizeChartIcon />
-                            <span>Hướng Dẫn Chọn Size</span>
-                          </div>
-                        }
-                        position="center"
-                        handleClose={() => setIsOpenGuideSize(false)}
-                      >
-                        <GuideSize
-                          isOpen={isOpenGuideSize}
-                          handleClose={() => setIsOpenGuideSize(false)}
-                        />
-                      </PopUp>
-                    )}
-                  </label>
-                  <div className={cx('details__sizes-data')}>
-                    {defaultColor?.sizes.map((size: ISize) => (
-                      <div
-                        key={size._id}
-                        className={cx('size', size.quantity === 0 && 'not-available')}
-                      >
-                        <input
-                          type="radio"
-                          className={cx('d-none')}
-                          name="product-choose-size"
-                          value={size.size}
-                          id={size._id}
-                          defaultChecked={defaultSize?.size === size.size}
-                          onChange={() => setDefaultSize(size)}
-                        />
-                        <label htmlFor={size._id} className={cx('size-sw')}>
-                          {size.size}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className={cx('details__promotion')}>
-                  <div className={cx('box-gift-detail')}>
-                    <b>Tặng 01 kem mắt AHC cho hóa đơn bất kỳ từ 2690K</b>
-                  </div>
-                </div>
-                <div className={cx('details__promotion')}>
-                  <div className={cx('box-gift-detail')}>
-                    <b>Thanh toán qua Ree-Pay</b>
-                    <div>Nhập mã: REEPAY188 Giảm ngay 188K cho hóa đơn từ 1888K</div>
-                    <div>Nhập mã: REEPAY88 Giảm ngày 88K cho hóa đơn từ 1088K</div>
-                    <div>&nbsp;</div>
-                    <b>Thanh toán qua VNPay</b>
-                    <div>Nhập mã: QRVIP Giảm ngay 3% tối đa 500K</div>
-
-                    <div>&nbsp;&nbsp;</div>
-                    <div>
-                      <span style={{ color: '#000000', fontWeight: 'bold' }}>Chi tiết:</span>{' '}
-                      <span style={{ color: '#000000', textDecoration: 'underline' }}>Tại đây</span>
-                    </div>
-                  </div>
-                </div>
-                <div className={cx('details__warning')}>
-                  {defaultSize && defaultSize.quantity <= 10 && (
-                    <div className={cx('show-stock-slow')}>
-                      Chỉ còn {defaultSize.quantity} sản phẩm !
-                    </div>
-                  )}
-                </div>
-                <div className={cx('details__actions_available')}>
-                  <div onClick={handleBuyNow} className={cx('btn')}>
-                    <Button className={cx('buy-now')} large primary>
-                      {isLoadingBuyNow ? (
-                        <ReactLoading
-                          type="spinningBubbles"
-                          color="#2e2e2e"
-                          width={20}
-                          height={20}
-                        />
-                      ) : (
-                        'mua ngay'
+                        </div>
                       )}
-                    </Button>
+                    </div>
                   </div>
-                  <div className={cx('btn')}>
-                    <Button large primary onClick={handleAddToCart}>
-                      {isLoadingAddToCart && !isLoadingBuyNow ? (
-                        <ReactLoading
-                          type="spinningBubbles"
-                          color="#ffffff"
-                          width={20}
-                          height={20}
-                        />
-                      ) : (
-                        'thêm vào giỏ'
+                  <div className={cx('variants')}>
+                    <div className={cx('variants-images')}>
+                      {product?.colors.map((color) => (
+                        <div key={color._id} className={cx('image')}>
+                          <input
+                            type="radio"
+                            className={cx('d-none')}
+                            id={color._id}
+                            value={defaultColor?.colorName}
+                            name="product-choose-color"
+                            checked={color._id === defaultColor?._id}
+                            onChange={() => handleSetColor(color)}
+                          />
+                          <label className={cx('color')} htmlFor={color._id}>
+                            <img src={process.env.REACT_APP_API_URL + color.imageMedium} alt="" />
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className={cx('details')}>
+                  <div className={cx('details__text-content')}>
+                    <h3 className={cx('details__brand')}>{product?.brand.name}</h3>
+                    <h1 className={cx('details__prd-title')}>{product?.name}</h1>
+                    <div className={cx('details__sku')}>Style Code: 3ASMB0323</div>
+                    <div
+                      className={cx(
+                        `details__prd-price`,
+                        product && product.discount > 0 && 'hasSale',
                       )}
-                    </Button>
-                  </div>
-                  <div className={cx('btn')}>
-                    <Button
-                      onClick={handleWishList}
-                      className={cx('add-to-wish')}
-                      leftIcon={
-                        isLoadingFavorite ? null : isFavorited ? <HeartActiveIcon /> : <HeartIcon />
-                      }
                     >
-                      {isLoadingFavorite ? (
-                        <ReactLoading
-                          type="spinningBubbles"
-                          color="#2e2e2e"
-                          width={20}
-                          height={20}
-                        />
-                      ) : (
-                        'thêm vào wishlist'
+                      <div className={cx('price')}>
+                        {product &&
+                          (
+                            product.price -
+                            product!.price * (product!.discount / 100)
+                          ).toLocaleString('vn-VN')}
+                        ₫
+                      </div>
+                      <del>{product?.price.toLocaleString('vn-VN')}₫</del>
+                      <div className={cx('sale')}>-{product?.discount}%</div>
+                    </div>
+                  </div>
+                  <div className={cx('details__sizes')}>
+                    <label
+                      className={cx('d-flex', 'justify-content-between', 'align-items-center')}
+                    >
+                      <b>KÍCH CỠ</b>
+                      {product?.category.catalog === '632f35fab1734732d9dc8821' && (
+                        <PopUp
+                          isOpen={isOpenGuideSize}
+                          trigger={
+                            <div
+                              className={cx('size-guide')}
+                              onClick={() => setIsOpenGuideSize(true)}
+                            >
+                              <SizeChartIcon />
+                              <span>Hướng Dẫn Chọn Size</span>
+                            </div>
+                          }
+                          position="center"
+                          handleClose={() => setIsOpenGuideSize(false)}
+                        >
+                          <GuideSize
+                            isOpen={isOpenGuideSize}
+                            handleClose={() => setIsOpenGuideSize(false)}
+                          />
+                        </PopUp>
                       )}
-                    </Button>
+                    </label>
+                    <div className={cx('details__sizes-data')}>
+                      {defaultColor?.sizes.map((size: ISize) => (
+                        <div
+                          key={size._id}
+                          className={cx('size', size.quantity === 0 && 'not-available')}
+                        >
+                          <input
+                            type="radio"
+                            className={cx('d-none')}
+                            name="product-choose-size"
+                            value={size.size}
+                            id={size._id}
+                            defaultChecked={defaultSize?.size === size.size}
+                            onChange={() => setDefaultSize(size)}
+                          />
+                          <label htmlFor={size._id} className={cx('size-sw')}>
+                            {size.size}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className={cx('details__promotion')}>
+                    <div className={cx('box-gift-detail')}>
+                      <b>Tặng 01 kem mắt AHC cho hóa đơn bất kỳ từ 2690K</b>
+                    </div>
+                  </div>
+                  <div className={cx('details__promotion')}>
+                    <div className={cx('box-gift-detail')}>
+                      <b>Thanh toán qua Ree-Pay</b>
+                      <div>Nhập mã: REEPAY188 Giảm ngay 188K cho hóa đơn từ 1888K</div>
+                      <div>Nhập mã: REEPAY88 Giảm ngày 88K cho hóa đơn từ 1088K</div>
+                      <div>&nbsp;</div>
+                      <b>Thanh toán qua VNPay</b>
+                      <div>Nhập mã: QRVIP Giảm ngay 3% tối đa 500K</div>
+
+                      <div>&nbsp;&nbsp;</div>
+                      <div>
+                        <span style={{ color: '#000000', fontWeight: 'bold' }}>Chi tiết:</span>{' '}
+                        <span style={{ color: '#000000', textDecoration: 'underline' }}>
+                          Tại đây
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className={cx('details__warning')}>
+                    {defaultSize && defaultSize.quantity <= 10 && (
+                      <div className={cx('show-stock-slow')}>
+                        Chỉ còn {defaultSize.quantity} sản phẩm !
+                      </div>
+                    )}
+                  </div>
+                  <div className={cx('details__actions_available')}>
+                    <div onClick={handleBuyNow} className={cx('btn')}>
+                      <Button className={cx('buy-now')} large primary>
+                        {isLoadingBuyNow ? (
+                          <ReactLoading
+                            type="spinningBubbles"
+                            color="#2e2e2e"
+                            width={20}
+                            height={20}
+                          />
+                        ) : (
+                          'mua ngay'
+                        )}
+                      </Button>
+                    </div>
+                    <div className={cx('btn')}>
+                      <Button large primary onClick={handleAddToCart}>
+                        {isLoadingAddToCart && !isLoadingBuyNow ? (
+                          <ReactLoading
+                            type="spinningBubbles"
+                            color="#ffffff"
+                            width={20}
+                            height={20}
+                          />
+                        ) : (
+                          'thêm vào giỏ'
+                        )}
+                      </Button>
+                    </div>
+                    <div className={cx('btn')}>
+                      <Button
+                        onClick={handleWishList}
+                        className={cx('add-to-wish')}
+                        leftIcon={
+                          isLoadingFavorite ? null : isFavorited ? (
+                            <HeartActiveIcon />
+                          ) : (
+                            <HeartIcon />
+                          )
+                        }
+                      >
+                        {isLoadingFavorite ? (
+                          <ReactLoading
+                            type="spinningBubbles"
+                            color="#2e2e2e"
+                            width={20}
+                            height={20}
+                          />
+                        ) : (
+                          'thêm vào wishlist'
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
+              <div className={cx('line')}></div>
             </div>
-            <div className={cx('line')}></div>
-          </div>
-          <div className={cx('container-fluid')}>
-            <div className={cx('product-desc')}>
-              <TabContent contents={navItems} />
+            <div className={cx('container-fluid')}>
+              <div className={cx('product-desc')}>
+                <TabContent contents={navItems} />
+              </div>
             </div>
-          </div>
-          <div className={cx('container-fluid')}>
-            <SlideProduct
-              title="Sản phẩm bạn đã xem"
-              showBtn={false}
-              products={brandsMen[0].products}
-            />
-          </div>
-          <div className={cx('container-fluid')}>
-            <SlideProduct
-              title="Có thể bạn cũng thích"
-              showBtn={false}
-              products={brandsMen[0].products}
-            />
-          </div>
-          <div className={cx('container-fluid')}>
-            <SlideProduct
-              title="Sản phẩm cùng thương hiệu"
-              showBtn={false}
-              products={brandsMen[0].products}
-            />
-          </div>
-        </>
-      )}
-    </div>
+            <div className={cx('container-fluid')}>
+              <SlideProduct
+                title="Sản phẩm bạn đã xem"
+                showBtn={false}
+                products={brandsMen[0].products}
+              />
+            </div>
+            <div className={cx('container-fluid')}>
+              <SlideProduct
+                title="Có thể bạn cũng thích"
+                showBtn={false}
+                products={brandsMen[0].products}
+              />
+            </div>
+            <div className={cx('container-fluid')}>
+              <SlideProduct
+                title="Sản phẩm cùng thương hiệu"
+                showBtn={false}
+                products={brandsMen[0].products}
+              />
+            </div>
+          </>
+        )}
+      </div>
+    </Helmet>
   );
 };
 const ReturnPolicy = () => {
