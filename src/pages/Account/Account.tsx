@@ -18,6 +18,8 @@ import { toast } from 'react-toastify';
 import { clearCart } from '../../features/cartSlice';
 import axiosClient from '../../api/axiosClient';
 import Loading from '../../components/Loading';
+import { Helmet } from '../../components';
+import { uploadApi } from '../../api';
 const cx = classNames.bind(styles);
 
 const Account = () => {
@@ -62,12 +64,7 @@ const Account = () => {
       try {
         const data = new FormData();
         data.append('avatar', avatar || '');
-        const res: { message: string; file: FileResponse } = await axiosClient.post(
-          '/upload/avatar',
-          data,
-        );
-        console.log(res);
-
+        const res = await uploadApi.avatar(data);
         if (res.file) {
           await updateProfile({ avatar: `/public/avatars/${res.file.filename}` });
         }
@@ -77,97 +74,95 @@ const Account = () => {
     };
     avatar && uploadAvatar();
   }, [avatar]);
-  useEffect(() => {
-    document.title = 'Tài khoản Koga-clothes.shop';
-  }, [pathname]);
-  console.log(avatar);
   return (
-    <div className={cx('wrapper')}>
-      <div className={cx('container-fluid')}>
-        <div className={cx('container')}>
-          <div className={cx('col-3')}>
-            <div className={cx('account-avatar')}>
-              <div className={cx('avatar')}>
-                <span className={cx('avatar-name')}>
-                  {user?.firstName ? user?.firstName[0] : user?.username[0]}
-                </span>
-                {user?.avatar && (
-                  <img
-                    className={cx('img')}
-                    src={
-                      user?.avatar.startsWith('/')
-                        ? process.env.REACT_APP_API_URL + user.avatar
-                        : user.avatar
-                    }
-                    alt=""
-                  />
-                )}
-                <div className={cx('camera-icon')}>
-                  <input
-                    type="file"
-                    id="avatar"
-                    accept="image/*"
-                    onChange={(e) => setAvatar(e.target.files![0] || undefined)}
-                  />
-                  <label htmlFor="avatar">
-                    <CameraIcon />
-                  </label>
-                </div>
-              </div>
-
-              <div className={cx('name')}>{`Xin chào, ${
-                user?.firstName && user?.lastName
-                  ? user.firstName + ' ' + user.lastName
-                  : user?.username
-              }`}</div>
-            </div>
-            <div className={cx('sidebar__list')}>
-              {sidebars.map((sidebar, index) => (
-                <NavLink
-                  end={sidebar.endPath}
-                  key={index}
-                  to={sidebar.to}
-                  onClick={() => handleLogout(sidebar)}
-                  className={(nav) =>
-                    cx('sidebar__item', { active: nav.isActive && sidebar.to !== '#' })
-                  }
-                >
-                  <div className={cx('sidebar__icons')}>
-                    <div className={cx('icon')}>{sidebar.icon}</div>
-                    <div className={cx('icon', 'active')}>{sidebar.iconActive}</div>
+    <Helmet title="Tài khoản Koga-clothes.shop">
+      <div className={cx('wrapper')}>
+        <div className={cx('container-fluid')}>
+          <div className={cx('container')}>
+            <div className={cx('col-3')}>
+              <div className={cx('account-avatar')}>
+                <div className={cx('avatar')}>
+                  <span className={cx('avatar-name')}>
+                    {user?.firstName ? user?.firstName[0] : user?.username[0]}
+                  </span>
+                  {user?.avatar && (
+                    <img
+                      className={cx('img')}
+                      src={
+                        user?.avatar.startsWith('/')
+                          ? process.env.REACT_APP_API_URL + user.avatar
+                          : user.avatar
+                      }
+                      alt=""
+                    />
+                  )}
+                  <div className={cx('camera-icon')}>
+                    <input
+                      type="file"
+                      id="avatar"
+                      accept="image/*"
+                      onChange={(e) => setAvatar(e.target.files![0] || undefined)}
+                    />
+                    <label htmlFor="avatar">
+                      <CameraIcon />
+                    </label>
                   </div>
-                  <span>{sidebar.title}</span>
-                </NavLink>
-              ))}
-            </div>
-          </div>
-          <div className={cx('col-9')}>
-            <div className={cx('account-info')}>
-              <h1 className={cx('account-page-title')}>
-                {orderID ? (
-                  <Link
-                    style={{ display: 'flex', gap: '10px', alignItems: 'center' }}
-                    to={config.routes.order}
+                </div>
+
+                <div className={cx('name')}>{`Xin chào, ${
+                  user?.firstName && user?.lastName
+                    ? user.firstName + ' ' + user.lastName
+                    : user?.username
+                }`}</div>
+              </div>
+              <div className={cx('sidebar__list')}>
+                {sidebars.map((sidebar, index) => (
+                  <NavLink
+                    end={sidebar.endPath}
+                    key={index}
+                    to={sidebar.to}
+                    onClick={() => handleLogout(sidebar)}
+                    className={(nav) =>
+                      cx('sidebar__item', { active: nav.isActive && sidebar.to !== '#' })
+                    }
                   >
-                    <ArrowLeftIcon />
-                    <strong style={{ fontSize: 14, letterSpacing: 1, fontWeight: 700 }}>
-                      Đơn hàng
-                    </strong>
-                  </Link>
-                ) : (
-                  sidebars.find((sidebar: SideBarItem) => sidebar.to === pathname)?.title
-                )}
-              </h1>
-              {pathname === config.routes.account && <AccountInfo />}
-              {pathname.includes(config.routes.order) && <Order />}
-              {pathname === config.routes.address && <Address />}
-              {pathname === config.routes.recentlyViewed && <RecentlyViewed />}
+                    <div className={cx('sidebar__icons')}>
+                      <div className={cx('icon')}>{sidebar.icon}</div>
+                      <div className={cx('icon', 'active')}>{sidebar.iconActive}</div>
+                    </div>
+                    <span>{sidebar.title}</span>
+                  </NavLink>
+                ))}
+              </div>
+            </div>
+            <div className={cx('col-9')}>
+              <div className={cx('account-info')}>
+                <h1 className={cx('account-page-title')}>
+                  {orderID ? (
+                    <Link
+                      style={{ display: 'flex', gap: '10px', alignItems: 'center' }}
+                      to={config.routes.order}
+                    >
+                      <ArrowLeftIcon />
+                      <strong style={{ fontSize: 14, letterSpacing: 1, fontWeight: 700 }}>
+                        Đơn hàng
+                      </strong>
+                    </Link>
+                  ) : (
+                    sidebars.find((sidebar: SideBarItem) => sidebar.to === pathname)?.title
+                  )}
+                </h1>
+                {pathname === config.routes.account && <AccountInfo />}
+                {pathname.includes(config.routes.order) && <Order />}
+                {pathname === config.routes.address && <Address />}
+                {pathname === config.routes.recentlyViewed && <RecentlyViewed />}
+              </div>
             </div>
           </div>
         </div>
+        {isLoading && <Loading />}
       </div>
-      {isLoading && <Loading />}
-    </div>
+    </Helmet>
   );
 };
 

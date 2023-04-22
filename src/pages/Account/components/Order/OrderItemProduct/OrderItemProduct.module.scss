@@ -5,21 +5,21 @@
   flex-direction: co;
   .image-wrapper {
     .image-product {
-      width: 134px;
+      width: 13.4rem;
     }
   }
   .text-wrapper {
     flex: 1;
-    padding-left: 20px;
+    padding-left: 2rem;
     .product-brand {
       font-weight: 700;
-      letter-spacing: 2px;
+      letter-spacing: 0.2rem;
     }
     .product-name {
-      margin: 10px 0;
+      margin: 1rem 0;
     }
   }
   .lq {
-    padding: 24px 0;
+    padding: 2.4rem 0;
   }
 }

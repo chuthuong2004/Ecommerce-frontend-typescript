@@ -2,7 +2,7 @@ import Input from '../../../../components/Input';
 import styles from './AccountInfo.module.scss';
 import classNames from 'classnames/bind';
 import Button from '../../../../components/Button';
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { IAddress } from '../../../../models/user.model';
 import PopUp from './../../../../components/PopUp/PopUp';
 import { useAppSelector } from '../../../../app/hooks';
@@ -63,4 +63,4 @@ const AccountInfo: React.FC<Props> = ({}) => {
   );
 };
 
-export default AccountInfo;
+export default memo(AccountInfo);

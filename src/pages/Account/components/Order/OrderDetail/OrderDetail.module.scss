@@ -2,20 +2,20 @@
   font-size: 1.4rem;
   &__meta {
     display: flex;
-    padding: 24px 32px;
+    padding: 2.4rem 3.2rem;
     background-color: #f7f8f9;
-    line-height: 21px;
+    line-height: 2.1rem;
     &--left {
       flex: 1;
-      padding-right: 60px;
-      border-right: 1px dotted #2e2e2e;
+      padding-right: 6rem;
+      border-right: 0.1rem dotted #2e2e2e;
       & > div {
-        padding: 5px 0;
+        padding: 0.5rem 0;
       }
       .ord-number {
         display: flex;
         align-items: center;
-        gap: 5px;
+        gap: 0.5rem;
         .copy-icon {
           cursor: pointer;
           position: relative;
@@ -25,11 +25,11 @@
           .copied {
             position: absolute;
             color: #f7f8f9;
-            right: -15px;
-            top: -35px;
+            right: -1.5rem;
+            top: -3.5rem;
             background-color: #757272;
-            padding: 5px;
-            border-radius: 10px;
+            padding: 0.5rem;
+            border-radius: 1rem;
             font-size: 1.2rem;
             opacity: 0;
             transition: all 0.3s ease-in-out;
@@ -43,9 +43,9 @@
     }
     &--right {
       flex: 2;
-      padding-left: 60px;
+      padding-left: 6rem;
       & > p {
-        padding: 5px 0;
+        padding: 0.5rem 0;
       }
       .shipment-detail {
         display: flex;
@@ -66,42 +66,42 @@
   &__items {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    padding: 24px 0;
+    gap: 2.4rem;
+    padding: 2.4rem 0;
     max-height: 56rem;
     overflow: scroll;
   }
   &__summary {
-    padding: 32px 0;
-    letter-spacing: 2px;
+    padding: 3.2rem 0;
+    letter-spacing: 0.2rem;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    border-top: 4px solid #f7f8f9;
+    gap: 1.6rem;
+    border-top: 0.4rem solid #f7f8f9;
   }
   &__total {
     font-size: 1.8rem;
     padding-top: 3.2rem;
-    border-top: 1px solid #f7f8f9;
+    border-top: 0.1rem solid #f7f8f9;
   }
   &__actions {
-    border-top: 4px solid #f7f8f9;
+    border-top: 0.4rem solid #f7f8f9;
     display: flex;
-    padding: 20px 0;
+    padding: 2rem 0;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 2rem;
     height: 100%;
     .btn {
-      padding: 17px;
+      padding: 1.7rem;
     }
   }
   .cancel-order {
     background-color: #fff;
-    border-radius: 5px;
-    width: 500px;
+    border-radius: 0.5rem;
+    width: 50rem;
     position: fixed;
-    top: 50px;
+    top: 5rem;
     left: 50%;
     line-height: 1.4;
     z-index: 9999;
@@ -113,18 +113,18 @@
     }
     h2 {
       font-size: 2.2rem;
-      padding: 20px;
-      border-bottom: 1px solid #dee2e6;
+      padding: 2rem;
+      border-bottom: 0.1rem solid #dee2e6;
     }
     .form-cancel {
-      padding: 15px;
+      padding: 1.5rem;
       padding-top: 0;
       .cancel-input {
       }
       .cancel-btn {
-        margin-top: 15px;
+        margin-top: 1.5rem;
         width: max-content;
-        min-width: 185px;
+        min-width: 18.5rem;
       }
     }
   }
@@ -134,7 +134,7 @@
   from {
     opacity: 0;
 
-    transform: translate(-50%, -80px);
+    transform: translate(-50%, -8rem);
   }
   to {
     opacity: 1;
@@ -145,7 +145,7 @@
     opacity: 1;
   }
   to {
-    transform: translate(-50%, -80px);
+    transform: translate(-50%, -8rem);
     opacity: 0;
   }
 }

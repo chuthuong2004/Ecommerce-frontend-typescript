@@ -13,6 +13,7 @@ import { EOrderStatus, IOrder } from '../../../../models/order.model';
 import OrderContent from './OrderContent';
 import { useGetMyOrderQuery } from '../../../../services/ordersApi';
 import OrderDetail from './OrderDetail';
+import { Helmet } from '../../../../components';
 const cx = classNames.bind(styles);
 
 const Order: React.FC = () => {
@@ -91,38 +92,30 @@ const Order: React.FC = () => {
           ),
       },
     ]);
-    document.title = 'Đơn hàng của bạn - Koga-clothes.shop';
   }, [orders]);
-  console.log({
-    data: dataOrder,
-    isFetching,
-    isError,
-    isSuccess,
-    isLoading,
-    error,
-  });
-  console.log('order', orders);
   return (
-    <div>
-      {pathname === config.routes.order ? (
-        <div className={cx('wrapper')}>
-          {tabHeaders.length > 0 && (
-            <>
-              <div className={cx('container')}>
-                <TabContent contents={tabHeaders} />
-              </div>
-              {orders.length === 0 && (
-                <div className={cx('empty-order')}>
-                  <RecommendedProduct slideShow={2.5} slideScroll={2} small noMargin />
+    <Helmet title="Đơn hàng của bạn - Koga-clothes.shop">
+      <div>
+        {pathname === config.routes.order ? (
+          <div className={cx('wrapper')}>
+            {tabHeaders.length > 0 && (
+              <>
+                <div className={cx('container')}>
+                  <TabContent contents={tabHeaders} />
                 </div>
-              )}
-            </>
-          )}
-        </div>
-      ) : (
-        orderID && <OrderDetail orderId={orderID} />
-      )}
-    </div>
+                {orders.length === 0 && (
+                  <div className={cx('empty-order')}>
+                    <RecommendedProduct slideShow={2.5} slideScroll={2} small noMargin />
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        ) : (
+          orderID && <OrderDetail orderId={orderID} />
+        )}
+      </div>
+    </Helmet>
   );
 };
 
