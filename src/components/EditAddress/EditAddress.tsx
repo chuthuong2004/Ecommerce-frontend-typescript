@@ -1,18 +1,17 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState, memo } from 'react';
 import classNames from 'classnames/bind';
-import styles from './EditAddress.module.scss';
-import Input from '../Input';
-import Select from '../Select';
-import Button from '../Button';
-import { CloseIcon } from '../Icons';
+import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
+
+import styles from './EditAddress.module.scss';
+
+import { Button, Select, Input } from '../';
+import { CloseIcon } from '../Icons';
 import { IAddressUser, IDistrict, IProvince, IWard } from '../../models/user.model';
 import { useAppSelector } from '../../app/hooks';
-import { memo } from 'react';
 import { selectAuth } from '../../features/authSlice';
 import { useAddAddressMutation, useUpdateAddressMutation } from '../../services/authApi';
-import ReactLoading from 'react-loading';
-import provinceApi from '../../api/provinceApi';
+import { provinceApi } from '../../api';
 
 const cx = classNames.bind(styles);
 
@@ -134,7 +133,6 @@ const EditAddress: React.FC<Props> = ({ address, handleClosePopUp }) => {
       await addAddress(currentAddress);
     }
   };
-  console.log(currentAddress);
   return (
     <div>
       <div>
@@ -243,4 +241,4 @@ const EditAddress: React.FC<Props> = ({ address, handleClosePopUp }) => {
   );
 };
 
-export default EditAddress;
+export default memo(EditAddress);

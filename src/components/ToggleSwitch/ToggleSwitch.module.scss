@@ -1,6 +1,6 @@
 .toggle-switch {
   position: relative;
-  width: 75px;
+  width: 7.5rem;
   display: inline-block;
   vertical-align: middle;
   -webkit-user-select: none;
@@ -15,7 +15,7 @@
     overflow: hidden;
     cursor: pointer;
     border: 0 solid #bbb;
-    border-radius: 20px;
+    border-radius: 2rem;
     margin: 0;
   }
   &-inner {
@@ -28,10 +28,10 @@
       display: block;
       float: left;
       width: 50%;
-      height: 34px;
+      height: 3.4rem;
       padding: 0;
-      line-height: 34px;
-      font-size: 14px;
+      line-height: 3.4rem;
+      font-size: 1.4rem;
       color: white;
       font-weight: bold;
       box-sizing: border-box;
@@ -39,7 +39,7 @@
     &:before {
       content: '';
       text-transform: uppercase;
-      padding-left: 10px;
+      padding-left: 1rem;
       background-color: #2e2e2e;
       color: #fff;
     }
@@ -55,22 +55,22 @@
   &-inner:after {
     content: '';
     text-transform: uppercase;
-    padding-right: 10px;
+    padding-right: 1rem;
     background-color: #bbb;
     color: #fff;
     text-align: right;
   }
   &-switch {
     display: block;
-    width: 24px;
-    margin: 5px;
+    width: 2.4rem;
+    margin: 0.5rem;
     background: #fff;
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 40px;
+    right: 4rem;
     border: 0 solid #bbb;
-    border-radius: 20px;
+    border-radius: 2rem;
     transition: all 0.3s ease-in 0s;
   }
   &-checkbox:checked + &-label {
@@ -78,7 +78,7 @@
       margin-left: 0;
     }
     .toggle-switch-switch {
-      right: 0px;
+      right: 0;
     }
   }
 }

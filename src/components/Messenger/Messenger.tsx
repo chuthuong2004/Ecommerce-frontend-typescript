@@ -1,35 +1,22 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, memo } from 'react';
 import styles from './Messenger.module.scss';
 import classNames from 'classnames/bind';
+import { toast } from 'react-toastify';
 
-import {
-  FaFileImage,
-  FaGift,
-  FaInfoCircle,
-  FaPaperclip,
-  FaPaperPlane,
-  FaPhone,
-  FaPlusCircle,
-  FaSmile,
-  FaVideo,
-} from 'react-icons/fa';
+import { FaPaperPlane, FaPlusCircle, FaSmile } from 'react-icons/fa';
 import { BsFillTelephoneFill, BsFillCameraVideoFill, BsDashLg } from 'react-icons/bs';
-import Message from '../Message';
 import { useAppSelector } from '../../app/hooks';
 import { selectAuth } from '../../features/authSlice';
 import { IMessage } from '../../models/message.model';
 import { IConversation } from '../../models/conversation.model';
-import messageApi from '../../api/messageApi';
+import { messageApi, conversationApi, uploadApi } from '../../api';
 import { FileResponse, IUser } from '../../models/user.model';
-import conversationApi from '../../api/conversationApi';
-import { toast } from 'react-toastify';
 import config from '../../config';
 import { useSockets } from '../../context/socket.context';
 import { MdClose } from 'react-icons/md';
-import axiosClient from '../../api/axiosClient';
-import Button from '../Button';
 import { CloseIcon } from '../Icons';
 import moment from 'moment';
+import { Message, Button } from '..';
 require('moment/locale/vi');
 
 const cx = classNames.bind(styles);
@@ -162,7 +149,7 @@ const Messenger = () => {
       fileImages.map((image) => {
         formData.append('imageMessage', image);
       });
-      const res = await axiosClient.post('/upload/messages', formData);
+      const res = await uploadApi.message(formData);
       console.log(res.data.imageMessage);
       const images = res.data.imageMessage.map(
         (image: FileResponse) => '/public/messages/' + image.filename,
@@ -254,9 +241,7 @@ const Messenger = () => {
     //   receiverId: receiver?._id || '',
     // });
   };
-  console.log('receiver: ', receiver?.username);
 
-  console.log('====================================');
   return (
     <div className={cx('container')}>
       {activeMessenger ? (
@@ -311,15 +296,6 @@ const Messenger = () => {
                 <div className={cx('icon')}>
                   <FaPlusCircle />
                 </div>
-                {/* <div className={cx('icon')}>
-                        <FaFileImage />
-                      </div>
-                      <div className={cx('icon')}>
-                        <FaPaperclip />
-                      </div>
-                      <div className={cx('icon')}>
-                        <FaGift />
-                      </div> */}
                 <div className={cx('chat-input')}>
                   <input
                     ref={messageInputRef}
@@ -387,4 +363,4 @@ const Messenger = () => {
   );
 };
 
-export default Messenger;
+export default memo(Messenger);

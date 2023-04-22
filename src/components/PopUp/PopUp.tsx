@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './PopUp.module.scss';
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, memo, useEffect, useRef } from 'react';
 const cx = classNames.bind(styles);
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
   children: ReactNode;
   trigger: ReactNode;
   handleClose: () => void;
-  position?: string;
+  position?: 'left' | 'right' | 'center';
 };
 const PopUp: React.FC<Props> = ({ trigger, isOpen, handleClose, children, position = 'right' }) => {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -36,4 +36,4 @@ const PopUp: React.FC<Props> = ({ trigger, isOpen, handleClose, children, positi
   );
 };
 
-export default PopUp;
+export default memo(PopUp);

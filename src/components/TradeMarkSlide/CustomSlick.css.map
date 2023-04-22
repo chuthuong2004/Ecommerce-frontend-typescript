@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AACA,AAAA,EAAE,AAAA,aAAa,CAAC;EACR,gBAAgB,EAAE,OAAQ;CACjC",
-    "sources": [
-        "CustomSlick.scss"
-    ],
-    "names": [],
-    "file": "CustomSlick.css"
-}

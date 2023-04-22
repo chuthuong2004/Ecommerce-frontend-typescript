@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Select.module.scss';
 import { ArrowDownIcon } from '../Icons';
@@ -28,4 +28,4 @@ const Select: React.FC<Props> = ({ label, name, children, onChangeSelected = () 
   );
 };
 
-export default Select;
+export default memo(Select);

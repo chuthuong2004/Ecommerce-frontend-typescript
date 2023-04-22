@@ -1,16 +1,16 @@
 import React, { useState, useEffect, memo } from 'react';
-import classNames from 'classnames/bind';
-import styles from './EditInformation.module.scss';
-import { useAppSelector } from '../../app/hooks';
-import { selectAuth } from '../../features/authSlice';
-import Input from '../Input';
-import Button from '../Button';
-import { EGender, IUser } from '../../models/user.model';
-import Select from '../Select';
-import { EGenderType } from '../../models/product.model';
-import { useUpdateProfileMutation } from '../../services/authApi';
 import { toast } from 'react-toastify';
 import ReactLoading from 'react-loading';
+
+import classNames from 'classnames/bind';
+import styles from './EditInformation.module.scss';
+
+import { useAppSelector } from '../../app/hooks';
+import { selectAuth } from '../../features/authSlice';
+import { EGender } from '../../models/user.model';
+import { useUpdateProfileMutation } from '../../services/authApi';
+import { Input, Button, Select } from '../';
+
 const cx = classNames.bind(styles);
 
 type Props = {
@@ -58,7 +58,6 @@ const EditInformation: React.FC<Props> = ({ handleClosePopup }) => {
   const handleSubmit = async () => {
     await updateProfile(updateValue);
   };
-  console.log(updateValue);
 
   return (
     <div className={cx('form')}>

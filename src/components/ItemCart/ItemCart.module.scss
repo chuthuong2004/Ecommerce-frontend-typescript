@@ -1,22 +1,22 @@
 .container {
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
   display: flex;
   position: relative;
   input[type='checkbox'] {
-    margin-right: 15px;
+    margin-right: 1.5rem;
     &:checked {
       border: none;
-      outline: 2px solid var(--primary);
+      outline: 0.2rem solid var(--primary);
     }
   }
   input:checked {
-    outline: 2px solid var(--primary);
+    outline: 0.2rem solid var(--primary);
     border: none;
   }
   .image-wrapper {
     img {
-      width: 100px;
-      height: 140px;
+      width: 10rem;
+      height: 14rem;
       object-fit: contain;
     }
   }
@@ -24,8 +24,8 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding-left: 15px;
-    padding-right: 5px;
+    padding-left: 1.5rem;
+    padding-right: 0.5rem;
     .top {
       display: flex;
       align-items: center;
@@ -33,13 +33,13 @@
       .brand {
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 2px;
-        font-size: 12px;
+        letter-spacing: 0.2rem;
+        font-size: 1.2rem;
       }
       .close {
-        letter-spacing: 1px;
-        font-size: 14px;
-        padding: 2px 0;
+        letter-spacing: 0.1rem;
+        font-size: 1.4rem;
+        padding: 0.2rem 0;
         display: flex;
         justify-content: center;
         cursor: pointer;
@@ -48,8 +48,8 @@
     }
     .product-name {
       font-weight: 400;
-      margin-bottom: 10px;
-      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      letter-spacing: 0.1rem;
       font-size: 1.4rem;
       display: -webkit-box;
       -webkit-box-orient: vertical;
@@ -58,27 +58,27 @@
       overflow: hidden;
       &.item-cart {
         -webkit-line-clamp: 1;
-        font-size: 12px;
+        font-size: 1.2rem;
       }
     }
     .product-price {
       display: flex;
       align-items: center;
-      letter-spacing: 1px;
+      letter-spacing: 0.1rem;
       .price {
-        font-size: 12px;
+        font-size: 1.2rem;
         font-weight: 700;
-        margin-right: 5px;
+        margin-right: 0.5rem;
       }
       del {
-        font-size: 12px;
-        margin-left: 5px;
+        font-size: 1.2rem;
+        margin-left: 0.5rem;
         display: none;
       }
       &.hasSale > .price {
         background-color: #faff19;
-        font-size: 14px;
-        padding: 5px 10px;
+        font-size: 1.4rem;
+        padding: 0.5rem 1rem;
       }
       &.hasSale > del {
         display: block;
@@ -87,48 +87,48 @@
     .variant-select {
       display: flex;
       align-items: flex-start;
-      font-size: 12px;
+      font-size: 1.2rem;
       justify-content: space-between;
-      letter-spacing: 1px;
+      letter-spacing: 0.1rem;
       padding-top: 0;
       .product-variant-color {
         display: flex;
         align-items: flex-start;
         flex-direction: column;
         flex: 1;
-        margin: 10px 0 0;
+        margin: 1rem 0 0;
       }
       .product-variant-size {
         display: flex;
         align-items: flex-start;
         flex-direction: column;
         flex: 1;
-        margin: 10px 0 0;
+        margin: 1rem 0 0;
         select {
           width: 100%;
-          padding: 5px;
-          font-size: 12px;
-          border: 1px solid #767676;
-          border-radius: 2px;
+          padding: 0.5rem;
+          font-size: 1.2rem;
+          border: 0.1rem solid #767676;
+          border-radius: 0.2rem;
         }
       }
     }
     .product-actions {
-      font-size: 12px;
-      margin-top: 10px;
+      font-size: 1.2rem;
+      margin-top: 1rem;
     }
     .product-quantity {
-      margin-top: 5px;
+      margin-top: 0.5rem;
       display: flex;
       .input-number {
         display: flex;
         align-items: center;
-        border: 1px solid #868d95;
-        border-radius: 2px;
-        min-width: 42px;
-        height: 40px;
+        border: 0.1rem solid #868d95;
+        border-radius: 0.2rem;
+        min-width: 4.2rem;
+        height: 4rem;
         .btn-quantity {
-          width: 40px;
+          width: 4rem;
           height: 100%;
           display: flex;
           align-items: center;
@@ -137,9 +137,9 @@
           background-color: #fff;
         }
         .input-quantity {
-          width: 25px;
-          max-height: 40px;
-          font-size: 12px;
+          width: 2.5rem;
+          max-height: 4rem;
+          font-size: 1.2rem;
           font-weight: 700;
           text-align: center;
         }

@@ -6,15 +6,13 @@ import classNames from 'classnames/bind';
 import vi from 'timeago.js/lib/lang/vi';
 import { IMessage } from '../../models/message.model';
 import moment from 'moment';
-import PopUp from '../PopUp';
-import { useState } from 'react';
+import { memo, useState } from 'react';
+import { PopUp } from '..';
 const cx = classNames.bind(styles);
 type Props = {
   message: IMessage;
   own: boolean;
 };
-// register it.
-// register('vi', vi);
 const Message: React.FC<Props> = ({ message, own }) => {
   const [popupImage, setPopupImage] = useState({ isOpen: false, src: '' });
   return (
@@ -92,4 +90,4 @@ const Message: React.FC<Props> = ({ message, own }) => {
   );
 };
 
-export default Message;
+export default memo(Message);

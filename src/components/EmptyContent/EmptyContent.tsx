@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react';
 import styles from './EmptyContent.module.scss';
 import classNames from 'classnames/bind';
-import Button from '../Button';
+
+import { Button } from '../';
 import config from '../../config';
 const cx = classNames.bind(styles);
 type Props = {

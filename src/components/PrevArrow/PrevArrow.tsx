@@ -1,23 +1,13 @@
-import React from 'react'
+import React, { ClassAttributes, memo } from 'react';
 import { PrevArrowIcon } from '../Icons';
 
-type Props = {
-    classNames?: string;
-    style?: any,
-    onClick?: any
-}
-const PrevArrow: React.FC<Props> = ({ style, classNames, onClick }) => {
-    return (
-        <div
-            className={`btn-arrow btn-prev ${classNames}`}
-            style={{
-                ...style,
-            }}
-            onClick={onClick}
-        >
-            <PrevArrowIcon />
-        </div>
-    );
+interface Props extends React.HTMLAttributes<HTMLDivElement>, ClassAttributes<HTMLDivElement> {}
+const PrevArrow: React.FC<Props> = ({ className, ...passProps }) => {
+  return (
+    <div className={`btn-arrow btn-prev ${className}`} {...passProps}>
+      <PrevArrowIcon />
+    </div>
+  );
 };
 
-export default PrevArrow
+export default memo(PrevArrow);

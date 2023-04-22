@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { IColor, IProduct } from '../../models/product.model';
 import config from '../../config';
 import { HeartActiveIcon, HeartIcon } from '../Icons';
-import productApi from '../../api/productApi';
+import { productApi } from '../../api';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectAuth, setCredentials } from './../../features/authSlice';

@@ -1,25 +1,25 @@
 .container {
   z-index: 9995;
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  right: 2rem;
+  bottom: 2rem;
   .icon-wrapper {
     background-color: #2e2e2e;
     align-items: center;
-    border-radius: 34px 8px 34px 34px;
-    box-shadow: 0 5px 4px 0 rgb(0 0 0 / 26%);
+    border-radius: 3.4rem 0.8rem 3.4rem 3.4rem;
+    box-shadow: 0 0.5rem 0.4rem 0 rgb(0 0 0 / 26%);
     color: #fff;
     cursor: pointer;
     display: flex;
     justify-content: center;
-    height: 60px;
-    width: 60px;
+    height: 6rem;
+    width: 6rem;
     position: relative;
     .icon {
       background-color: #fff;
-      border-radius: 8px 8px 8px 1px;
-      width: 20px;
-      height: 15px;
+      border-radius: 0.8rem 0.8rem 0.8rem 1px;
+      width: 2rem;
+      height: 1.5rem;
       position: relative;
       display: flex;
       justify-content: center;
@@ -28,17 +28,17 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: 0.2rem;
       }
       span {
-        width: 12px;
-        height: 2px;
-        border-radius: 2px;
+        width: 1.2rem;
+        height: 0.2rem;
+        border-radius: 0.2rem;
         background-color: #2e2e2e;
       }
       .line-short {
-        width: 6px;
-        height: 1px;
+        width: 0.6rem;
+        height: 0.1rem;
         text-align: left;
       }
     }
@@ -46,8 +46,8 @@
   .messenger {
     width: 0;
     height: 0;
-    border-radius: 10px;
-    box-shadow: 0 5px 4px 0 rgb(0 0 0 / 26%);
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 0.4rem 0 rgb(0 0 0 / 26%);
     background-color: #f7f8f9;
     font-size: 1.4rem;
     transition: all 0.15s ease;
@@ -56,69 +56,69 @@
     overflow: hidden;
     opacity: 0;
     &.active {
-      width: 350px;
-      height: 500px;
+      width: 35rem;
+      height: 50rem;
       opacity: 1;
     }
     &__header {
-      height: 70px;
+      height: 7rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
-      -webkit-box-shadow: 0px 1px 10px 0px rgba(46, 46, 46, 0.51);
-      box-shadow: 0px 1px 2px 0px rgba(46, 46, 46, 0.51);
+      padding: 1rem;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      -webkit-box-shadow: 0 0.1rem 1rem 0 rgba(46, 46, 46, 0.51);
+      box-shadow: 0 0.1rem 0.2rem 0 rgba(46, 46, 46, 0.51);
       &-info {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 1rem;
         .avatar {
           display: flex;
           img {
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 5rem;
+            height: 5rem;
           }
         }
         .name {
           font-weight: 500;
         }
         .active-text {
-          font-size: 12px;
+          font-size: 1.2rem;
           font-weight: 400;
         }
       }
       &-actions {
         color: #2e2e2e;
         display: flex;
-        gap: 10px;
+        gap: 1rem;
         .icon {
           cursor: pointer;
-          font-size: 20px;
+          font-size: 2rem;
         }
       }
     }
     &__body {
-      padding: 0 10px 10px 10px;
-      margin-top: 5px;
-      height: calc(500px - 70px - 60px);
+      padding: 0 1rem 1rem 1rem;
+      margin-top: 0.5rem;
+      height: calc(50rem - 7rem - 6rem);
       overflow-y: scroll;
       background-color: #f7f8f9;
     }
     &__footer {
       display: flex;
       align-items: center;
-      height: 60px;
-      gap: 5px;
-      padding: 10px;
+      height: 6rem;
+      gap: 0.5rem;
+      padding: 1rem;
       .icon {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 10px;
-        font-size: 20px;
+        padding: 1rem;
+        font-size: 2rem;
         color: var(--primary);
         border-radius: 50%;
         cursor: pointer;
@@ -130,9 +130,9 @@
       .emoji {
         position: absolute;
         top: 50%;
-        right: 20px;
+        right: 2rem;
         transform: translateY(-50%);
-        font-size: 20px;
+        font-size: 2rem;
         color: var(--primary);
         &:hover {
           background-color: none;
@@ -147,47 +147,47 @@
         }
         .input {
           width: 100%;
-          padding: 12px 20px;
-          padding-right: 40px;
-          border-radius: 8px;
-          font-size: 14px;
-          letter-spacing: 1px;
+          padding: 1.2rem 2rem;
+          padding-right: 4rem;
+          border-radius: 0.8rem;
+          font-size: 1.4rem;
+          letter-spacing: 0.1rem;
           transition: all 0.2s ease-in-out;
-          border: 1px solid transparent;
+          border: 0.1rem solid transparent;
           &:focus {
             border-color: var(--bs-primary);
           }
         }
         .prev-image-container {
           display: flex;
-          gap: 10px;
-          border-radius: 8px;
+          gap: 1rem;
+          border-radius: 0.1rem;
           position: absolute;
           bottom: 100%;
           width: 100%;
-          padding: 10px;
+          padding: 1rem;
           z-index: 10;
           .chat-image-input {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
+            width: 5rem;
+            height: 5rem;
+            border-radius: 1rem;
             position: relative;
             img {
               width: 100%;
               height: 100%;
-              border-radius: 10px;
+              border-radius: 1rem;
             }
             .close-icon {
               position: absolute;
               background-color: #f7f8f9;
-              border: 1px solid #dfd6d6;
+              border: 0.1rem solid #dfd6d6;
               cursor: pointer;
               display: flex;
               align-items: center;
               justify-content: center;
-              right: -5px;
-              top: -5px;
-              padding: 5px;
+              right: -0.5rem;
+              top: -0.5rem;
+              padding: 0.5rem;
               border-radius: 50%;
             }
           }
@@ -195,10 +195,10 @@
       }
       .chat-submit {
         background-color: var(--primary);
-        padding: 10px 20px;
-        border-radius: 8px;
+        padding: 1rem 2rem;
+        border-radius: 0.8rem;
         color: var(--white);
-        font-size: 18px;
+        font-size: 1.8rem;
         position: relative;
       }
     }
@@ -209,11 +209,11 @@
         background-color: var(--primary);
         display: flex;
         color: var(--white);
-        padding: 10px;
+        padding: 1rem;
         justify-content: space-between;
         font-weight: 500;
         .title {
-          font-size: 14px;
+          font-size: 1.4rem;
           text-transform: uppercase;
         }
         .btn-close {
@@ -228,7 +228,7 @@
         justify-content: center;
         .btn-start {
           width: max-content;
-          border-radius: 100px !important;
+          border-radius: 10rem !important;
         }
       }
     }

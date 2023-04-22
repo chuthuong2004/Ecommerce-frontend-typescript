@@ -1,11 +1,8 @@
 import './GlobalStyles.scss';
-import PropTypes from 'prop-types';
-import React,{ ReactNode } from 'react';
-
 type Props = {
-    children: any
-}
+  children: any;
+};
 const GlobalStyles = ({ children }: Props) => {
-    return children;
-}
+  return children;
+};
 export default GlobalStyles;

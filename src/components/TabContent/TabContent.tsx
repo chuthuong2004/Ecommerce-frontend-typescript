@@ -10,6 +10,7 @@ export interface ITabContent {
   title: string;
   content: string | ReactNode;
 }
+
 type Props = {
   contents: ITabContent[];
 };
@@ -19,7 +20,6 @@ const TabContent: React.FC<Props> = ({ contents }) => {
   useEffect(() => {
     setTabSelected(contents[0]);
   }, [contents]);
-  console.log(tabSelected);
   return (
     <div>
       <div className={cx('tab-header')}>

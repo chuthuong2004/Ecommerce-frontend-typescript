@@ -15,12 +15,14 @@
   transition: all 0.6s ease-in-out;
   background-color: rgba(49, 49, 49, 0.5);
 }
-.modal.no-active {
-  opacity: 0;
-}
-.modal.active {
-  opacity: 1;
-  display: block;
+.modal {
+  &.no-active {
+    opacity: 0;
+  }
+  &.active {
+    opacity: 1;
+    display: block;
+  }
 }
 .modal.right,
 .modal.right > .overlay {
@@ -30,4 +32,10 @@
 .modal.center > .overlay {
   top: 0;
   z-index: 20;
+}
+.modal.left,
+.modal.left > .overlay {
+  top: 0;
+  z-index: 20;
+  height: 100%;
 }

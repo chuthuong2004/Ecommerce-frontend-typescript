@@ -1,28 +1,25 @@
 import classNames from 'classnames/bind';
 import { EyeIcon, EyeActiveIcon } from '../Icons';
 import styles from './Input.module.scss';
-import React, { useState, useEffect, memo, useId } from 'react';
-import { InputAuth } from '../../pages/Login/Login';
+import React, { useState, useEffect, memo, useId, ClassAttributes } from 'react';
 const cx = classNames.bind(styles);
-type Props = {
+interface IInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement>,
+    ClassAttributes<HTMLInputElement> {
   label?: string;
-  type?: string;
-  placeholder?: string;
-  name?: string;
   error?: any;
-  disabled?: boolean;
-  value?: string;
-  className?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
-};
-const Input: React.FC<Props> = ({
+  rounded?: boolean;
+  textArea?: boolean;
+}
+const Input: React.FC<IInputProps> = ({
   label,
   type = 'text',
-  placeholder = `Nhập ${label ? label : 'thông tin vào trường này'}`,
+  placeholder,
   name = '',
   error = null,
+  textArea,
   onChange,
+  // rounded,
   ...passProps
 }) => {
   const idInput = useId();
@@ -41,7 +38,14 @@ const Input: React.FC<Props> = ({
     <div>
       {type === 'checkbox' || type === 'radio' ? (
         <div className={cx('checkbox')}>
-          <input type={type} name="" id={idInput} />
+          <input
+            type={type}
+            id={idInput}
+            checked={props.checked}
+            name={name}
+            placeholder={placeholder}
+            {...props}
+          />
           <label htmlFor={idInput}>
             <span></span>
             {label}
@@ -63,13 +67,25 @@ const Input: React.FC<Props> = ({
                   : 'Bạn không được để trống dòng này'}
               </span>
             )}
-            <input
-              type={displayed ? 'text' : type}
-              name={name}
-              id={idInput}
-              placeholder={placeholder}
-              {...props}
-            />
+            {textArea ? (
+              <textarea
+                cols={30}
+                rows={10}
+                name={name}
+                id={idInput}
+                placeholder={placeholder}
+                {...props}
+              ></textarea>
+            ) : (
+              <input
+                type={displayed ? 'text' : type}
+                name={name}
+                id={idInput}
+                placeholder={placeholder}
+                {...props}
+              />
+            )}
+
             {type === 'password' && (
               <div
                 onClick={props.value ? handleClickEye : undefined}

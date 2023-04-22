@@ -1,36 +1,36 @@
 .input-container {
   display: flex;
   flex-direction: column;
-  font-size: 14px;
-  letter-spacing: 1px;
-  line-height: 20px;
-  margin-top: 16px;
+  font-size: 1.4rem;
+  letter-spacing: 0.1rem;
+  line-height: 2rem;
+  margin-top: 1.6rem;
   // width: 100%;
-  // margin-top: 16px;
+  // margin-top: 1.6rem;
   .input-label {
-    font-size: 12px;
-    letter-spacing: 1px;
-    line-height: 14.5px;
-    margin: 0 0 8px;
+    font-size: 1.2rem;
+    letter-spacing: 0.1rem;
+    line-height: 1.45rem;
+    margin: 0 0 0.8rem;
     text-transform: uppercase;
   }
   .input {
     position: relative;
     input {
       width: 100%;
-      border: 1px solid #868d95;
-      border-radius: 2px;
+      border: 0.1rem solid #868d95;
+      border-radius: 0.2rem;
       background-color: #ffffff;
-      font-size: 14px;
-      line-height: 14px;
+      font-size: 1.4rem;
+      line-height: 1.4rem;
       transition: all 0.2s ease-in-out;
-      padding: 12px 15px;
-      letter-spacing: 2px;
+      padding: 1.2rem 1.5rem;
+      letter-spacing: 0.2rem;
       &:placeholder-shown {
         // text-transform: capitalize;
       }
       &:focus {
-        box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 0.4rem 0 rgba(0, 0, 0, 0.5);
       }
       &:disabled {
         background-color: #f7f8f9;
@@ -40,7 +40,7 @@
       display: none;
       position: absolute;
       top: 50%;
-      right: 10px;
+      right: 1rem;
       transform: translateY(-50%);
       cursor: pointer;
       transition: all 0.2s ease-in-out;
@@ -54,15 +54,15 @@
     }
     .message-error {
       position: absolute;
-      font-size: 12px;
+      font-size: 1.2rem;
       color: #e24c4c;
       right: 0;
-      bottom: -20px;
+      bottom: -2rem;
     }
     .message-error.error + input {
       transition: all 0.2s ease-in-out;
       border-color: #e24c4c;
-      box-shadow: 0px 0px 4px 0px #e24c4c;
+      box-shadow: 0 0 0.4rem 0 #e24c4c;
     }
   }
 }
@@ -70,7 +70,7 @@
 .checkbox {
   input {
     color: red;
-    font-size: 20px;
+    font-size: 2rem;
   }
   input[type='checkbox']:checked {
     background-color: red;
@@ -88,12 +88,12 @@
 }
 
 .checkbox {
-  margin-top: 16px;
+  margin-top: 1.6rem;
   display: flex;
   align-items: center;
   label {
     font-family: Helvetica;
-    letter-spacing: 1px;
+    letter-spacing: 0.1rem;
     margin: 0;
   }
   @keyframes pop {
@@ -112,10 +112,10 @@
   }
   input + label span {
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin: 0 5px -4px 0;
-    margin-right: 10px;
+    width: 2rem;
+    height: 2rem;
+    margin: 0 0.5rem -0.4rem 0;
+    margin-right: 1rem;
     &:before,
     &:after {
       // @include transition(all 0.3s ease-in-out);
@@ -125,10 +125,10 @@
       display: flex;
       align-items: center;
       z-index: 1;
-      width: 18px;
-      height: 18px;
+      width: 1.8rem;
+      height: 1.8rem;
       background: transparent;
-      border: 2px solid var(--primary);
+      border: 0.2rem solid var(--primary);
     }
     &:after {
       z-index: 0;

@@ -2,21 +2,9 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './GuideSize.module.scss';
 import { CloseIcon } from '../Icons';
+import { IGuideSize } from '../../models/guideSize.model';
 const cx = classNames.bind(styles);
-interface ISizeGuideSize {
-  sizeNumber: number;
-  sizeChar: string;
-}
-interface ISizeParam {
-  name: string;
-  value: number[];
-}
-interface IGuideSize {
-  name: string;
-  title: string;
-  sizes: ISizeGuideSize[];
-  sizeParameters: ISizeParam[];
-}
+
 const guideSizes: IGuideSize[] = [
   {
     name: 'ĐẦM VÀ ÁO',

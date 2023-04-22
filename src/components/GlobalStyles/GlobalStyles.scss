@@ -5,9 +5,9 @@
 :root {
   --primary: #2e2e2e;
   --secondary: #fe8ce5;
-  --default-layout-header-height: 56px;
-  --default-layout-width: 1150px;
-  --default-layout-horizontal-spacer: 24px;
+  --default-layout-header-height: 5.6rem;
+  --default-layout-width: 115rem;
+  --default-layout-horizontal-spacer: 2.4rem;
   --black: #000;
   --text-color: #161823;
   --white: #fff;
@@ -40,11 +40,11 @@ body {
 // Scrollbar
 html *::-webkit-scrollbar {
   border-radius: 0;
-  width: 8px;
+  width: 0.8rem;
 }
 
 html *::-webkit-scrollbar-thumb {
-  border-radius: 4px;
+  border-radius: 0.4rem;
   background-color: rgba(0, 0, 0, 0.15);
 }
 
@@ -76,8 +76,8 @@ img {
 // Custom tippy tooltip
 body {
   .tippy-box {
-    height: 38px;
-    border: radius 8px;
+    height: 3.8rem;
+    border-radius: 0.8rem;
     font-weight: 600;
     font-size: 1.6rem;
     line-height: 2.2rem;
@@ -87,10 +87,10 @@ body {
     color: rgba(82, 84, 84, 0.92);
   }
   .tippy-content {
-    padding: 8px 9px;
+    padding: 0.8rem 0.9rem;
   }
   .tippy-box[data-placement^='bottom'] > .tippy-arrow:before {
-    top: -8px;
+    top: -0.8rem;
   }
 }
 
@@ -113,10 +113,10 @@ body {
   text-align: center;
 }
 .container-fluid {
-  font-size: 14px;
-  letter-spacing: 1px;
-  line-height: 21px;
-  padding: 0 80px;
+  font-size: 1.4rem;
+  letter-spacing: 0.1rem;
+  line-height: 2.1rem;
+  padding: 0 8rem;
   width: 100vw;
 }
 svg {
@@ -124,15 +124,54 @@ svg {
 }
 select {
   outline: none;
-  letter-spacing: 1px;
-  border-radius: 2px;
-  border: 1px solid #868d95;
+  letter-spacing: 0.1rem;
+  border-radius: 0.2rem;
+  border: 0.1rem solid #868d95;
 
-  font-size: 14px;
+  font-size: 1.4rem;
   &:focus {
-    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 0.4rem 0 rgba(0, 0, 0, 0.5);
   }
 }
 .p10 {
-  padding: 10px 0;
+  padding: 1rem 0;
+}
+@media screen and (min-width: 1199.98px) {
+  .container-fluid {
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+  }
+}
+
+// CSS BUTTON ARROW
+.btn-arrow {
+  position: absolute;
+  z-index: 1;
+  background-color: #ffffff;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0.4rem 0.8rem 0 rgba(0, 0, 0, 0.4);
+  transition: all 1s ease-in-out;
+  cursor: pointer;
+  &:hover {
+    background-color: #ffffff;
+  }
+  &.btn-prev {
+    left: 6rem;
+    &.center {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+  &.btn-next {
+    right: 6rem;
+    &.center {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
 }

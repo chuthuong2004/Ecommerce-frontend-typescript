@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,gBAAgB,CAAC;EACb,KAAK,EAAE,KAAK;EACZ,MAAM,EAAE,IAAI;CAYf;;AAdD,AAGI,gBAHY,CAGZ,kBAAkB,CAAC;EACf,OAAO,EAAE,IAAI;EACb,WAAW,EAAE,MAAM;EACnB,MAAM,EAAE,IAAI;EACZ,KAAK,EAAE,IAAI;CAMd;;AAbL,AAQQ,gBARQ,CAGZ,kBAAkB,CAKd,iBAAiB,CAAC;EACd,KAAK,EAAE,KAAK;EACZ,MAAM,EAAE,IAAI;EACZ,OAAO,EAAE,gBAAgB;CAC5B",
-    "sources": [
-        "Slide.module.scss"
-    ],
-    "names": [],
-    "file": "Slide.module.css"
-}

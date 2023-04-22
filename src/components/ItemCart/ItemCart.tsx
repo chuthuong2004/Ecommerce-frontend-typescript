@@ -1,14 +1,14 @@
-import classNames from 'classnames/bind';
-import styles from './ItemCart.module.scss';
-import { CloseIcon, MinusIcon, PlusIcon, PlusStrongIcon } from '../Icons';
-import Button from '../Button/Button';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import config from '../../config/index';
 import React, { useEffect, useState, memo } from 'react';
+import classNames from 'classnames/bind';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import ReactLoading from 'react-loading';
+import { toast } from 'react-toastify';
+
 import { EActionCart, ICartItem } from '../../models/cart.model';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { CloseIcon, MinusIcon, PlusStrongIcon } from '../Icons';
+
 import {
-  addToCart,
   clearCart,
   decreaseCart,
   increaseCart,
@@ -16,19 +16,18 @@ import {
   selectCart,
   setCart,
 } from '../../features/cartSlice';
-import { selectAuth, setCredentials } from '../../features/authSlice';
+import { selectAuth } from '../../features/authSlice';
 import {
   useAddItemToCartMutation,
   useRemoveItemFromCartMutation,
   useUpdateQuantityCartMutation,
 } from '../../services/cartsApi';
-import { toast } from 'react-toastify';
 import { useGetMyProfileQuery } from '../../services/authApi';
-import productApi from '../../api/productApi';
-import ReactLoading from 'react-loading';
-import Loading from '../Loading';
-import Select from '../Select';
-import Dialog from '../Dialog';
+import { productApi } from '../../api';
+
+import styles from './ItemCart.module.scss';
+import config from '../../config';
+import { Button, Dialog, Loading } from '..';
 const cx = classNames.bind(styles);
 type Props = {
   cartItem: ICartItem;

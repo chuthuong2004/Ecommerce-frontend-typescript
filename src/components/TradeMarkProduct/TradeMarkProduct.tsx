@@ -2,13 +2,13 @@ import styles from './TradeMarkProduct.module.scss';
 import classNames from 'classnames/bind';
 import SlideProduct from '../SlideProduct';
 import { IBrand } from '../../models/brand.model';
+import { memo } from 'react';
 const cx = classNames.bind(styles);
 type Props = {
   data: IBrand;
   banner?: boolean;
 };
 const TradeMarkProduct: React.FC<Props> = ({ data, banner = true }) => {
-  console.log(data.products);
   return (
     <div className={cx('container')}>
       {banner && (
@@ -25,4 +25,4 @@ const TradeMarkProduct: React.FC<Props> = ({ data, banner = true }) => {
   );
 };
 
-export default TradeMarkProduct;
+export default memo(TradeMarkProduct);

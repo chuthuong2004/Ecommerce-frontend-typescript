@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { CloseIcon, SearchIcon } from '../Icons';
 import ReactLoading from 'react-loading';
 
@@ -48,4 +48,4 @@ const SearchInput: React.FC<Props> = ({
   );
 };
 
-export default SearchInput;
+export default memo(SearchInput);

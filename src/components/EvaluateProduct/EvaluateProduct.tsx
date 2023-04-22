@@ -1,12 +1,13 @@
 import React, { ChangeEvent, useState } from 'react';
-import styles from './EvaluateProduct.module.scss';
 import classNames from 'classnames/bind';
-import { Rating } from 'react-simple-star-rating';
-import { IOrderItem } from '../../models/order.model';
-import Button from '../Button';
-import reviewApi from '../../api/reviewApi';
 import { toast } from 'react-toastify';
 import ReactLoading from 'react-loading';
+import { Rating } from 'react-simple-star-rating';
+
+import { IOrderItem } from '../../models/order.model';
+import { Button } from '../';
+import { reviewApi } from '../../api';
+import styles from './EvaluateProduct.module.scss';
 
 const cx = classNames.bind(styles);
 type Props = {
@@ -60,7 +61,6 @@ const EvaluateProduct: React.FC<Props> = ({ orderItems, handleClose }) => {
       setLoading(false);
     }
   };
-  console.log(dataReview);
 
   return (
     <div className={cx('container')}>

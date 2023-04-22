@@ -1,23 +1,15 @@
-import React from 'react'
+import React, { ClassAttributes, memo } from 'react';
 import { NextArrowIcon } from '../Icons';
 
-type Props = {
-    classNames?: string;
-    style?: any,
-    onClick?: any
+interface Props extends React.HTMLAttributes<HTMLDivElement>, ClassAttributes<HTMLDivElement> {
+  className?: string;
 }
-const NextArrow: React.FC<Props> = ({ style, classNames, onClick }) => {
-    return (
-        <div
-            className={`btn-arrow btn-next ${classNames}`}
-            style={{
-                ...style,
-            }}
-            onClick={onClick}
-        >
-            <NextArrowIcon />
-        </div>
-    );
+const NextArrow: React.FC<Props> = ({ className, ...passProps }) => {
+  return (
+    <div className={`btn-arrow btn-next ${className}`} {...passProps}>
+      <NextArrowIcon />
+    </div>
+  );
 };
 
-export default NextArrow
+export default memo(NextArrow);

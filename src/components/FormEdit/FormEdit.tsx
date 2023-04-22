@@ -1,13 +1,11 @@
-import classNames from 'classnames/bind';
-import styles from './FormEdit.module.scss';
-import React from 'react';
-import { CloseIcon } from '../Icons';
-import { IAddressUser } from '../../models/user.model';
 import { memo } from 'react';
-import EditInformation from '../EditInformation';
-import EditAddress from '../EditAddress';
-import EvaluateProduct from '../EvaluateProduct';
+import classNames from 'classnames/bind';
+import React from 'react';
+import styles from './FormEdit.module.scss';
+import { IAddressUser } from '../../models/user.model';
 import { IOrderItem } from '../../models/order.model';
+import { CloseIcon } from '../Icons';
+import { EvaluateProduct, EditAddress, EditInformation } from '../';
 const cx = classNames.bind(styles);
 
 type Props = {

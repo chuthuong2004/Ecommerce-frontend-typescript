@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, memo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Dialog.module.scss';
 import Button from '../Button';
@@ -33,4 +33,4 @@ const Dialog: React.FC<Props> = ({
   );
 };
 
-export default Dialog;
+export default memo(Dialog);

@@ -2,7 +2,7 @@ import styles from './CategoryContainer.module.scss';
 import classNames from 'classnames/bind';
 import Button from '../Button/Button';
 import config from '../../config';
-import React from 'react';
+import React, { memo } from 'react';
 import { ICatalog } from '../../models/catalog.model';
 const cx = classNames.bind(styles);
 
@@ -35,4 +35,4 @@ const CategoryContainer: React.FC<Props> = ({ categories }) => {
   );
 };
 
-export default CategoryContainer;
+export default memo(CategoryContainer);

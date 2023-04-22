@@ -12,7 +12,7 @@ import { useLocation } from 'react-router-dom';
 import { useAddItemToCartMutation } from '../../services/cartsApi';
 import productApi from '../../api/productApi';
 import { useGetMyProfileQuery } from '../../services/authApi';
-import { useRef } from 'react';
+import { memo, useRef } from 'react';
 import { selectAuth } from '../../features/authSlice';
 import { ICartItem } from '../../models/cart.model';
 import config from '../../config';
@@ -105,4 +105,4 @@ const WishList: React.FC<Props> = ({ activeWishList, handleClosePopUp = () => {}
   );
 };
 
-export default WishList;
+export default memo(WishList);
