@@ -87,3 +87,8 @@ export interface FileResponse {
   path: string;
   size: number;
 }
+
+export interface IResponseUpload {
+  message: string;
+  file: FileResponse;
+}
