@@ -64,7 +64,8 @@ const Account = () => {
       try {
         const data = new FormData();
         data.append('avatar', avatar || '');
-        const res = await uploadApi.avatar(data);
+        const res: { message: string; file: FileResponse } = await uploadApi.avatar(data);
+        console.log(res);
         if (res.file) {
           await updateProfile({ avatar: `/public/avatars/${res.file.filename}` });
         }
@@ -74,6 +75,7 @@ const Account = () => {
     };
     avatar && uploadAvatar();
   }, [avatar]);
+  console.log(avatar);
   return (
     <Helmet title="Tài khoản Koga-clothes.shop">
       <div className={cx('wrapper')}>

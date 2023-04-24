@@ -12,6 +12,7 @@ import { NextArrowIcon, PrevArrowIcon } from '../Icons';
 import ProductItem from '../ProductItem';
 import Button from '../Button';
 import config from '../../config';
+import { NextArrow, PrevArrow } from '..';
 
 const cx = classNames.bind(styles);
 type Props = {
@@ -71,6 +72,8 @@ const SlideProduct: React.FC<Props> = ({
           )}
         </div>
       </Slider>
+      <PrevArrow className="center" />
+      <NextArrow className="center" />
     </div>
   );
 };

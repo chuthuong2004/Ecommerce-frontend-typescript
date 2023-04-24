@@ -29,6 +29,8 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './CustomSlick.scss';
 import { memo } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Grid, Pagination, EffectCube } from 'swiper';
 const cx = classNames.bind(styles);
 const linkList = [
   {
@@ -291,6 +293,27 @@ const TradeMarkSlide = () => {
                 </Link>
               </div>
             </Slider>
+
+            <Swiper
+              slidesPerView={5}
+              grid={{
+                rows: 3,
+                fill: 'row',
+              }}
+              // spaceBetween={30}
+              pagination={{
+                clickable: true,
+              }}
+              autoplay={true}
+              modules={[Grid, Pagination]}
+              className={cx('slider')}
+            >
+              {linkList.map((link, i) => (
+                <SwiperSlide className={cx('slide-item')}>
+                  <Link to={link.to}>{link.icon}</Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </div>
       </div>

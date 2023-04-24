@@ -16,27 +16,29 @@ import {
   PrevArrowIcon,
   SizeChartIcon,
 } from '../../components/Icons';
-import TabContent, { ITabContent } from '../../components/TabContent/TabContent';
 import { MagnifierContainer, MagnifierPreview, MagnifierZoom } from 'react-image-magnifiers';
-import Button from '../../components/Button';
 import config from '../../config';
-import SlideProduct from '../../components/SlideProduct';
 import { brandsMen } from '../Home/components/Men/dataMen';
-import productApi from '../../api/productApi';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addToCart, setCart } from '../../features/cartSlice';
 import { toast } from 'react-toastify';
-import NextArrow from '../../components/NextArrow';
-import PrevArrow from '../../components/PrevArrow';
 import { selectAuth, setCredentials } from '../../features/authSlice';
 import { useAddItemToCartMutation } from '../../services/cartsApi';
 import { useGetMyProfileQuery } from '../../services/authApi';
 import { IFavorite } from '../../models/user.model';
 import ReactLoading from 'react-loading';
-import Loading from '../../components/Loading';
-import PopUp from '../../components/PopUp';
-import GuideSize from '../../components/GuideSize/GuideSize';
-import { Helmet } from '../../components';
+import {
+  Helmet,
+  Loading,
+  PopUp,
+  GuideSize,
+  NextArrow,
+  PrevArrow,
+  Button,
+  SlideProduct,
+} from '../../components';
+import TabContent, { ITabContent } from '../../components/TabContent/TabContent';
+import { productApi } from '../../api';
 const cx = classNames.bind(styles);
 
 const Product = () => {

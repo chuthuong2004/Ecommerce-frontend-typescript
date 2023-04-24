@@ -15,6 +15,8 @@ type Props = {
 };
 const Message: React.FC<Props> = ({ message, own }) => {
   const [popupImage, setPopupImage] = useState({ isOpen: false, src: '' });
+  console.log('message');
+
   return (
     <div className={cx('message', own && 'own')}>
       <PopUp

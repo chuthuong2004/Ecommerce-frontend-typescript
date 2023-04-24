@@ -17,6 +17,7 @@ import { MdClose } from 'react-icons/md';
 import { CloseIcon } from '../Icons';
 import moment from 'moment';
 import { Message, Button } from '..';
+import ReactLoading from 'react-loading';
 require('moment/locale/vi');
 
 const cx = classNames.bind(styles);
@@ -26,7 +27,10 @@ const Messenger = () => {
   const [conversation, setConversation] = useState<IConversation | undefined>(undefined);
   const [loadingGetMessage, setLoadingGetMessage] = useState(false);
   const [newMessage, setNewMessage] = useState('');
-  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [data, setData] = useState<{ countDocument: number; messages: IMessage[] }>({
+    countDocument: 0,
+    messages: [],
+  });
   const [receiver, setReceiver] = useState<IUser | undefined>(undefined);
   const [fileImages, setFileImages] = useState<File[]>([]);
   const [currentPageYOffset, setCurrentPageYOffset] = useState({
@@ -42,15 +46,15 @@ const Messenger = () => {
     socket.on(config.socketEvents.SERVER.GET_MESSAGE, ({ message }: { message: IMessage }) => {
       message.sender._id !== user?._id && setReceiver(message.sender);
       if (!activeMessenger) setActiveMessenger(true);
-      setMessages((prev) => {
-        const lastPrevMessage = prev[prev.length - 1];
+      setData((prev) => {
+        const lastPrevMessage = prev.messages[prev.messages.length - 1];
         if (
           lastPrevMessage &&
           // user?._id !== message.sender._id &&
           lastPrevMessage.conversation === message.conversation &&
           lastPrevMessage._id !== message._id
         ) {
-          return [...prev, message];
+          return { ...prev, messages: [...prev.messages, message] };
         }
         return prev;
       });
@@ -61,7 +65,7 @@ const Messenger = () => {
     const fetchConversation = async () => {
       try {
         const res: IConversation[] = await conversationApi.getMyConversation();
-        console.log(res[0]);
+        // console.log(res[0]);
         if (res) {
           setReceiver(res[0]?.members.find((member) => member._id !== user?._id));
           setConversation(res[0]);
@@ -84,7 +88,7 @@ const Messenger = () => {
         const res = await messageApi.getMessagesFromConversation(conversation?._id || '', params);
         console.log(res);
         if (res.data.length > 0) {
-          setMessages(res.data);
+          setData({ countDocument: res.countDocument, messages: res.data });
           setLoadingGetMessage(false);
         }
       } catch (error) {
@@ -108,7 +112,7 @@ const Messenger = () => {
       };
       user?._id && handleCreateNewConversation();
     } else {
-      setMessages([]);
+      setData({ countDocument: 0, messages: [] });
       setCurrentPageYOffset({ page: 2, height: 0 });
     }
   }, [activeMessenger, conversation, user?._id]);
@@ -117,13 +121,13 @@ const Messenger = () => {
     if (
       conversation &&
       activeMessenger &&
-      messages &&
+      data.messages &&
       receiver &&
-      receiver?._id === messages[messages.length - 1]?.sender?._id
+      receiver?._id === data.messages[data.messages.length - 1]?.sender?._id
     ) {
       handleUpdateSeenMessage(conversation?._id, receiver?._id);
     }
-  }, [messages, receiver]);
+  }, [data.messages, receiver]);
 
   const handleUpdateSeenMessage = async (conversation: string, receiverId: string) => {
     try {
@@ -163,7 +167,7 @@ const Messenger = () => {
         if (newMessage) createMessage.text = newMessage;
         const message: IMessage = await messageApi.create(createMessage);
         if (message) {
-          setMessages((prev) => [...prev, message]);
+          setData((prev) => ({ ...prev, messages: [...prev.messages, message] }));
           socket.emit(config.socketEvents.CLIENT.SEND_MESSAGE, {
             message,
             receiverId: receiver?._id,
@@ -191,30 +195,34 @@ const Messenger = () => {
     });
   };
   const handleScroll = async (e: any) => {
-    console.log(e.target.scrollTop);
+    // console.log(e.target.scrollTop);
     setCurrentPageYOffset({ ...currentPageYOffset, height: e.target.scrollTop });
-    console.log({ e: e.target.scrollTop, b: currentPageYOffset });
+    // console.log({ e: e.target.scrollTop, b: currentPageYOffset });
 
     if (e.target.scrollTop === 0 && e.target.scrollTop < currentPageYOffset.height) {
+      if (data.messages.length === data.countDocument) return;
       try {
         const params = {
           page: currentPageYOffset.page,
           limit: 10,
-          skip: messages.length,
+          skip: data.messages.length,
         };
-        console.log(params);
+        // console.log(params);
 
-        // setLoadingGetMessage(true);
+        setLoadingGetMessage(true);
         const res = await messageApi.getMessagesFromConversation(conversation?._id || '', params);
         console.log(res);
         if (res.data.length > 0) {
-          const isExist = messages.find((message) => message._id === res.data[0]._id);
+          const isExist = data.messages.find((message) => message._id === res.data[0]._id);
           if (res.resultPerPage === currentPageYOffset.page && !isExist) {
             setCurrentPageYOffset({ ...currentPageYOffset, page: currentPageYOffset.page + 1 });
-            setMessages((prev) => [...res.data, ...prev]);
+            setData((prev) => ({
+              countDocument: res.countDocument,
+              messages: [...res.data, ...prev.messages],
+            }));
           }
-          // setLoadingGetMessage(false);
         }
+        setLoadingGetMessage(false);
       } catch (error) {
         console.log(error);
       }
@@ -244,121 +252,123 @@ const Messenger = () => {
 
   return (
     <div className={cx('container')}>
-      {activeMessenger ? (
-        <div className={cx('messenger', activeMessenger && 'active')}>
-          {user ? (
-            <>
-              <div className={cx('messenger__header')}>
-                <div className={cx('messenger__header-info')}>
-                  <div className={cx('avatar')}>
-                    <img
-                      src={receiver?.avatar ? process.env.REACT_APP_API_URL + receiver.avatar : ''}
-                      alt=""
-                    />
-                  </div>
-                  <div>
-                    <p className={cx('name')}>
-                      {receiver?.firstName
-                        ? receiver.firstName + ' ' + receiver.lastName
-                        : receiver?.username}
-                    </p>
-                    <p className={cx('active-text')}>
-                      {receiver?.loggedOut
-                        ? `Hoạt động ${moment(receiver?.loggedOutAt).fromNow()}`
-                        : 'Đang hoạt động'}
-                    </p>
-                  </div>
-                </div>
-                <div className={cx('messenger__header-actions')}>
-                  <div className={cx('icon')}>
-                    <BsFillTelephoneFill />
-                  </div>
-                  <div className={cx('icon')}>
-                    <BsFillCameraVideoFill />
-                  </div>
-                  <div onClick={() => setActiveMessenger(false)} className={cx('icon')}>
-                    <BsDashLg />
-                  </div>
-                </div>
-              </div>
-              <div
-                ref={messageContainerRef}
-                className={cx('messenger__body')}
-                onScroll={handleScroll}
-              >
-                {messages.map((message) => (
-                  <div ref={scrollRef} key={message._id}>
-                    <Message message={message} own={message?.sender?._id === user?._id} />
-                  </div>
-                ))}
-              </div>
-              <form className={cx('messenger__footer')}>
-                <div className={cx('icon')}>
-                  <FaPlusCircle />
-                </div>
-                <div className={cx('chat-input')}>
-                  <input
-                    ref={messageInputRef}
-                    className={cx('input')}
-                    name="message"
-                    placeholder="Aa"
-                    value={newMessage}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setNewMessage(e.target.value)
-                    }
-                    onKeyDown={handleKeyDown}
-                    onPaste={handlePasteClipboard}
-                    onBlur={handleBlur}
+      <div className={cx('messenger', activeMessenger && 'active')}>
+        {loadingGetMessage && (
+          <div className={cx('loading-message')}>
+            <ReactLoading type="spinningBubbles" color="#2e3e3e" width="2rem" height="2rem" />
+          </div>
+        )}
+        {user ? (
+          <>
+            <div className={cx('messenger__header')}>
+              <div className={cx('messenger__header-info')}>
+                <div className={cx('avatar')}>
+                  <img
+                    src={receiver?.avatar ? process.env.REACT_APP_API_URL + receiver.avatar : ''}
+                    alt=""
                   />
-                  {fileImages.length > 0 && (
-                    <div className={cx('prev-image-container')}>
-                      {fileImages.map((fileImage, i) => (
-                        <div className={cx('chat-image-input')} key={i}>
-                          <img src={URL.createObjectURL(fileImage)} alt="" />
-                          <span
-                            onClick={() => handleRemoveImageFile(fileImage)}
-                            className={cx('close-icon')}
-                          >
-                            <MdClose />
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  <div className={cx('icon', 'emoji')}>
-                    <FaSmile />
-                  </div>
                 </div>
-
-                <button onClick={handleSendMessage} className={cx('chat-submit')}>
-                  <FaPaperPlane />
-                </button>
-              </form>
-            </>
-          ) : (
-            <div className={cx('require-login')}>
-              <div>
-                <Button primary to={config.routes.login}>
-                  Vui lòng đăng nhập
-                </Button>
+                <div>
+                  <p className={cx('name')}>
+                    {receiver?.firstName
+                      ? receiver.firstName + ' ' + receiver.lastName
+                      : receiver?.username}
+                  </p>
+                  <p className={cx('active-text')}>
+                    {receiver?.loggedOut
+                      ? `Hoạt động ${moment(receiver?.loggedOutAt).fromNow()}`
+                      : 'Đang hoạt động'}
+                  </p>
+                </div>
+              </div>
+              <div className={cx('messenger__header-actions')}>
+                <div className={cx('icon')}>
+                  <BsFillTelephoneFill />
+                </div>
+                <div className={cx('icon')}>
+                  <BsFillCameraVideoFill />
+                </div>
+                <div onClick={() => setActiveMessenger(false)} className={cx('icon')}>
+                  <BsDashLg />
+                </div>
               </div>
             </div>
-          )}
-        </div>
-      ) : (
-        <div
-          onClick={() => setActiveMessenger(true)}
-          id="messenger"
-          className={cx('icon-wrapper', activeMessenger && 'closed')}
-        >
-          <div className={cx('icon')}>
-            <div className={cx('c')}>
-              <span></span>
-              <span className={cx('line-short')}></span>
+            <div
+              ref={messageContainerRef}
+              className={cx('messenger__body')}
+              onScroll={handleScroll}
+            >
+              {data.messages.map((message) => (
+                <div ref={scrollRef} key={message._id}>
+                  <Message message={message} own={message?.sender?._id === user?._id} />
+                </div>
+              ))}
+            </div>
+            <form className={cx('messenger__footer')}>
+              <div className={cx('icon')}>
+                <FaPlusCircle />
+              </div>
+              <div className={cx('chat-input')}>
+                <input
+                  ref={messageInputRef}
+                  className={cx('input')}
+                  name="message"
+                  placeholder="Aa"
+                  value={newMessage}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setNewMessage(e.target.value)
+                  }
+                  onKeyDown={handleKeyDown}
+                  onPaste={handlePasteClipboard}
+                  onBlur={handleBlur}
+                />
+                {fileImages.length > 0 && (
+                  <div className={cx('prev-image-container')}>
+                    {fileImages.map((fileImage, i) => (
+                      <div className={cx('chat-image-input')} key={i}>
+                        <img src={URL.createObjectURL(fileImage)} alt="" />
+                        <span
+                          onClick={() => handleRemoveImageFile(fileImage)}
+                          className={cx('close-icon')}
+                        >
+                          <MdClose />
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className={cx('icon', 'emoji')}>
+                  <FaSmile />
+                </div>
+              </div>
+
+              <button onClick={handleSendMessage} className={cx('chat-submit')}>
+                <FaPaperPlane />
+              </button>
+            </form>
+          </>
+        ) : (
+          <div className={cx('require-login')}>
+            <div>
+              <Button primary to={config.routes.login}>
+                Vui lòng đăng nhập
+              </Button>
             </div>
           </div>
+        )}
+      </div>
+      <div
+        onClick={() => setActiveMessenger(!activeMessenger)}
+        id="messenger"
+        className={cx('icon-wrapper')}
+      >
+        <div className={cx('icon')}>
+          <div className={cx('c')}>
+            <span></span>
+            <span className={cx('line-short')}></span>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
