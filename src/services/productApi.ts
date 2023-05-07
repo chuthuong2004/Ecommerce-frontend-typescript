@@ -1,10 +1,9 @@
-import { IProduct } from '../models/product.model';
+import { IResponseData } from '../interfaces';
+import { IProduct } from '../models';
 import axiosClient from './axiosClient';
 
 const productApi = {
   getAll: (params: any) => {
-    console.log(params);
-
     const url = 'products';
     return axiosClient.get(url, { params });
   },
@@ -16,11 +15,11 @@ const productApi = {
     const url = `product/slug/${slug}`;
     return axiosClient.get(url);
   },
-  addFavorite: (productId: string): Promise<{ message: string; data: IProduct }> => {
+  addFavorite: (productId: string): Promise<IResponseData<IProduct>> => {
     const url = `products/favorite/add/${productId}`;
     return axiosClient.put(url);
   },
-  removeFavorite: (productId: string): Promise<{ message: string; data: IProduct }> => {
+  removeFavorite: (productId: string): Promise<IResponseData<IProduct>> => {
     const url = `products/favorite/remove/${productId}`;
     return axiosClient.put(url);
   },

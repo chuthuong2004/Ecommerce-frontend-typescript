@@ -1,6 +1,6 @@
 import { BaseQueryResult } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { RootState } from '../app/store';
+import { RootState } from '../features/store';
 import { ICart } from '../models/cart.model';
 import { EOrderStatus, IOrder } from '../models/order.model';
 import { IAddress, IUser } from './../models/user.model';

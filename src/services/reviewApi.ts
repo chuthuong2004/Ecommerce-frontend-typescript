@@ -1,5 +1,4 @@
-import { IInputReview } from '../components/EvaluateProduct/EvaluateProduct';
-import { IProduct } from '../models/product.model';
+import { IInputReview } from '../interfaces';
 import axiosClient from './axiosClient';
 
 const reviewApi = {

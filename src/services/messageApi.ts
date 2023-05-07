@@ -1,6 +1,4 @@
-import { IBrand } from '../models/brand.model';
-import { IMessage } from '../models/message.model';
-import { IProduct } from '../models/product.model';
+import { IMessage } from '../models';
 import axiosClient from './axiosClient';
 
 const messageApi = {

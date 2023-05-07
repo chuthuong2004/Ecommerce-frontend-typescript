@@ -1,4 +1,4 @@
-import { IResponseUpload } from '../models/user.model';
+import { IResponseUpload } from '../interfaces';
 import axiosClient from './axiosClient';
 
 const uploadApi = {

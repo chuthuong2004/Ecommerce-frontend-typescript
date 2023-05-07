@@ -1,4 +1,4 @@
-import { IConversation } from '../models/conversation.model';
+import { IConversation } from '../models';
 import axiosClient from './axiosClient';
 
 const conversationApi = {

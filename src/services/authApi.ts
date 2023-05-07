@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { RootState } from '../app/store';
+import { RootState } from '../features/store';
 import { IAddressUser, IUser } from '../models/user.model';
 import { IProduct } from '../models/product.model';
 import { ICart } from '../models/cart.model';
