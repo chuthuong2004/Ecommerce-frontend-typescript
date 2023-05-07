@@ -1,24 +1,20 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, memo, useCallback, useState } from 'react';
 import classNames from 'classnames/bind';
 import { toast } from 'react-toastify';
 import ReactLoading from 'react-loading';
 import { Rating } from 'react-simple-star-rating';
 
-import { IOrderItem } from '../../models/order.model';
-import { Button } from '../';
+import { Button } from '../../components';
 import { reviewApi } from '../../api';
 import styles from './EvaluateProduct.module.scss';
+import { IInputReview, IOrderItem } from '../../interfaces';
 
 const cx = classNames.bind(styles);
 type Props = {
   handleClose: () => void;
   orderItems?: IOrderItem[];
 };
-export interface IInputReview {
-  orderItemId: string;
-  content: string;
-  star: number;
-}
+
 const EvaluateProduct: React.FC<Props> = ({ orderItems, handleClose }) => {
   const [dataReview, setDataReview] = useState<IInputReview[]>(
     orderItems && orderItems.length > 0
@@ -32,24 +28,30 @@ const EvaluateProduct: React.FC<Props> = ({ orderItems, handleClose }) => {
       : [],
   );
   const [loading, setLoading] = useState(false);
-  const handleChangeInput = (e: ChangeEvent<HTMLTextAreaElement>, orderItem: IOrderItem) => {
-    setDataReview((prev) => {
-      const index = prev.findIndex((item) => item.orderItemId === orderItem._id);
-      prev[index].content = e.target.value;
-      console.log(prev);
 
-      return prev;
-    });
-  };
-  const handleRating = (rate: number, orderItem: IOrderItem) => {
+  const handleChangeInput = useCallback(
+    (e: ChangeEvent<HTMLTextAreaElement>, orderItem: IOrderItem) => {
+      setDataReview((prev) => {
+        const index = prev.findIndex((item) => item.orderItemId === orderItem._id);
+        prev[index].content = e.target.value;
+        console.log(prev);
+
+        return prev;
+      });
+    },
+    [],
+  );
+
+  function handleRating(rate: number, orderItem: IOrderItem) {
     setDataReview((prev) => {
       const index = prev.findIndex((item) => item.orderItemId === orderItem._id);
       prev[index].star = rate;
       console.log(prev);
       return prev;
     });
-  };
-  const handleEvaluation = async () => {
+  }
+
+  async function handleEvaluation() {
     try {
       setLoading(true);
       const res = await reviewApi.create(dataReview);
@@ -60,7 +62,7 @@ const EvaluateProduct: React.FC<Props> = ({ orderItems, handleClose }) => {
       toast.error((error as any).response.data.message);
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className={cx('container')}>
@@ -129,4 +131,4 @@ const EvaluateProduct: React.FC<Props> = ({ orderItems, handleClose }) => {
   );
 };
 
-export default EvaluateProduct;
+export default memo(EvaluateProduct);

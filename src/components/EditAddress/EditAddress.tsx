@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef, useState, memo } from 'react';
+import React, { useEffect, useState, memo, useCallback } from 'react';
 import classNames from 'classnames/bind';
 import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
@@ -6,10 +6,9 @@ import { toast } from 'react-toastify';
 import styles from './EditAddress.module.scss';
 
 import { Button, Select, Input } from '../';
-import { CloseIcon } from '../Icons';
-import { IAddressUser, IDistrict, IProvince, IWard } from '../../models/user.model';
+import { IAddressUser, IDistrict, IProvince, IWard } from '../../interfaces';
+import { selectAuth } from '../../features/slices/authSlice';
 import { useAppSelector } from '../../app/hooks';
-import { selectAuth } from '../../features/authSlice';
 import { useAddAddressMutation, useUpdateAddressMutation } from '../../services/authApi';
 import { provinceApi } from '../../api';
 
@@ -35,7 +34,6 @@ const EditAddress: React.FC<Props> = ({ address, handleClosePopUp }) => {
   const [provinces, setProvinces] = useState<IProvince[]>([]);
   const [districts, setDistricts] = useState<IDistrict[]>([]);
   const [wards, setWards] = useState<IWard[]>([]);
-  const { user } = useAppSelector(selectAuth);
 
   const [
     addAddress,
@@ -113,18 +111,18 @@ const EditAddress: React.FC<Props> = ({ address, handleClosePopUp }) => {
     }
   }, [currentAddress]);
 
-  const handleBlurInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBlurInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorsInput({
       ...errorsInput,
       [e.target.name]: e.target.value ? '' : 'Trường này là bắt buộc !',
     });
-  };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  }, []);
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setCurrentAddress((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
-  };
+  }, []);
 
   const handleSaveAddress = async () => {
     if (address) {

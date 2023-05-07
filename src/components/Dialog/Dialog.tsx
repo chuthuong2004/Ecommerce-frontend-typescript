@@ -1,17 +1,16 @@
 import React, { ReactNode, memo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Dialog.module.scss';
-import Button from '../Button';
 import { CloseIcon } from '../Icons';
 const cx = classNames.bind(styles);
 
-type Props = {
+interface Props {
   title: string;
   description: string;
   isOpenDialog: boolean;
   children: ReactNode;
   handleCloseDialog: () => void;
-};
+}
 const Dialog: React.FC<Props> = ({
   title,
   description,

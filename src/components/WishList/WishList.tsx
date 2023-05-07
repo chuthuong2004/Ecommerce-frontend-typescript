@@ -1,21 +1,17 @@
 import classNames from 'classnames/bind';
 import styles from './WishList.module.scss';
-import ItemCart from '../ItemCart';
-import Button from '../Button';
 import { CloseIcon, HeartFragileIcon } from '../Icons';
-import RecommendedProduct from '../RecommendedProduct';
-import EmptyContent from '../EmptyContent';
 import { useAppSelector } from '../../app/hooks';
-import { IFavorite } from '../../models/user.model';
 import { toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
-import { useAddItemToCartMutation } from '../../services/cartsApi';
-import productApi from '../../api/productApi';
-import { useGetMyProfileQuery } from '../../services/authApi';
 import { memo, useRef } from 'react';
-import { selectAuth } from '../../features/authSlice';
-import { ICartItem } from '../../models/cart.model';
 import config from '../../config';
+import { selectAuth } from '../../features/slices/authSlice';
+import { useAddItemToCartMutation } from '../../services/cartsApi';
+import { useGetMyProfileQuery } from '../../services/authApi';
+import { productApi } from '../../api';
+import { ICartItem, IFavorite } from '../../interfaces';
+import { Button, EmptyContent, ItemCart, RecommendedProduct } from '..';
 const cx = classNames.bind(styles);
 
 type Props = {

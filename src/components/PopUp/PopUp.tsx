@@ -25,6 +25,7 @@ const PopUp: React.FC<Props> = ({ trigger, isOpen, handleClose, children, positi
       modalRef.current!.style.display = 'block';
     }
   }, [isOpen]);
+
   return (
     <>
       {trigger}

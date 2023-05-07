@@ -3,13 +3,8 @@ import styles from './TabContent.module.scss';
 import classNames from 'classnames/bind';
 import parse from 'html-react-parser';
 import { ArrowDownIcon } from '../Icons';
+import { ITabContent } from '../../interfaces';
 const cx = classNames.bind(styles);
-
-export interface ITabContent {
-  _id: string;
-  title: string;
-  content: string | ReactNode;
-}
 
 type Props = {
   contents: ITabContent[];
@@ -20,6 +15,7 @@ const TabContent: React.FC<Props> = ({ contents }) => {
   useEffect(() => {
     setTabSelected(contents[0]);
   }, [contents]);
+
   return (
     <div>
       <div className={cx('tab-header')}>

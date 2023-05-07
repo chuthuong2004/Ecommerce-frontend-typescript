@@ -6,11 +6,8 @@ import { toast } from 'react-toastify';
 import { FaPaperPlane, FaPlusCircle, FaSmile } from 'react-icons/fa';
 import { BsFillTelephoneFill, BsFillCameraVideoFill, BsDashLg } from 'react-icons/bs';
 import { useAppSelector } from '../../app/hooks';
-import { selectAuth } from '../../features/authSlice';
-import { IMessage } from '../../models/message.model';
-import { IConversation } from '../../models/conversation.model';
+import { selectAuth } from '../../features/slices/authSlice';
 import { messageApi, conversationApi, uploadApi } from '../../api';
-import { FileResponse, IUser } from '../../models/user.model';
 import config from '../../config';
 import { useSockets } from '../../context/socket.context';
 import { MdClose } from 'react-icons/md';
@@ -18,6 +15,8 @@ import { CloseIcon } from '../Icons';
 import moment from 'moment';
 import { Message, Button } from '..';
 import ReactLoading from 'react-loading';
+import { IConversation, IMessage, IUser } from '../../models';
+import { FileResponse } from '../../interfaces';
 require('moment/locale/vi');
 
 const cx = classNames.bind(styles);
@@ -37,11 +36,12 @@ const Messenger = () => {
     page: 2,
     height: 0,
   });
+
   const { socket } = useSockets();
   const messageInputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const messageContainerRef = useRef<HTMLDivElement>(null);
-  console.log(socket.id);
+
   useEffect(() => {
     socket.on(config.socketEvents.SERVER.GET_MESSAGE, ({ message }: { message: IMessage }) => {
       message.sender._id !== user?._id && setReceiver(message.sender);
@@ -76,6 +76,7 @@ const Messenger = () => {
     };
     fetchConversation();
   }, [user?._id]);
+
   useEffect(() => {
     const getMessages = async () => {
       try {
@@ -97,6 +98,7 @@ const Messenger = () => {
     };
     conversation && activeMessenger && getMessages();
   }, [conversation, activeMessenger]);
+
   useEffect(() => {
     if (activeMessenger && !conversation) {
       const handleCreateNewConversation = async () => {
@@ -116,6 +118,7 @@ const Messenger = () => {
       setCurrentPageYOffset({ page: 2, height: 0 });
     }
   }, [activeMessenger, conversation, user?._id]);
+
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
     if (
@@ -129,14 +132,15 @@ const Messenger = () => {
     }
   }, [data.messages, receiver]);
 
-  const handleUpdateSeenMessage = async (conversation: string, receiverId: string) => {
+  async function handleUpdateSeenMessage(conversation: string, receiverId: string) {
     try {
       const res = await messageApi.updateSeenMessage(conversation, receiverId);
     } catch (error) {
       console.log(error);
     }
-  };
-  const handleSendMessage = async (e: React.FormEvent) => {
+  }
+
+  async function handleSendMessage(e: React.FormEvent) {
     e.preventDefault();
     let createMessage: {
       conversation?: string;
@@ -160,7 +164,6 @@ const Messenger = () => {
       );
       createMessage.images = images;
     }
-    console.log(createMessage);
 
     if (newMessage || (createMessage?.images && createMessage?.images?.length > 0)) {
       try {
@@ -180,7 +183,8 @@ const Messenger = () => {
     } else {
       toast.info('Vui lòng nhập thông tin');
     }
-  };
+  }
+
   const handleKeyDown = () => {
     socket.emit(config.socketEvents.CLIENT.KEY_DOWN, {
       isKeyPressedDown: true,
@@ -194,7 +198,7 @@ const Messenger = () => {
       return prev.filter((fileImage) => fileImage !== file);
     });
   };
-  const handleScroll = async (e: any) => {
+  async function handleScroll(e: any) {
     // console.log(e.target.scrollTop);
     setCurrentPageYOffset({ ...currentPageYOffset, height: e.target.scrollTop });
     // console.log({ e: e.target.scrollTop, b: currentPageYOffset });
@@ -227,7 +231,8 @@ const Messenger = () => {
         console.log(error);
       }
     }
-  };
+  }
+
   const handlePasteClipboard = (e: any) => {
     if (e.clipboardData.files[0] as File) {
       setFileImages((prev) => {
@@ -241,6 +246,7 @@ const Messenger = () => {
       });
     }
   };
+
   const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     // socket.emit(config.socketEvents.CLIENT.KEY_DOWN, {
     //   isKeyPressedDown: true,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import ReactLoading from 'react-loading';
 
@@ -6,10 +6,10 @@ import classNames from 'classnames/bind';
 import styles from './EditInformation.module.scss';
 
 import { useAppSelector } from '../../app/hooks';
-import { selectAuth } from '../../features/authSlice';
-import { EGender } from '../../models/user.model';
+import { selectAuth } from '../../features/slices/authSlice';
 import { useUpdateProfileMutation } from '../../services/authApi';
-import { Input, Button, Select } from '../';
+import { Button, Input, Select } from '..';
+import { EGender } from '../../interfaces';
 
 const cx = classNames.bind(styles);
 
@@ -34,11 +34,7 @@ const EditInformation: React.FC<Props> = ({ handleClosePopup }) => {
     phone: '',
     email: '',
   });
-  const [updateProfile, { data, isSuccess, isError, isLoading, error }] =
-    useUpdateProfileMutation();
-  const handleOnChangeInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setUpdateValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  const [updateProfile, { isSuccess, isError, isLoading, error }] = useUpdateProfileMutation();
 
   useEffect(() => {
     if (isSuccess) {
@@ -49,12 +45,21 @@ const EditInformation: React.FC<Props> = ({ handleClosePopup }) => {
       toast.error((error as any).data.message);
     }
   }, [isLoading]);
-  const handleOnBlurInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setErrorValue({
-      ...errorValue,
+
+  const handleOnChangeInput = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      setUpdateValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    },
+    [],
+  );
+
+  const handleOnBlurInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setErrorValue((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value ? '' : 'Trường này là bắt buộc !',
-    });
-  };
+    }));
+  }, []);
+
   const handleSubmit = async () => {
     await updateProfile(updateValue);
   };

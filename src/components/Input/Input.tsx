@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import { EyeIcon, EyeActiveIcon } from '../Icons';
 import styles from './Input.module.scss';
 import React, { useState, useEffect, memo, useId, ClassAttributes } from 'react';
+
 const cx = classNames.bind(styles);
 interface IInputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
@@ -24,16 +25,20 @@ const Input: React.FC<IInputProps> = ({
 }) => {
   const idInput = useId();
   const [displayed, setDisplayed] = useState(false);
+
   const handleClickEye: React.MouseEventHandler<HTMLDivElement> = () => {
     setDisplayed(!displayed);
   };
+
   const props: any = {
     onChange,
     ...passProps,
   };
+
   useEffect(() => {
     setDisplayed(false);
   }, [!props.value]);
+
   return (
     <div>
       {type === 'checkbox' || type === 'radio' ? (

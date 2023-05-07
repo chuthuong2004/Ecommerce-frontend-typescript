@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './GuideSize.module.scss';
 import { CloseIcon } from '../Icons';
-import { IGuideSize } from '../../models/guideSize.model';
+import { IGuideSize } from '../../interfaces';
 const cx = classNames.bind(styles);
 
 const guideSizes: IGuideSize[] = [
@@ -260,4 +260,4 @@ const GuideSize: React.FC<Props> = ({ isOpen, handleClose }) => {
   );
 };
 
-export default GuideSize;
+export default memo(GuideSize);

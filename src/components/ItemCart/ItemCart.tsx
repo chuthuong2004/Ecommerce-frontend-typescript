@@ -1,10 +1,9 @@
-import React, { useEffect, useState, memo } from 'react';
+import React, { useEffect, useState, memo, useMemo, useCallback } from 'react';
 import classNames from 'classnames/bind';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
 
-import { EActionCart, ICartItem } from '../../models/cart.model';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { CloseIcon, MinusIcon, PlusStrongIcon } from '../Icons';
 
@@ -15,8 +14,8 @@ import {
   removeFromCart,
   selectCart,
   setCart,
-} from '../../features/cartSlice';
-import { selectAuth } from '../../features/authSlice';
+} from '../../features/slices/cartSlice';
+import { selectAuth } from '../../features/slices/authSlice';
 import {
   useAddItemToCartMutation,
   useRemoveItemFromCartMutation,
@@ -28,6 +27,7 @@ import { productApi } from '../../api';
 import styles from './ItemCart.module.scss';
 import config from '../../config';
 import { Button, Dialog, Loading } from '..';
+import { EActionCart, ICartItem } from '../../interfaces';
 const cx = classNames.bind(styles);
 type Props = {
   cartItem: ICartItem;
@@ -89,6 +89,7 @@ const ItemCart: React.FC<Props> = ({
   useEffect(() => {
     setChecked(isSelected);
   }, [isSelected]);
+
   useEffect(() => {
     if (isSuccessRemoved) {
       if ((dataRemoved as any)?.message) {
@@ -101,6 +102,7 @@ const ItemCart: React.FC<Props> = ({
       toast.error((errorRemoved as any).data.message);
     }
   }, [isLoadingRemoved]);
+
   useEffect(() => {
     if (isSuccessUpdated) {
       if ((dataUpdated as any)?.message) {
@@ -115,6 +117,7 @@ const ItemCart: React.FC<Props> = ({
       toast.error((errorUpdated as any).data.message);
     }
   }, [isLoadingUpdated]);
+
   useEffect(() => {
     if (isSuccessCart) {
       if (dataCart?.data) {
@@ -125,7 +128,7 @@ const ItemCart: React.FC<Props> = ({
     }
   }, [isLoadingCart]);
 
-  const handleRemoveFavorite = async () => {
+  async function handleRemoveFavorite() {
     try {
       setIsLoadingRemoveFavorite(true);
       const res = await productApi.removeFavorite(cartItem.product._id);
@@ -134,16 +137,17 @@ const ItemCart: React.FC<Props> = ({
     } catch (error: any) {
       toast.error(error.data.message);
     }
-  };
-  const handleAddFavorite = async () => {
+  }
+  async function handleAddFavorite() {
     try {
       const res = await productApi.addFavorite(cartItem.product._id);
       refetchProfile();
     } catch (error: any) {
       toast.error(error.data.message);
     }
-  };
-  const handleAddToCart = async () => {
+  }
+
+  async function handleAddToCart() {
     if (!isCart) {
       handleRemoveFavorite();
       await addItemToCart({
@@ -155,28 +159,32 @@ const ItemCart: React.FC<Props> = ({
       handleRemoveFromCart();
       handleAddFavorite();
     }
-  };
-  const handleDecreaseCart = async () => {
+  }
+
+  async function handleDecreaseCart() {
     await updateQuantityCart({
       cartItemId: cartItem._id || '',
       quantity: cartItem.quantity - 1,
     });
-  };
-  const handleIncreaseCart = async () => {
+  }
+
+  async function handleIncreaseCart() {
     await updateQuantityCart({
       cartItemId: cartItem._id || '',
       quantity: cartItem.quantity + 1,
     });
-  };
-  const handleRemoveFromCart = async () => {
+  }
+
+  async function handleRemoveFromCart() {
     if (isCart) {
       const res = await removeItemFromCart(cartItem._id || '');
       console.log('res', res);
       dispatch(removeFromCart(cartItem));
     }
     !isCart && handleRemoveFavorite();
-  };
-  const handleCart = (action: EActionCart) => {
+  }
+
+  async function handleCart(action: EActionCart) {
     if (user && cartItem) {
       action === EActionCart.ADD && handleAddToCart();
       action === EActionCart.DECREASE && handleDecreaseCart();
@@ -188,15 +196,16 @@ const ItemCart: React.FC<Props> = ({
       action === EActionCart.INCREASE && dispatch(increaseCart(cartItem));
       action === EActionCart.REMOVE && dispatch(removeFromCart(cartItem));
     }
-  };
+  }
+
   const handleChangeChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(e.target.checked);
     onChangeChecked(cartItem, e.target.checked);
   };
 
-  const handleChangeSelectedSize = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChangeSelectedSize = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     setDefaultSize(e.target.value);
-  };
+  }, []);
 
   return (
     <div className={cx('wrapper')}>
@@ -212,7 +221,7 @@ const ItemCart: React.FC<Props> = ({
         <div className={cx('text-wrapper')}>
           <div className={cx('top')}>
             <Link to={config.routes.trademark} className={cx('brand')}>
-              {cartItem.product.brand.name}
+              {cartItem?.product.brand.name}
             </Link>
             <div onClick={() => setIsOpenDialog(true)} className={cx('close')}>
               <CloseIcon />

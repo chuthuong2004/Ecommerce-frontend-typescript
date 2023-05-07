@@ -1,13 +1,14 @@
 import TimeAgo from 'timeago-react';
 // import { register } from 'timeago.js';
-import styles from './Message.module.scss';
 import classNames from 'classnames/bind';
 // import it first.
 import vi from 'timeago.js/lib/lang/vi';
-import { IMessage } from '../../models/message.model';
 import moment from 'moment';
 import { memo, useState } from 'react';
+
+import styles from './Message.module.scss';
 import { PopUp } from '..';
+import { IMessage } from '../../models';
 const cx = classNames.bind(styles);
 type Props = {
   message: IMessage;
@@ -15,7 +16,6 @@ type Props = {
 };
 const Message: React.FC<Props> = ({ message, own }) => {
   const [popupImage, setPopupImage] = useState({ isOpen: false, src: '' });
-  console.log('message');
 
   return (
     <div className={cx('message', own && 'own')}>

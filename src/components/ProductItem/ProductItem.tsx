@@ -2,13 +2,14 @@ import styles from './ProductItem.module.scss';
 import classNames from 'classnames/bind';
 import { useState, memo, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { IColor, IProduct } from '../../models/product.model';
 import config from '../../config';
 import { HeartActiveIcon, HeartIcon } from '../Icons';
 import { productApi } from '../../api';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectAuth, setCredentials } from './../../features/authSlice';
+import { selectAuth } from '../../features/slices/authSlice';
+import { IProduct } from '../../models';
+import { IColor } from '../../interfaces';
 import { useGetMyProfileQuery } from '../../services/authApi';
 const cx = classNames.bind(styles);
 type Props = {

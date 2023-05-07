@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import styles from './Button.module.scss';
-import PropTypes from 'prop-types';
 import React, { ReactNode, memo } from 'react';
 const cx = classNames.bind(styles);
 export interface PropsButton extends React.HTMLAttributes<HTMLButtonElement> {

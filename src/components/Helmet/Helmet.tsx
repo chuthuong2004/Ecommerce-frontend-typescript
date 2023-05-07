@@ -8,7 +8,6 @@ const Helmet: React.FC<HelmetProps> = ({ title, children }) => {
   useEffect(() => {
     document.title = title ? title : 'www.kogaclothes.shop';
   }, [title]);
-  console.log(title);
   return children;
 };
 

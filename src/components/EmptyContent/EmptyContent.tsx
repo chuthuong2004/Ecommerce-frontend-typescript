@@ -1,8 +1,8 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, memo } from 'react';
 import styles from './EmptyContent.module.scss';
 import classNames from 'classnames/bind';
 
-import { Button } from '../';
+import { Button } from '../../components';
 import config from '../../config';
 const cx = classNames.bind(styles);
 type Props = {
@@ -47,4 +47,4 @@ const EmptyContent: React.FC<Props> = ({
   );
 };
 
-export default EmptyContent;
+export default memo(EmptyContent);

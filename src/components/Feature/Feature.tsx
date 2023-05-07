@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './Feature.module.scss';
-import React from 'react';
-import { IProduct } from '../../models/product.model';
+import React, { memo } from 'react';
+import { IProduct } from '../../models';
 const cx = classNames.bind(styles);
 
 type Props = {
@@ -36,4 +36,4 @@ const Feature: React.FC<Props> = ({ features }) => {
   );
 };
 
-export default Feature;
+export default memo(Feature);
