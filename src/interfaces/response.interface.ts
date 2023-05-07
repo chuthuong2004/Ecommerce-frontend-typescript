@@ -1,4 +1,4 @@
-import { IProduct } from '../models';
+import { IProduct } from '@/models';
 
 export interface IResponseData<Type> {
   message: string;

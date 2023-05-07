@@ -1,28 +1,30 @@
-import classNames from 'classnames/bind';
+import { useState, useEffect, useCallback, FocusEvent, useRef } from 'react';
 import { CredentialResponse, GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FacebookIcon, GoogleIcon, LeftIcon, LogoIcon } from '../../components/Icons';
+import ReactLoading from 'react-loading';
+import jwt_decode from 'jwt-decode';
+import { toast } from 'react-toastify';
+
+// STYLES
+import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
-import config from '../../config';
-import { useState, useEffect, useCallback, FocusEvent, useRef } from 'react';
+
+import { FacebookIcon, GoogleIcon, LeftIcon, LogoIcon } from '@/components/Icons';
+import config from '@/config';
 import {
   useForgotPasswordMutation,
   useLoginUserMutation,
   useLoginWithGoogleMutation,
   useRegisterUserMutation,
-} from '../../services/authApi';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setCredentials } from '../../redux/slices/authSlice';
+} from '@/services/authApi';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { setCredentials } from '@/redux/slices/authSlice';
+import { useAddItemToCartMutation } from '@/services/cartsApi';
+import { clearCart, selectCart } from '@/redux/slices/cartSlice';
+import { ICartItem } from '@/interfaces';
+import { Button, Input } from '@/components';
 
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAddItemToCartMutation } from '../../services/cartsApi';
-import { clearCart, selectCart } from '../../redux/slices/cartSlice';
-import ReactLoading from 'react-loading';
-import jwt_decode from 'jwt-decode';
-import { ICartItem } from '../../interfaces';
-import { Button, Input } from '../../components';
-
 const cx = classNames.bind(styles);
 
 export type InputAuth = {

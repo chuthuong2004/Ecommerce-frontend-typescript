@@ -5,17 +5,17 @@ import { toast } from 'react-toastify';
 
 import { FaPaperPlane, FaPlusCircle, FaSmile } from 'react-icons/fa';
 import { BsFillTelephoneFill, BsFillCameraVideoFill, BsDashLg } from 'react-icons/bs';
-import { useAppSelector } from '../../app/hooks';
-import { selectAuth } from '../../redux/slices/authSlice';
-import { messageApi, conversationApi, uploadApi } from '../../services';
-import config from '../../config';
-import { useSockets } from '../../context/socket.context';
+import { useAppSelector } from '@/app/hooks';
+import { selectAuth } from '@/redux/slices/authSlice';
+import { messageApi, conversationApi, uploadApi } from '@/services';
+import config from '@/config';
+import { useSockets } from '@/context/socket.context';
 import { MdClose } from 'react-icons/md';
 import moment from 'moment';
 import { Message, Button } from '..';
 import ReactLoading from 'react-loading';
-import { IConversation, IMessage, IUser } from '../../models';
-import { FileResponse } from '../../interfaces';
+import { IConversation, IMessage, IUser } from '@/models';
+import { FileResponse } from '@/interfaces';
 require('moment/locale/vi');
 
 const cx = classNames.bind(styles);

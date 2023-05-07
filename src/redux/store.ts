@@ -3,7 +3,7 @@ import { setupListeners } from '@reduxjs/toolkit/dist/query';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-import { authApi, cartsApi, ordersApi } from '../services';
+import { authApi, cartsApi, ordersApi } from '@/services';
 import rootReducer from './reducer';
 
 const persistConfig = {

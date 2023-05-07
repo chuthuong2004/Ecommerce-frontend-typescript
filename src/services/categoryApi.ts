@@ -1,5 +1,5 @@
-import { ICategory } from '../models';
-import axiosClient from './axiosClient';
+import { axiosClient } from '@/api';
+import { ICategory } from '@/models';
 
 const categoryApi = {
   getAll: (params: any) => {

@@ -1,9 +1,9 @@
 import classNames from 'classnames/bind';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import config from '../../config';
+import config from '@/config';
 import styles from './NoPageFound.module.scss';
-import { RecommendedProduct } from '../../components';
+import { RecommendedProduct } from '@/components';
 const cx = classNames.bind(styles);
 const NoPageFound = () => {
   return (

@@ -7,15 +7,15 @@ import styles from './Product.module.scss';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useLocation, useNavigate } from 'react-router-dom';
-import { HeartActiveIcon, HeartIcon, SizeChartIcon } from '../../components/Icons';
+import { HeartActiveIcon, HeartIcon, SizeChartIcon } from '@/components/Icons';
 import { MagnifierContainer, MagnifierPreview, MagnifierZoom } from 'react-image-magnifiers';
-import config from '../../config';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { addToCart } from '../../redux/slices/cartSlice';
+import config from '@/config';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { addToCart } from '@/redux/slices/cartSlice';
 import { toast } from 'react-toastify';
-import { selectAuth } from '../../redux/slices/authSlice';
-import { useAddItemToCartMutation } from '../../services/cartsApi';
-import { useGetMyProfileQuery } from '../../services/authApi';
+import { selectAuth } from '@/redux/slices/authSlice';
+import { useAddItemToCartMutation } from '@/services/cartsApi';
+import { useGetMyProfileQuery } from '@/services/authApi';
 import ReactLoading from 'react-loading';
 import {
   Helmet,

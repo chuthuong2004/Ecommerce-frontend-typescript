@@ -1,4 +1,4 @@
-import { IGenderCatalog } from '../interfaces';
+import { IGenderCatalog } from '@/interfaces';
 
 export interface ICatalog {
   _id: string;

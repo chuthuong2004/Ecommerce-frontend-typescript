@@ -1,5 +1,5 @@
-import { ICartItem } from '../interfaces';
-import { IUser } from '../models';
+import { ICartItem } from '@/interfaces';
+import { IUser } from '@/models';
 
 export interface ICart {
   _id: string;

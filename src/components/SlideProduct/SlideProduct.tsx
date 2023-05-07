@@ -7,9 +7,9 @@ import { useState } from 'react';
 import './ProductSlider.scss';
 import styles from './SlideProduct.module.scss';
 import classNames from 'classnames/bind';
-import config from '../../config';
-import { Button, NextArrow, PrevArrow, ProductItem } from '..';
-import { IProduct } from '../../models';
+import config from '@/config';
+import { Button, NextArrow, PrevArrow, ProductItem } from '@/components';
+import { IProduct } from '@/models';
 
 const cx = classNames.bind(styles);
 type Props = {

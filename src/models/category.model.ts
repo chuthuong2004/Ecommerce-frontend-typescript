@@ -1,4 +1,4 @@
-import { ICatalog, IProduct } from '../models';
+import { ICatalog, IProduct } from '@/models';
 
 export interface ICategory {
   _id: string;

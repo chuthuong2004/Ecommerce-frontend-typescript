@@ -7,8 +7,8 @@ import moment from 'moment';
 import { memo, useState } from 'react';
 
 import styles from './Message.module.scss';
-import { PopUp } from '..';
-import { IMessage } from '../../models';
+import { PopUp } from '@/components';
+import { IMessage } from '@/models';
 const cx = classNames.bind(styles);
 type Props = {
   message: IMessage;

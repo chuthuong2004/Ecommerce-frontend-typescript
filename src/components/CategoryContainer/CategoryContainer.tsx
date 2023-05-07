@@ -1,9 +1,9 @@
 import styles from './CategoryContainer.module.scss';
 import classNames from 'classnames/bind';
-import config from '../../config';
+import config from '@/config';
 import React, { memo } from 'react';
-import { ICatalog } from '../../models';
-import { Button } from '../../components';
+import { Button } from '@/components';
+import { ICatalog } from '@/models';
 const cx = classNames.bind(styles);
 
 type Props = {

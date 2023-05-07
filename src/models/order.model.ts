@@ -1,5 +1,5 @@
-import { IUser } from '../models';
-import { IAddress, IOrderItem } from '../interfaces';
+import { IUser } from '@/models';
+import { IAddress, IOrderItem } from '@/interfaces';
 
 export interface IOrder {
   _id: string;

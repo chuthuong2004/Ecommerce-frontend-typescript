@@ -1,4 +1,4 @@
-import { IProduct } from '../models';
+import { IProduct } from '@/models';
 
 export interface ICartItem {
   product: IProduct;

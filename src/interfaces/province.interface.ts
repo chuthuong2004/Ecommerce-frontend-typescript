@@ -1,4 +1,4 @@
-import { IDistrict } from '../interfaces';
+import { IDistrict } from '@/interfaces';
 
 export interface IProvince {
   name: string;

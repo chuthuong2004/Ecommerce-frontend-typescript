@@ -1,9 +1,9 @@
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
 import { useLocation, Link } from 'react-router-dom';
-import config from '../../config';
+import config from '@/config';
 import { Kids, Men, Women } from './components';
-import { TradeMarkSlide } from '../../components';
+import { TradeMarkSlide } from '@/components';
 import { memo } from 'react';
 const cx = classNames.bind(styles);
 const Home: React.FC = () => {

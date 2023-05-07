@@ -4,11 +4,10 @@ import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
 
 import styles from './EditAddress.module.scss';
-
-import { Button, Select, Input } from '../';
-import { IAddressUser, IDistrict, IProvince, IWard } from '../../interfaces';
-import { useAddAddressMutation, useUpdateAddressMutation } from '../../services/authApi';
-import { provinceApi } from '../../services';
+import { IAddressUser, IProvince, IDistrict, IWard } from '@/interfaces';
+import { provinceApi } from '@/services';
+import { useAddAddressMutation, useUpdateAddressMutation } from '@/services/authApi';
+import { Button, Input, Select } from '@/components';
 
 const cx = classNames.bind(styles);
 

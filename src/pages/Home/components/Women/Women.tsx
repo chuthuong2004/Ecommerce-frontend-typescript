@@ -3,14 +3,8 @@ import styles from './Women.module.scss';
 import { brandsWomen, slides } from './dataWomen';
 import { catalogs } from '../Men/dataMen';
 import { features } from '../Kids/dataKids';
-import { IBrand, ICatalog } from '../../../../models';
-import {
-  BlockTitle,
-  CategoryContainer,
-  Feature,
-  Slide,
-  TradeMarkProduct,
-} from '../../../../components';
+import { IBrand, ICatalog } from '@/models';
+import { BlockTitle, CategoryContainer, Feature, Slide, TradeMarkProduct } from '@/components';
 import { memo } from 'react';
 const cx = classNames.bind(styles);
 const Women = () => {

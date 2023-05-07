@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './OrderItemProduct.module.scss';
-import { IOrderItem } from '../../../../../../interfaces';
+import { IOrderItem } from '@/interfaces';
 const cx = classNames.bind(styles);
 type Props = {
   orderItem: IOrderItem;

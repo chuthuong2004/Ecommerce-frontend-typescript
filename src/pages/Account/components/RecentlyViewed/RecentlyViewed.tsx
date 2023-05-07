@@ -2,8 +2,8 @@ import React, { memo } from 'react';
 import styles from './RecentlyViewed.module.scss';
 import classNames from 'classnames/bind';
 import { products } from './dummyData';
-import { IProduct } from '../../../../models';
-import { ProductItem } from '../../../../components';
+import { IProduct } from '@/models';
+import { ProductItem } from '@/components';
 const cx = classNames.bind(styles);
 
 const RecentlyViewed = () => {

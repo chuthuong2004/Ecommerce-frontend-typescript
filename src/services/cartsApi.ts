@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { RootState } from '../features/store';
-import { ICart } from '../models/cart.model';
+import { RootState } from '@/redux/store';
+import { ICart } from '@/models';
 export const cartsApi = createApi({
   reducerPath: 'cartsApi',
   baseQuery: fetchBaseQuery({

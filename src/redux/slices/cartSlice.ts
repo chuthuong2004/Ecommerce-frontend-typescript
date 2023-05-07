@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { RootState } from '../store';
 import { v4 as uuidv4 } from 'uuid';
-import { ICartItem } from '../../interfaces/cartItem.interface';
+import { RootState } from '@/redux/store';
+import { ICartItem } from '@/interfaces';
 
 const initialState: { cartItems: ICartItem[] } = {
   cartItems: [],

@@ -1,5 +1,5 @@
-import { IResponseUpload } from '../interfaces';
-import axiosClient from './axiosClient';
+import { axiosClient } from '@/api';
+import { IResponseUpload } from '@/interfaces';
 
 const uploadApi = {
   avatar: (formData: FormData): Promise<IResponseUpload> => {

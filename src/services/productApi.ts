@@ -1,6 +1,6 @@
-import { IResponseData } from '../interfaces';
-import { IProduct } from '../models';
-import axiosClient from './axiosClient';
+import { axiosClient } from '@/api';
+import { IResponseData } from '@/interfaces';
+import { IProduct } from '@/models';
 
 const productApi = {
   getAll: (params: any) => {

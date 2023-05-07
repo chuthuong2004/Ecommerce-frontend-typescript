@@ -1,11 +1,11 @@
 import React, { useRef, memo } from 'react';
-import { ArrowRightIcon, CopyIcon } from '../../../../../../components/Icons';
+import { ArrowRightIcon, CopyIcon } from '@/components/Icons';
 import classNames from 'classnames/bind';
 import styles from './OrderItem.module.scss';
 import { Link } from 'react-router-dom';
-import config from '../../../../../../config';
-import { IOrder } from '../../../../../../models';
-import { EOrderStatus } from '../../../../../../interfaces';
+import config from '@/config';
+import { IOrder } from '@/models';
+import { EOrderStatus } from '@/interfaces';
 import OrderItemProduct from '../OrderItemProduct';
 const cx = classNames.bind(styles);
 type Props = {

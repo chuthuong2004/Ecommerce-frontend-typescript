@@ -1,4 +1,4 @@
-import { FooterMain, SocialFooter } from '../../layouts/components';
+import { FooterMain, SocialFooter } from '@/layouts/components';
 import styles from './Policy.module.scss';
 import classNames from 'classnames/bind';
 

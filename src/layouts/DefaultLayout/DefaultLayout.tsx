@@ -1,13 +1,13 @@
 import classNames from 'classnames/bind';
 import styles from './DefaultLayout.module.scss';
-import config from '../../config';
-import { useLocation, useParams } from 'react-router-dom';
+import config from '@/config';
+import { useLocation } from 'react-router-dom';
 import React, { useEffect, ReactNode, Suspense, lazy } from 'react';
-import { useSockets } from '../../context/socket.context';
-import { useAppSelector } from '../../app/hooks';
-import { selectAuth } from '../../redux/slices/authSlice';
+import { useSockets } from '@/context/socket.context';
+import { useAppSelector } from '@/app/hooks';
+import { selectAuth } from '@/redux/slices/authSlice';
 import { Footer, ScrollToTop } from '../components';
-import { Messenger } from '../../components';
+import { Messenger } from '@/components';
 
 const Header = lazy(() => import('../components/Header'));
 const cx = classNames.bind(styles);

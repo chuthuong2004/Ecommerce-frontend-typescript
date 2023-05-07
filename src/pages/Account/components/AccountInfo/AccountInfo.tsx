@@ -1,10 +1,10 @@
 import styles from './AccountInfo.module.scss';
 import classNames from 'classnames/bind';
 import React, { memo, useState } from 'react';
-import { useAppSelector } from '../../../../app/hooks';
-import { selectAuth } from '../../../../redux/slices/authSlice';
+import { useAppSelector } from '@/app/hooks';
+import { selectAuth } from '@/redux/slices/authSlice';
 import moment from 'moment';
-import { Button, FormEdit, Input, PopUp } from '../../../../components';
+import { Button, FormEdit, Input, PopUp } from '@/components';
 const cx = classNames.bind(styles);
 type Props = {};
 

@@ -1,8 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { RootState } from '../features/store';
-import { IAddressUser, IUser } from '../models/user.model';
-import { IProduct } from '../models/product.model';
-import { ICart } from '../models/cart.model';
+import { RootState } from '@/redux/store';
+import { IUser } from '@/models';
+import { IAddressUser } from '@/interfaces';
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({

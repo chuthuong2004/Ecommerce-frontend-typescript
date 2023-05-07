@@ -3,7 +3,7 @@ import styles from './TabContent.module.scss';
 import classNames from 'classnames/bind';
 import parse from 'html-react-parser';
 import { ArrowDownIcon } from '../Icons';
-import { ITabContent } from '../../interfaces';
+import { ITabContent } from '@/interfaces';
 const cx = classNames.bind(styles);
 
 type Props = {

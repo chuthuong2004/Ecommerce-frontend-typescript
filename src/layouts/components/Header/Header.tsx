@@ -6,8 +6,8 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import HeadlessTippy from '@tippyjs/react/headless';
 
-import config from '../../../config';
-import { Wrapper as PopperWrapper } from '../../../components/Popper';
+import config from '@/config';
+import { Wrapper as PopperWrapper } from '@/components/Popper';
 import {
   BagActiveIcon,
   BagIcon,
@@ -18,19 +18,21 @@ import {
   SearchIcon,
   UserActiveIcon,
   UserIcon,
-} from '../../../components/Icons';
-import { Button, PopUp, WishList } from '../../../components';
+} from '@/components/Icons';
+import { Button, PopUp, WishList } from '@/components';
+import { headerLinks } from '@/assets/headerLinks';
+import { SideBarItem, sidebars } from '@/assets/sidebars';
+import { logout, selectAuth, setCredentials } from '@/redux/slices/authSlice';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { clearCart, selectCart, setCart } from '@/redux/slices/cartSlice';
+import { authApi, useGetMyProfileQuery, useLogoutUserMutation } from '@/services/authApi';
+import { cartsApi, useGetMyCartQuery } from '@/services/cartsApi';
+import { ordersApi } from '@/services';
+
 import { MenuMobile, MenuSub, Search } from './components';
-import { headerLinks } from '../../../assets/headerLinks';
-import { SideBarItem, sidebars } from '../../../assets/sidebars';
-import { logout, selectAuth, setCredentials } from '../../../redux/slices/authSlice';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+
 import { toast } from 'react-toastify';
-import { clearCart, selectCart, setCart } from '../../../redux/slices/cartSlice';
 import { isMobile } from 'react-device-detect';
-import { authApi, useGetMyProfileQuery, useLogoutUserMutation } from '../../../services/authApi';
-import { cartsApi, useGetMyCartQuery } from '../../../services/cartsApi';
-import { ordersApi } from '../../../services';
 const cx = classNames.bind(styles);
 
 function Header() {

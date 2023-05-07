@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './NewsLetterFooter.module.scss';
 import { useCallback, useState, FocusEvent, memo } from 'react';
-import { Button, Input } from '../../../components';
+import { Button, Input } from '@/components';
 const cx = classNames.bind(styles);
 const NewsLetterFooter = () => {
   const [email, setEmail] = useState<string>('');

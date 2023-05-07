@@ -1,15 +1,15 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './MenuMobile.module.scss';
-import { TfiClose } from 'react-icons/tfi';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiFacebook, FiInstagram, FiLinkedin, FiTwitter } from 'react-icons/fi';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 
-import { IoIosArrowBack, IoIosArrowForward, IoMdSettings } from 'react-icons/io';
-import { BiSearch } from 'react-icons/bi';
-import { LogoIcon } from '../../../../../components/Icons';
-import { headerLinks } from '../../../../../assets/headerLinks';
+import { TfiClose } from 'react-icons/tfi';
+import { FiFacebook, FiInstagram, FiLinkedin, FiTwitter } from 'react-icons/fi';
+import { IoIosArrowForward, IoMdSettings } from 'react-icons/io';
+
+import { useAppDispatch } from '@/app/hooks';
+import { LogoIcon } from '@/components/Icons';
+import { headerLinks } from '@/assets/headerLinks';
 const cx = classNames.bind(styles);
 
 interface MenuMobileProps {

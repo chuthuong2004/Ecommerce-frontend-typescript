@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { ArrowTopIcon } from '../../../components/Icons';
+import { ArrowTopIcon } from '@/components/Icons';
 import classNames from 'classnames/bind';
 import styles from './ScrollToTop.module.scss';
 const cx = classNames.bind(styles);

@@ -1,5 +1,5 @@
-import { IBrand } from '../models';
-import axiosClient from '../api/axiosClient';
+import { axiosClient } from '@/api';
+import { IBrand } from '@/models';
 
 const brandApi = {
   getAll: (

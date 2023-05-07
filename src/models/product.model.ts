@@ -1,5 +1,5 @@
-import { IColor } from '../interfaces';
-import { IBrand, ICategory } from '../models';
+import { IColor } from '@/interfaces';
+import { IBrand, ICategory } from '@/models';
 
 export interface IProduct {
   name: string;

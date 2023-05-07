@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Collection.module.scss';
-import { CloseIcon, FilterIcon, MinusIcon, PlusIcon } from '../../components/Icons';
+import { CloseIcon, FilterIcon, MinusIcon, PlusIcon } from '@/components/Icons';
 import { useEffect, useState, useRef, memo } from 'react';
-import { IBrand, ICategory, IProduct } from '../../models';
-import { EGenderType, ESort, IActionFilter } from '../../interfaces';
-import { brandApi, categoryApi, productApi } from '../../services';
-import { Button, Loading, ProductItem } from '../../components';
+import { IBrand, ICategory, IProduct } from '@/models';
+import { EGenderType, ESort, IActionFilter } from '@/interfaces';
+import { brandApi, categoryApi, productApi } from '@/services';
+import { Button, Loading, ProductItem } from '@/components';
 const cx = classNames.bind(styles);
 
 interface IFilter {

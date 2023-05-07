@@ -1,7 +1,7 @@
 import React, { ReactNode, memo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Dialog.module.scss';
-import { CloseIcon } from '../Icons';
+import { CloseIcon } from '@/components/Icons';
 const cx = classNames.bind(styles);
 
 interface Props {

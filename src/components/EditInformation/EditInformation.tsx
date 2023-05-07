@@ -5,11 +5,11 @@ import ReactLoading from 'react-loading';
 import classNames from 'classnames/bind';
 import styles from './EditInformation.module.scss';
 
-import { useAppSelector } from '../../app/hooks';
-import { selectAuth } from '../../redux/slices/authSlice';
-import { useUpdateProfileMutation } from '../../services/authApi';
-import { Button, Input, Select } from '..';
-import { EGender } from '../../interfaces';
+import { useAppSelector } from '@/app/hooks';
+import { selectAuth } from '@/redux/slices/authSlice';
+import { useUpdateProfileMutation } from '@/services/authApi';
+import { Button, Input, Select } from '@/components';
+import { EGender } from '@/interfaces';
 
 const cx = classNames.bind(styles);
 

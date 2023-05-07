@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './Address.module.scss';
 import classNames from 'classnames/bind';
-import { EditIcon, LocationEmptyIcon, PlusStrongIcon } from '../../../../components/Icons';
-import { useAppSelector } from '../../../../app/hooks';
-import { selectAuth } from '../../../../redux/slices/authSlice';
-import { Button, EmptyContent, FormEdit, Helmet, PopUp } from '../../../../components';
-import { IAddressUser } from '../../../../interfaces';
+import { EditIcon, LocationEmptyIcon, PlusStrongIcon } from '@/components/Icons';
+import { useAppSelector } from '@/app/hooks';
+import { selectAuth } from '@/redux/slices/authSlice';
+import { Button, EmptyContent, FormEdit, Helmet, PopUp } from '@/components';
+import { IAddressUser } from '@/interfaces';
 const cx = classNames.bind(styles);
 type Props = {};
 const Address: React.FC<Props> = ({}) => {

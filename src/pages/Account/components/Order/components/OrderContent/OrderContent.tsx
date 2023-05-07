@@ -1,10 +1,10 @@
 import React, { useState, useEffect, memo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './OrderContent.module.scss';
-import { useDebounce } from '../../../../../../hooks';
-import { IOrder } from '../../../../../../models';
-import { IOrderItem } from '../../../../../../interfaces';
-import { SearchInput } from '../../../../../../components';
+import { useDebounce } from '@/hooks';
+import { IOrder } from '@/models';
+import { IOrderItem } from '@/interfaces';
+import { SearchInput } from '@/components';
 import OrderItem from '../OrderItem';
 const cx = classNames.bind(styles);
 

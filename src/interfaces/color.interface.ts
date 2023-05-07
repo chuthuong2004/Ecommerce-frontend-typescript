@@ -1,4 +1,4 @@
-import { ISize } from '../interfaces';
+import { ISize } from '@/interfaces';
 
 export interface IColor {
   images: string[];

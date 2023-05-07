@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './GuideSize.module.scss';
 import { CloseIcon } from '../Icons';
-import { IGuideSize } from '../../interfaces';
+import { IGuideSize } from '@/interfaces';
 const cx = classNames.bind(styles);
 
 const guideSizes: IGuideSize[] = [

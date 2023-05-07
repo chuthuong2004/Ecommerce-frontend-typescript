@@ -1,8 +1,7 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import styles from './MenuSub.module.scss';
-import PropTypes from 'prop-types';
-import { ISubLink } from '../../../../../assets/headerLinks';
+import { ISubLink } from '@/assets/headerLinks';
 import { memo } from 'react';
 const cx = classNames.bind(styles);
 type Props = {

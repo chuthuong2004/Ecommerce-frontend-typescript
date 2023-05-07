@@ -1,5 +1,9 @@
+import { useState, useRef, useEffect, useCallback, memo } from 'react';
 import styles from './Payment.module.scss';
 import classNames from 'classnames/bind';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
@@ -13,20 +17,18 @@ import {
   ShopeePayIcon,
   VisaIcon,
   VNPayIcon,
-} from '../../components/Icons';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import config from '../../config';
-import { useState, useRef, useEffect, useCallback, memo } from 'react';
-import { logout, selectAuth } from '../../redux/slices/authSlice';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { clearCart, selectCart } from '../../redux/slices/cartSlice';
-import { useCreateNewOrderMutation } from '../../services/ordersApi';
-import { toast } from 'react-toastify';
-import { useGetMyCartQuery } from '../../services/cartsApi';
-import { useLogoutUserMutation } from '../../services/authApi';
-import { IAddress, IAddressUser, ICartItem, IDistrict, IProvince, IWard } from '../../interfaces';
-import { provinceApi } from '../../services';
-import { Button, Helmet, Input, Loading, Select } from '../../components';
+} from '@/components/Icons';
+import config from '@/config';
+import { logout, selectAuth } from '@/redux/slices/authSlice';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { clearCart, selectCart } from '@/redux/slices/cartSlice';
+import { useCreateNewOrderMutation } from '@/services/ordersApi';
+import { useGetMyCartQuery } from '@/services/cartsApi';
+import { useLogoutUserMutation } from '@/services/authApi';
+import { IAddress, IAddressUser, ICartItem, IDistrict, IProvince, IWard } from '@/interfaces';
+import { provinceApi } from '@/services';
+import { Button, Helmet, Input, Loading, Select } from '@/components';
+
 const cx = classNames.bind(styles);
 
 type Props = {

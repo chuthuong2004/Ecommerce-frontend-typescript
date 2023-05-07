@@ -1,14 +1,14 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { store } from './redux/store';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import SocketsProvider from './context/socket.context';
 import { GlobalStyles } from './components';
+import App from './App';
+import SocketsProvider from './context/socket.context';
+import { store } from './redux/store';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);

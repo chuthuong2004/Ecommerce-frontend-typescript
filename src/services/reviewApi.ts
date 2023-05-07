@@ -1,5 +1,5 @@
-import { IInputReview } from '../interfaces';
-import axiosClient from './axiosClient';
+import { axiosClient } from '@/api';
+import { IInputReview } from '@/interfaces';
 
 const reviewApi = {
   create: (reviews: IInputReview[]): Promise<{ message: string }> => {

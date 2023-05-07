@@ -1,5 +1,5 @@
-import { IColor } from '../interfaces';
-import { IProduct } from '../models';
+import { IColor } from '@/interfaces';
+import { IProduct } from '@/models';
 
 export interface IFavorite {
   product: IProduct;

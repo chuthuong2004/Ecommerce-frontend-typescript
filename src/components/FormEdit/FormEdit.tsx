@@ -3,8 +3,8 @@ import classNames from 'classnames/bind';
 import React from 'react';
 import styles from './FormEdit.module.scss';
 import { CloseIcon } from '../Icons';
-import { EvaluateProduct, EditAddress, EditInformation } from '../';
-import { IAddressUser, IOrderItem } from '../../interfaces';
+import { EvaluateProduct, EditAddress, EditInformation } from '@/components';
+import { IAddressUser, IOrderItem } from '@/interfaces';
 const cx = classNames.bind(styles);
 
 type Props = {

@@ -1,5 +1,5 @@
-import { IMessage } from '../models';
-import axiosClient from './axiosClient';
+import { axiosClient } from '@/api';
+import { IMessage } from '@/models';
 
 const messageApi = {
   create: (body: {

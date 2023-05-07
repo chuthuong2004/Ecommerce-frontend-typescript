@@ -1,4 +1,4 @@
-import { IAddressUser, IFavorite } from '../interfaces';
+import { IAddressUser, IFavorite } from '@/interfaces';
 
 export interface IUser {
   _id: string;

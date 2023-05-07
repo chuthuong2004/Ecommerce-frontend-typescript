@@ -2,14 +2,8 @@ import classNames from 'classnames/bind';
 import styles from './Men.module.scss';
 import { catalogs, slides, brandsMen } from './dataMen';
 import { features } from '../Kids/dataKids';
-import { IBrand, ICatalog } from '../../../../models';
-import {
-  BlockTitle,
-  CategoryContainer,
-  Feature,
-  Slide,
-  TradeMarkProduct,
-} from '../../../../components';
+import { IBrand, ICatalog } from '@/models';
+import { BlockTitle, CategoryContainer, Feature, Slide, TradeMarkProduct } from '@/components';
 import { memo } from 'react';
 const cx = classNames.bind(styles);
 const Men = () => {

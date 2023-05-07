@@ -1,5 +1,5 @@
-import { IConversation } from '../models';
-import axiosClient from './axiosClient';
+import { axiosClient } from '@/api';
+import { IConversation } from '@/models';
 
 const conversationApi = {
   create: (body: { receiverId: string }): Promise<IConversation> => {

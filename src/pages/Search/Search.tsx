@@ -6,10 +6,10 @@ import { BiSortAlt2 } from 'react-icons/bi';
 import HeadlessTippy from '@tippyjs/react/headless';
 import 'tippy.js/dist/tippy.css';
 import Loading from 'react-loading';
-import { Button, ProductItem } from '../../components';
-import { ESort } from '../../interfaces';
-import { IProduct } from '../../models';
-import { productApi } from '../../services';
+import { Button, ProductItem } from '@/components';
+import { ESort } from '@/interfaces';
+import { IProduct } from '@/models';
+import { productApi } from '@/services';
 const cx = classNames.bind(styles);
 const Search = () => {
   const useQuery = () => new URLSearchParams(useLocation().search);

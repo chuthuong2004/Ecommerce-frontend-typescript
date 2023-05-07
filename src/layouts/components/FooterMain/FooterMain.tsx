@@ -1,8 +1,8 @@
 import styles from './FooterMain.module.scss';
 import classNames from 'classnames/bind';
-import { AppStoreImage, GooglePlayImage } from '../../../components/Icons';
+import { AppStoreImage, GooglePlayImage } from '@/components/Icons';
 import { Link } from 'react-router-dom';
-import { colLinks } from '../../../assets/colLinks';
+import { colLinks } from '@/assets/colLinks';
 import { memo } from 'react';
 const cx = classNames.bind(styles);
 function FooterMain() {

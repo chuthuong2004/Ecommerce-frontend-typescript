@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
 
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { CloseIcon, MinusIcon, PlusStrongIcon } from '../Icons';
 
 import {
@@ -14,20 +14,20 @@ import {
   removeFromCart,
   selectCart,
   setCart,
-} from '../../redux/slices/cartSlice';
-import { selectAuth } from '../../redux/slices/authSlice';
+} from '@/redux/slices/cartSlice';
+import { selectAuth } from '@/redux/slices/authSlice';
 import {
   useAddItemToCartMutation,
   useRemoveItemFromCartMutation,
   useUpdateQuantityCartMutation,
-} from '../../services/cartsApi';
-import { useGetMyProfileQuery } from '../../services/authApi';
-import { productApi } from '../../services';
+} from '@/services/cartsApi';
+import { useGetMyProfileQuery } from '@/services/authApi';
+import { productApi } from '@/services';
 
 import styles from './ItemCart.module.scss';
-import config from '../../config';
+import config from '@/config';
 import { Button, Dialog, Loading } from '..';
-import { EActionCart, ICartItem } from '../../interfaces';
+import { EActionCart, ICartItem } from '@/interfaces';
 const cx = classNames.bind(styles);
 type Props = {
   cartItem: ICartItem;

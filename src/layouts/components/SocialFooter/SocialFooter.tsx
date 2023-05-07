@@ -11,7 +11,7 @@ import {
   VNPayIcon,
   YoutubeIcon,
   ZaloIcon,
-} from '../../../components/Icons';
+} from '@/components/Icons';
 import { memo } from 'react';
 const cx = classNames.bind(styles);
 const socialList = [

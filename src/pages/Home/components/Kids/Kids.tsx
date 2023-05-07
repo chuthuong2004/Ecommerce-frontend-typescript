@@ -3,8 +3,8 @@ import { features, brandsKid } from './dataKids';
 import classNames from 'classnames/bind';
 import styles from './Kids.module.scss';
 import { catalogs } from '../Men/dataMen';
-import { IBrand, ICatalog } from '../../../../models';
-import { BlockTitle, CategoryContainer, Feature, TradeMarkProduct } from '../../../../components';
+import { IBrand, ICatalog } from '@/models';
+import { BlockTitle, CategoryContainer, Feature, TradeMarkProduct } from '@/components';
 const cx = classNames.bind(styles);
 const Kids: React.FC = () => {
   const categoriesKids = catalogs.map((catalog: ICatalog) => {

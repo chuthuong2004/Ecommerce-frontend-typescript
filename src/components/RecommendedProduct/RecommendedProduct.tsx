@@ -1,7 +1,7 @@
 import styles from './RecommendedProduct.module.scss';
 import classNames from 'classnames/bind';
 import SlideProduct from '../SlideProduct';
-import { brandsKid } from '../../pages/Home/components/Kids/dataKids';
+import { brandsKid } from '@/pages/Home/components/Kids/dataKids';
 import { memo } from 'react';
 const cx = classNames.bind(styles);
 type Props = {

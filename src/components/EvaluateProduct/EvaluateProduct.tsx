@@ -4,10 +4,10 @@ import { toast } from 'react-toastify';
 import ReactLoading from 'react-loading';
 import { Rating } from 'react-simple-star-rating';
 
-import { Button } from '../../components';
-import { reviewApi } from '../../services';
+import { Button } from '@/components';
+import { reviewApi } from '@/services';
 import styles from './EvaluateProduct.module.scss';
-import { IInputReview, IOrderItem } from '../../interfaces';
+import { IInputReview, IOrderItem } from '@/interfaces';
 
 const cx = classNames.bind(styles);
 type Props = {

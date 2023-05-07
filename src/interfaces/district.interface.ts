@@ -1,4 +1,4 @@
-import { IWard } from '../interfaces';
+import { IWard } from '@/interfaces';
 
 export interface IDistrict {
   name: string;

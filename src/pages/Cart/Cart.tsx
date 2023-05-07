@@ -1,13 +1,13 @@
 import classNames from 'classnames/bind';
 import styles from './Cart.module.scss';
-import { BagIconLarge, PointerIcon } from '../../components/Icons';
-import config from '../../config';
-import { useAppSelector } from '../../app/hooks';
-import { selectCart } from '../../redux/slices/cartSlice';
+import { BagIconLarge, PointerIcon } from '@/components/Icons';
+import config from '@/config';
+import { useAppSelector } from '@/app/hooks';
+import { selectCart } from '@/redux/slices/cartSlice';
 import { memo, useEffect, useState } from 'react';
-import { ICartItem } from '../../interfaces';
-import { Button, EmptyContent, Input, ItemCart, RecommendedProduct } from '../../components';
-import { Footer, SocialFooter } from '../../layouts/components';
+import { ICartItem } from '@/interfaces';
+import { Button, EmptyContent, Input, ItemCart, RecommendedProduct } from '@/components';
+import { Footer, SocialFooter } from '@/layouts/components';
 const cx = classNames.bind(styles);
 const Cart = () => {
   let cart = useAppSelector(selectCart);

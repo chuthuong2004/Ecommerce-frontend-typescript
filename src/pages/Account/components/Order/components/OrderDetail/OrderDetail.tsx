@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef, memo } from 'react';
 import styles from './OrderDetail.module.scss';
 import classNames from 'classnames/bind';
-import { useCancelOrderMutation, useGetOrderByIdQuery } from '../../../../../../services/ordersApi';
-import { CopyIcon, MessageIcon } from '../../../../../../components/Icons';
+import { useCancelOrderMutation, useGetOrderByIdQuery } from '@/services/ordersApi';
+import { CopyIcon, MessageIcon } from '@/components/Icons';
 import { toast } from 'react-toastify';
 import ReactLoading from 'react-loading';
-import { useAddItemToCartMutation } from '../../../../../../services/cartsApi';
-import config from '../../../../../../config';
+import { useAddItemToCartMutation } from '@/services/cartsApi';
+import config from '@/config';
 import { useNavigate } from 'react-router-dom';
-import { IOrder } from '../../../../../../models';
-import { Button, FormEdit, Input, Loading, PopUp } from '../../../../../../components';
-import { EOrderStatus, IOrderItem } from '../../../../../../interfaces';
-import OrderItemProduct from '../OrderItemProduct';
+import { IOrder } from '@/models';
+import { Button, FormEdit, Input, Loading, PopUp } from '@/components';
+import { EOrderStatus, IOrderItem } from '@/interfaces';
+import { OrderItemProduct } from '..';
 const cx = classNames.bind(styles);
 type Props = {
   orderId: string;
