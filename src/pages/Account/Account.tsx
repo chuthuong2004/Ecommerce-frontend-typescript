@@ -1,25 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import styles from './Account.module.scss';
 import classNames from 'classnames/bind';
 import { NavLink, Link, useLocation, useParams, useNavigate } from 'react-router-dom';
 import config from '../../config';
-import AccountInfo from './components/AccountInfo';
-import Order from './components/Order';
-import Address from './components/Address';
-import RecentlyViewed from './components/RecentlyViewed';
 import { SideBarItem, sidebars } from '../../assets/sidebars';
 import { user } from '../../assets/fakeUser';
 import { ArrowLeftIcon, CameraIcon } from '../../components/Icons';
-import { FileResponse, IAddressUser } from '../../models/user.model';
-import { logout, selectAuth } from '../../features/authSlice';
+import { logout, selectAuth } from '../../redux/slices/authSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useLogoutUserMutation, useUpdateProfileMutation } from '../../services/authApi';
 import { toast } from 'react-toastify';
-import { clearCart } from '../../features/cartSlice';
-import axiosClient from '../../api/axiosClient';
-import Loading from '../../components/Loading';
-import { Helmet } from '../../components';
-import { uploadApi } from '../../api';
+import { clearCart } from '../../redux/slices/cartSlice';
+import { Helmet, Loading } from '../../components';
+import { uploadApi } from '../../services';
+import { FileResponse } from '../../interfaces';
+import { AccountInfo, Address, Order, RecentlyViewed } from './components';
 const cx = classNames.bind(styles);
 
 const Account = () => {
@@ -168,4 +163,4 @@ const Account = () => {
   );
 };
 
-export default Account;
+export default memo(Account);

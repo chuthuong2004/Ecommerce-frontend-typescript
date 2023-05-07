@@ -1,12 +1,12 @@
-import React, { useRef, memo, useState } from 'react';
-import { ArrowRightIcon, CopyIcon } from '../../../../../components/Icons';
-import { EOrderStatus } from '../../../../../models/order.model';
+import React, { useRef, memo } from 'react';
+import { ArrowRightIcon, CopyIcon } from '../../../../../../components/Icons';
 import classNames from 'classnames/bind';
 import styles from './OrderItem.module.scss';
-import { IOrder } from '../../../../../models/order.model';
-import { Link, useNavigate } from 'react-router-dom';
-import config from '../../../../../config';
-import OrderItemProduct from '../OrderItemProduct/OrderItemProduct';
+import { Link } from 'react-router-dom';
+import config from '../../../../../../config';
+import { IOrder } from '../../../../../../models';
+import { EOrderStatus } from '../../../../../../interfaces';
+import OrderItemProduct from '../OrderItemProduct';
 const cx = classNames.bind(styles);
 type Props = {
   order: IOrder;

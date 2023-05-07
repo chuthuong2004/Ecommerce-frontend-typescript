@@ -1,21 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import styles from './OrderDetail.module.scss';
 import classNames from 'classnames/bind';
-import { useCancelOrderMutation, useGetOrderByIdQuery } from '../../../../../services/ordersApi';
-import Loading from '../../../../../components/Loading';
-import { BagIcon, CopyIcon, MessageIcon } from '../../../../../components/Icons';
-import { EOrderStatus, IOrder, IOrderItem } from '../../../../../models/order.model';
-import OrderItemProduct from '../OrderItemProduct';
-import Button from '../../../../../components/Button';
-import PopUp from '../../../../../components/PopUp';
-import Input from '../../../../../components/Input';
+import { useCancelOrderMutation, useGetOrderByIdQuery } from '../../../../../../services/ordersApi';
+import { CopyIcon, MessageIcon } from '../../../../../../components/Icons';
 import { toast } from 'react-toastify';
 import ReactLoading from 'react-loading';
-import { useSockets } from '../../../../../context/socket.context';
-import { useAddItemToCartMutation } from '../../../../../services/cartsApi';
-import config from '../../../../../config';
+import { useAddItemToCartMutation } from '../../../../../../services/cartsApi';
+import config from '../../../../../../config';
 import { useNavigate } from 'react-router-dom';
-import FormEdit from '../../../../../components/FormEdit';
+import { IOrder } from '../../../../../../models';
+import { Button, FormEdit, Input, Loading, PopUp } from '../../../../../../components';
+import { EOrderStatus, IOrderItem } from '../../../../../../interfaces';
+import OrderItemProduct from '../OrderItemProduct';
 const cx = classNames.bind(styles);
 type Props = {
   orderId: string;
@@ -298,4 +294,4 @@ const OrderDetail: React.FC<Props> = ({ orderId }) => {
   );
 };
 
-export default OrderDetail;
+export default memo(OrderDetail);

@@ -5,8 +5,6 @@ import { FacebookIcon, GoogleIcon, LeftIcon, LogoIcon } from '../../components/I
 import styles from './Login.module.scss';
 import config from '../../config';
 import { useState, useEffect, useCallback, FocusEvent, useRef } from 'react';
-import Input from '../../components/Input';
-import Button from '../../components/Button';
 import {
   useForgotPasswordMutation,
   useLoginUserMutation,
@@ -14,15 +12,16 @@ import {
   useRegisterUserMutation,
 } from '../../services/authApi';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setCredentials } from '../../features/authSlice';
+import { setCredentials } from '../../redux/slices/authSlice';
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAddItemToCartMutation } from '../../services/cartsApi';
-import { clearCart, selectCart } from '../../features/cartSlice';
-import { ICartItem } from '../../models/cart.model';
+import { clearCart, selectCart } from '../../redux/slices/cartSlice';
 import ReactLoading from 'react-loading';
 import jwt_decode from 'jwt-decode';
+import { ICartItem } from '../../interfaces';
+import { Button, Input } from '../../components';
 
 const cx = classNames.bind(styles);
 

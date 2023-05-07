@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,QAAQ,CAAC;EACL,KAAK,EAAE,KAAK;EACZ,SAAS,EAAE,IAAI;EACf,OAAO,EAAE,MAAM;EACf,MAAM,EAAE,MAAM;EACd,KAAK,EAAE,OAAO;EACd,UAAU,EAAE,MAAM;CAIrB;;AAVD,AAOI,QAPI,CAOJ,CAAC,CAAC;EACE,KAAK,EAAE,IAAI;CACd",
-    "sources": [
-        "NoPageFound.module.scss"
-    ],
-    "names": [],
-    "file": "NoPageFound.module.css"
-}

@@ -2,19 +2,8 @@
 
 // Pages
 import config from '../config';
-import Home from '../pages/Home';
-import Product from '../pages/Product';
-import Account from '../pages/Account';
-import Cart from '../pages/Cart';
-import Payment from '../pages/Payment/Payment';
-import Login from '../pages/Login/Login';
-import Collection from '../pages/Collection';
 import { HeaderOnly } from '../layouts';
-import Policy from '../pages/Policy';
-import React, { ReactNode } from 'react';
-import NoPageFound from '../pages/NoPageFound';
-import Search from '../pages/Search';
-// import NoPageFound from '../pages/NoPageFound';
+import React, { ReactNode, lazy } from 'react';
 
 type routeType = {
   path: string;
@@ -26,84 +15,84 @@ type routeType = {
 const publicRoutes: Array<routeType> = [
   {
     path: config.routes.home,
-    component: Home,
+    component: lazy(async () => await import('../pages/Home')),
   },
   {
     path: `${config.routes.product}/:slug`,
-    component: Product,
+    component: lazy(async () => await import('../pages/Product')),
   },
 
   {
     path: config.routes.receiveNotify,
-    component: Account,
+    component: lazy(async () => await import('../pages/Account')),
   },
   {
     path: config.routes.help,
-    component: Policy,
+    component: lazy(async () => await import('../pages/Policy')),
     layout: HeaderOnly,
   },
   {
     path: config.routes.partner,
-    component: Account,
+    component: lazy(async () => await import('../pages/Account')),
   },
   {
     path: config.routes.cart,
-    component: Cart,
+    component: lazy(async () => await import('../pages/Cart')),
     layout: HeaderOnly,
   },
   {
     path: config.routes.payment,
-    component: Payment,
+    component: lazy(async () => await import('../pages/Payment')),
     layout: null,
 
     private: true,
   },
   {
     path: config.routes.login,
-    component: Login,
+    component: lazy(async () => await import('../pages/Login')),
     layout: null,
   },
   {
     path: config.routes.register,
-    component: Login,
+    component: lazy(async () => await import('../pages/Login')),
     layout: null,
   },
   {
     path: `${config.routes.collections}/:slugCollection`,
-    component: Collection,
+    component: lazy(async () => await import('../pages/Collection')),
   },
   {
     path: config.routes.search,
-    component: Search,
+    component: lazy(async () => await import('../pages/Search')),
   },
   {
     path: config.routes.account,
-    component: Account,
+    component: lazy(async () => await import('../pages/Account')),
     private: true,
   },
   {
     path: config.routes.order,
-    component: Account,
+    component: lazy(async () => await import('../pages/Account')),
     private: true,
   },
   {
     path: `${config.routes.order}/:orderID`,
-    component: Account,
+    component: lazy(async () => await import('../pages/Account')),
     private: true,
   },
   {
     path: config.routes.address,
-    component: Account,
+    component: lazy(async () => await import('../pages/Account')),
     private: true,
   },
   {
     path: config.routes.recentlyViewed,
-    component: Account,
+    component: lazy(async () => await import('../pages/Account')),
     private: true,
   },
   {
     path: '*',
-    component: NoPageFound,
+    component: lazy(async () => await import('../pages/NoPageFound')),
   },
 ];
 const privateRoutes: Array<routeType> = [];

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from './RecentlyViewed.module.scss';
 import classNames from 'classnames/bind';
-import { IProduct } from '../../../../models/product.model';
-import ProductItem from '../../../../components/ProductItem';
 import { products } from './dummyData';
+import { IProduct } from '../../../../models';
+import { ProductItem } from '../../../../components';
 const cx = classNames.bind(styles);
 
 const RecentlyViewed = () => {
@@ -18,4 +18,4 @@ const RecentlyViewed = () => {
   );
 };
 
-export default RecentlyViewed;
+export default memo(RecentlyViewed);

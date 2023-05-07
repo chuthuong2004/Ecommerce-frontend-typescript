@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Header.module.scss';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import HeadlessTippy from '@tippyjs/react/headless';
@@ -23,14 +23,14 @@ import { Button, PopUp, WishList } from '../../../components';
 import { MenuMobile, MenuSub, Search } from './components';
 import { headerLinks } from '../../../assets/headerLinks';
 import { SideBarItem, sidebars } from '../../../assets/sidebars';
-import { logout, selectAuth, setCredentials } from '../../../features/authSlice';
+import { logout, selectAuth, setCredentials } from '../../../redux/slices/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { authApi, useGetMyProfileQuery, useLogoutUserMutation } from '../../../services/authApi';
 import { toast } from 'react-toastify';
-import { clearCart, selectCart, setCart } from '../../../features/cartSlice';
-import { cartsApi, useGetMyCartQuery } from '../../../services/cartsApi';
-import { ordersApi } from '../../../services/ordersApi';
+import { clearCart, selectCart, setCart } from '../../../redux/slices/cartSlice';
 import { isMobile } from 'react-device-detect';
+import { authApi, useGetMyProfileQuery, useLogoutUserMutation } from '../../../services/authApi';
+import { cartsApi, useGetMyCartQuery } from '../../../services/cartsApi';
+import { ordersApi } from '../../../services';
 const cx = classNames.bind(styles);
 
 function Header() {
@@ -366,4 +366,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default memo(Header);

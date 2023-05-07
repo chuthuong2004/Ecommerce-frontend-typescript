@@ -1,16 +1,15 @@
 import classNames from 'classnames/bind';
 import styles from './DefaultLayout.module.scss';
-import PropTypes from 'prop-types';
-import Header from '../components/Header/Header';
-import Footer from '../components/Footer/Footer';
 import config from '../../config';
-import ScrollToTop from '../components/ScrollToTop';
 import { useLocation, useParams } from 'react-router-dom';
-import React, { useEffect, ReactNode } from 'react';
-import Messenger from './../../components/Messenger';
+import React, { useEffect, ReactNode, Suspense, lazy } from 'react';
 import { useSockets } from '../../context/socket.context';
 import { useAppSelector } from '../../app/hooks';
-import { selectAuth } from '../../features/authSlice';
+import { selectAuth } from '../../redux/slices/authSlice';
+import { Footer, ScrollToTop } from '../components';
+import { Messenger } from '../../components';
+
+const Header = lazy(() => import('../components/Header'));
 const cx = classNames.bind(styles);
 
 type Props = {
@@ -36,12 +35,12 @@ const DefaultLayout: React.FC<Props> = ({ children }) => {
       {/* Header */}
       <ScrollToTop />
       <Messenger />
-      <Header />
-      {/* Container */}
+      <Suspense fallback={<div>Loading...</div>}>
+        <Header />
+      </Suspense>
       <div className={cx('container')}>
         <div className={cx('content')}> {children} </div>
       </div>
-      {/* Footer */}
       <Footer />
     </div>
   );

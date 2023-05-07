@@ -2,17 +2,11 @@ import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Collection.module.scss';
 import { CloseIcon, FilterIcon, MinusIcon, PlusIcon } from '../../components/Icons';
-import Button from '../../components/Button';
-import ProductItem from '../../components/ProductItem';
-import { useEffect, useState, useRef } from 'react';
-import productApi from '../../api/productApi';
-import { EGenderType, ESort, IActionFilter, IProduct } from '../../models/product.model';
-import Loading from '../../components/Loading';
-import Input from '../../components/Input';
-import categoryApi from '../../api/categoryApi';
-import { ICategory } from '../../models/category.model';
-import brandApi from '../../api/brandApi';
-import { IBrand } from '../../models/brand.model';
+import { useEffect, useState, useRef, memo } from 'react';
+import { IBrand, ICategory, IProduct } from '../../models';
+import { EGenderType, ESort, IActionFilter } from '../../interfaces';
+import { brandApi, categoryApi, productApi } from '../../services';
+import { Button, Loading, ProductItem } from '../../components';
 const cx = classNames.bind(styles);
 
 interface IFilter {
@@ -504,4 +498,4 @@ const Collection = () => {
   );
 };
 
-export default Collection;
+export default memo(Collection);

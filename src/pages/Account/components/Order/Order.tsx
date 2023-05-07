@@ -1,19 +1,15 @@
 import classNames from 'classnames/bind';
 import styles from './Order.module.scss';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { TruckEmptyIcon } from '../../../../components/Icons';
-import EmptyContent from '../../../../components/EmptyContent';
-import RecommendedProduct from '../../../../components/RecommendedProduct';
-import TabContent from '../../../../components/TabContent';
 import { useLocation, useParams } from 'react-router-dom';
 import config from '../../../../config';
-import { ITabContent } from '../../../../components/TabContent/TabContent';
-import { EOrderStatus, IOrder } from '../../../../models/order.model';
-import OrderContent from './OrderContent';
 import { useGetMyOrderQuery } from '../../../../services/ordersApi';
-import OrderDetail from './OrderDetail';
-import { Helmet } from '../../../../components';
+import { EmptyContent, Helmet, RecommendedProduct, TabContent } from '../../../../components';
+import { IOrder } from '../../../../models';
+import { EOrderStatus, ITabContent } from '../../../../interfaces';
+import { OrderContent, OrderDetail } from './components';
 const cx = classNames.bind(styles);
 
 const Order: React.FC = () => {
@@ -119,4 +115,4 @@ const Order: React.FC = () => {
   );
 };
 
-export default Order;
+export default memo(Order);

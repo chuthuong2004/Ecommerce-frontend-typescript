@@ -1,12 +1,12 @@
 import classNames from 'classnames/bind';
-import Button from '../../../components/Button/Button';
-import Input from '../../../components/Input/Input';
 import styles from './NewsLetterFooter.module.scss';
 import { useCallback, useState, FocusEvent, memo } from 'react';
+import { Button, Input } from '../../../components';
 const cx = classNames.bind(styles);
 const NewsLetterFooter = () => {
   const [email, setEmail] = useState<string>('');
   const [error, setError] = useState<{ email: string }>({ email: '' });
+
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     setError({ email: email || e.target.value ? '' : 'Trường này là bắt buộc.' });
   };

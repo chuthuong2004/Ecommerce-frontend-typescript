@@ -1,11 +1,10 @@
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
 import { useLocation, Link } from 'react-router-dom';
-import Men from './components/Men';
-import Women from './components/Women';
-import config from '../../config/index';
-import Kids from './components/Kids';
-import TradeMarkSlide from '../../components/TradeMarkSlide';
+import config from '../../config';
+import { Kids, Men, Women } from './components';
+import { TradeMarkSlide } from '../../components';
+import { memo } from 'react';
 const cx = classNames.bind(styles);
 const Home: React.FC = () => {
   const useQuery = () => new URLSearchParams(useLocation().search);
@@ -51,4 +50,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default memo(Home);

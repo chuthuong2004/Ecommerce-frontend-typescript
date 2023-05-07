@@ -1,15 +1,17 @@
 import classNames from 'classnames/bind';
 import styles from './Women.module.scss';
-import Slide from '../../../../components/Slide/Slide';
-import BlockTitle from '../../../../components/BlockTitle';
-import Feature from '../../../../components/Feature';
-import TradeMarkProduct from '../../../../components/TradeMarkProduct';
 import { brandsWomen, slides } from './dataWomen';
-import CategoryContainer from '../../../../components/CategoryContainer';
 import { catalogs } from '../Men/dataMen';
 import { features } from '../Kids/dataKids';
-import { IBrand } from '../../../../models/brand.model';
-import { ICatalog } from '../../../../models/catalog.model';
+import { IBrand, ICatalog } from '../../../../models';
+import {
+  BlockTitle,
+  CategoryContainer,
+  Feature,
+  Slide,
+  TradeMarkProduct,
+} from '../../../../components';
+import { memo } from 'react';
 const cx = classNames.bind(styles);
 const Women = () => {
   const categoriesWomen = catalogs.map((catalog: ICatalog) => {
@@ -36,4 +38,4 @@ const Women = () => {
     </div>
   );
 };
-export default Women;
+export default memo(Women);

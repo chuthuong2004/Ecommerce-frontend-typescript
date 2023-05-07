@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import productApi from '../../api/productApi';
-import ProductItem from '../../components/ProductItem';
-import { ESort, IProduct } from '../../models/product.model';
+import React, { useState, useEffect, memo } from 'react';
 import styles from './Search.module.scss';
 import classNames from 'classnames/bind';
 import { useLocation } from 'react-router-dom';
-import Button from '../../components/Button';
-import { FilterIcon } from '../../components/Icons';
 import { BiSortAlt2 } from 'react-icons/bi';
-import Loading from '../../components/Loading';
-import { Wrapper as PopperWrapper } from '../../components/Popper';
 import HeadlessTippy from '@tippyjs/react/headless';
-import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import Loading from 'react-loading';
+import { Button, ProductItem } from '../../components';
+import { ESort } from '../../interfaces';
+import { IProduct } from '../../models';
+import { productApi } from '../../services';
 const cx = classNames.bind(styles);
 const Search = () => {
   const useQuery = () => new URLSearchParams(useLocation().search);
@@ -39,6 +36,7 @@ const Search = () => {
 
     fetchListProduct();
   }, [query.get('q'), actionSort]);
+
   const renderTippy = (attrs: any) => (
     <div className={cx('menu-more')} tabIndex="-1" {...attrs}>
       <div className={cx('action-more')}>
@@ -152,4 +150,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default memo(Search);

@@ -7,7 +7,7 @@ import { CloseIcon, LogoIcon, SearchIcon, SearchIconLarge } from '../../../../..
 import config from '../../../../../config';
 import Input from '../../../../../components/Input';
 import SearchInput from '../../../../../components/SearchInput';
-import OrderItemProduct from '../../../../../pages/Account/components/Order/OrderItemProduct';
+import OrderItemProduct from '../../../../../pages/Account/components/Order/components/OrderItemProduct';
 import EmptyContent from '../../../../../components/EmptyContent';
 
 const cx = classNames.bind(styles);

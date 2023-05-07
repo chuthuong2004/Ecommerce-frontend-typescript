@@ -1,14 +1,10 @@
-import Input from '../../../../components/Input';
 import styles from './AccountInfo.module.scss';
 import classNames from 'classnames/bind';
-import Button from '../../../../components/Button';
 import React, { memo, useState } from 'react';
-import { IAddress } from '../../../../models/user.model';
-import PopUp from './../../../../components/PopUp/PopUp';
 import { useAppSelector } from '../../../../app/hooks';
-import { selectAuth } from '../../../../features/authSlice';
+import { selectAuth } from '../../../../redux/slices/authSlice';
 import moment from 'moment';
-import FormEdit from '../../../../components/FormEdit';
+import { Button, FormEdit, Input, PopUp } from '../../../../components';
 const cx = classNames.bind(styles);
 type Props = {};
 

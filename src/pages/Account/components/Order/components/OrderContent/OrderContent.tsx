@@ -1,12 +1,11 @@
-import React, { useState, useEffect, memo, useRef } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './OrderContent.module.scss';
-import { IOrder, IOrderItem } from '../../../../../models/order.model';
-import { CloseIcon, SearchIcon } from '../../../../../components/Icons';
+import { useDebounce } from '../../../../../../hooks';
+import { IOrder } from '../../../../../../models';
+import { IOrderItem } from '../../../../../../interfaces';
+import { SearchInput } from '../../../../../../components';
 import OrderItem from '../OrderItem';
-import { useDebounce } from '../../../../../hooks';
-import ReactLoading from 'react-loading';
-import SearchInput from '../../../../../components/SearchInput';
 const cx = classNames.bind(styles);
 
 type Props = {
@@ -39,6 +38,7 @@ const OrderContent: React.FC<Props> = ({ data }) => {
     };
     handleSearch();
   }, [debouncedValue]);
+
   useEffect(() => {
     setSearchInput('');
     setLoading(false);
@@ -74,4 +74,4 @@ const OrderContent: React.FC<Props> = ({ data }) => {
   );
 };
 
-export default OrderContent;
+export default memo(OrderContent);

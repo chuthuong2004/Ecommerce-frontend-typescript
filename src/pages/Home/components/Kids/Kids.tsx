@@ -1,15 +1,10 @@
-import React from 'react';
-import Slide from '../../../../components/Slide/Slide';
-import BlockTitle from '../../../../components/BlockTitle/BlockTitle';
-import Feature from '../../../../components/Feature/Feature';
-import TradeMarkProduct from '../../../../components/TradeMarkProduct/TradeMarkProduct';
-import CategoryContainer from '../../../../components/CategoryContainer/CategoryContainer';
-import { features, slides, brandsKid } from './dataKids';
+import React, { memo } from 'react';
+import { features, brandsKid } from './dataKids';
 import classNames from 'classnames/bind';
 import styles from './Kids.module.scss';
 import { catalogs } from '../Men/dataMen';
-import { ICatalog } from '../../../../models/catalog.model';
-import { IBrand } from '../../../../models/brand.model';
+import { IBrand, ICatalog } from '../../../../models';
+import { BlockTitle, CategoryContainer, Feature, TradeMarkProduct } from '../../../../components';
 const cx = classNames.bind(styles);
 const Kids: React.FC = () => {
   const categoriesKids = catalogs.map((catalog: ICatalog) => {
@@ -36,4 +31,4 @@ const Kids: React.FC = () => {
   );
 };
 
-export default Kids;
+export default memo(Kids);

@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import { AppStoreImage, GooglePlayImage } from '../../../components/Icons';
 import { Link } from 'react-router-dom';
 import { colLinks } from '../../../assets/colLinks';
+import { memo } from 'react';
 const cx = classNames.bind(styles);
 function FooterMain() {
   return (
@@ -48,4 +49,4 @@ function FooterMain() {
   );
 }
 
-export default FooterMain;
+export default memo(FooterMain);

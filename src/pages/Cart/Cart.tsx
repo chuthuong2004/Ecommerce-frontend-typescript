@@ -1,18 +1,13 @@
 import classNames from 'classnames/bind';
 import styles from './Cart.module.scss';
-import Button from '../../components/Button';
 import { BagIconLarge, PointerIcon } from '../../components/Icons';
-import Input from '../../components/Input';
-import ItemCart from '../../components/ItemCart';
-import SocialFooter from '../../layouts/components/SocialFooter';
-import Footer from '../../layouts/components/Footer';
 import config from '../../config';
-import EmptyContent from '../../components/EmptyContent';
-import RecommendedProduct from '../../components/RecommendedProduct/RecommendedProduct';
-import { ICartItem } from '../../models/cart.model';
 import { useAppSelector } from '../../app/hooks';
-import { selectCart } from '../../features/cartSlice';
-import { useEffect, useState } from 'react';
+import { selectCart } from '../../redux/slices/cartSlice';
+import { memo, useEffect, useState } from 'react';
+import { ICartItem } from '../../interfaces';
+import { Button, EmptyContent, Input, ItemCart, RecommendedProduct } from '../../components';
+import { Footer, SocialFooter } from '../../layouts/components';
 const cx = classNames.bind(styles);
 const Cart = () => {
   let cart = useAppSelector(selectCart);
@@ -184,4 +179,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default memo(Cart);

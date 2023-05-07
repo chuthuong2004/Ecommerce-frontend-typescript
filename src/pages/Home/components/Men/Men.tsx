@@ -1,17 +1,16 @@
 import classNames from 'classnames/bind';
 import styles from './Men.module.scss';
-import Slide from '../../../../components/Slide';
-import BlockTitle from '../../../../components/BlockTitle';
-import Feature from '../../../../components/Feature';
 import { catalogs, slides, brandsMen } from './dataMen';
-import TradeMarkProduct from '../../../../components/TradeMarkProduct';
-import CategoryContainer from '../../../../components/CategoryContainer';
 import { features } from '../Kids/dataKids';
-import { IBrand } from '../../../../models/brand.model';
-import { ICatalog } from '../../../../models/catalog.model';
-import { useEffect, useState } from 'react';
-import { IProduct } from '../../../../models/product.model';
-import productApi from '../../../../api/productApi';
+import { IBrand, ICatalog } from '../../../../models';
+import {
+  BlockTitle,
+  CategoryContainer,
+  Feature,
+  Slide,
+  TradeMarkProduct,
+} from '../../../../components';
+import { memo } from 'react';
 const cx = classNames.bind(styles);
 const Men = () => {
   // const [productOfMlb, setProductOfMlb] = useState<IProduct[]>([])
@@ -50,4 +49,4 @@ const Men = () => {
   );
 };
 
-export default Men;
+export default memo(Men);
