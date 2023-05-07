@@ -1,3 +1,5 @@
+import { IGenderCatalog } from '../interfaces';
+
 export interface ICatalog {
   _id: string;
   name: string;
@@ -7,11 +9,4 @@ export interface ICatalog {
   createdAt: string;
   updatedAt: string;
   __v: number;
-}
-interface IGenderCatalog {
-  productType: string;
-  image: string;
-  description: string;
-  _id: string;
-  slug: string;
 }

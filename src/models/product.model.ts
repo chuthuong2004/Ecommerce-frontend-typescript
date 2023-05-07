@@ -1,25 +1,6 @@
-import { IBrand } from './brand.model';
-import { ICategory } from './category.model';
+import { IColor } from '../interfaces';
+import { IBrand, ICategory } from '../models';
 
-export enum EGenderType {
-  Woman = 'women',
-  Man = 'man',
-  Kid = 'kid',
-  Unisex = 'unisex',
-}
-export interface ISize {
-  size: string | number;
-  quantity: number;
-  _id: string;
-}
-export interface IColor {
-  images: string[];
-  imageSmall: string;
-  imageMedium: string;
-  colorName: string;
-  sizes: ISize[];
-  _id: string;
-}
 export interface IProduct {
   name: string;
   description: string;
@@ -44,33 +25,4 @@ export interface IProduct {
   _id: string;
   __v: number;
   deletedAt?: string;
-}
-export interface IQueryOptions {
-  page?: number;
-  limit?: number;
-  sort?: string;
-}
-export interface IResponseProducts {
-  countDocument: number;
-  resultPerPage: number;
-  data: IProduct[];
-}
-export enum ESort {
-  MOST_POPULAR = '-likeCount',
-  LATEST = '-createdAt',
-  BEST_SELLER = '-quantitySold',
-  PRICE_INCREASE = 'price',
-  PRICE_DECREASE = '-price',
-}
-export interface IFilter {
-  gender: string;
-  brand: string[];
-  category: string[];
-  color: string;
-  size: string;
-  price: string;
-}
-export interface IActionFilter {
-  sort: string;
-  filter?: IFilter;
 }

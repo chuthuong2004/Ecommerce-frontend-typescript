@@ -1,4 +1,4 @@
-import { IProduct } from './product.model';
+import { IProduct } from '../models';
 
 export interface IBrand {
   name: string;

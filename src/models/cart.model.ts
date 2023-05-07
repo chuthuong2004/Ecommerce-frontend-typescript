@@ -1,5 +1,5 @@
-import { IProduct } from './product.model';
-import { IUser } from './user.model';
+import { ICartItem } from '../interfaces';
+import { IUser } from '../models';
 
 export interface ICart {
   _id: string;
@@ -8,18 +8,4 @@ export interface ICart {
   createdAt: string;
   updatedAt: string;
   __v?: number;
-}
-export interface ICartItem {
-  product: IProduct;
-  quantity: number;
-  size: string | number;
-  color: string;
-  image: string;
-  _id?: string;
-}
-export enum EActionCart {
-  ADD = 'add',
-  REMOVE = 'remove',
-  INCREASE = 'increase',
-  DECREASE = 'decrease',
 }

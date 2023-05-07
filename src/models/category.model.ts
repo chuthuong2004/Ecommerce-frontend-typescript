@@ -1,5 +1,4 @@
-import { ICatalog } from './catalog.model';
-import { EGenderType, IProduct } from './product.model';
+import { ICatalog, IProduct } from '../models';
 
 export interface ICategory {
   _id: string;

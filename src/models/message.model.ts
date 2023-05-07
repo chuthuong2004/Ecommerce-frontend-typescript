@@ -1,4 +1,4 @@
-import { IUser } from './user.model';
+import { IUser } from '../models';
 
 export interface IMessage {
   _id: string;
