@@ -7,10 +7,8 @@ import styles from './EditAddress.module.scss';
 
 import { Button, Select, Input } from '../';
 import { IAddressUser, IDistrict, IProvince, IWard } from '../../interfaces';
-import { selectAuth } from '../../features/slices/authSlice';
-import { useAppSelector } from '../../app/hooks';
 import { useAddAddressMutation, useUpdateAddressMutation } from '../../services/authApi';
-import { provinceApi } from '../../api';
+import { provinceApi } from '../../services';
 
 const cx = classNames.bind(styles);
 

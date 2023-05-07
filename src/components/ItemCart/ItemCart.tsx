@@ -14,15 +14,15 @@ import {
   removeFromCart,
   selectCart,
   setCart,
-} from '../../features/slices/cartSlice';
-import { selectAuth } from '../../features/slices/authSlice';
+} from '../../redux/slices/cartSlice';
+import { selectAuth } from '../../redux/slices/authSlice';
 import {
   useAddItemToCartMutation,
   useRemoveItemFromCartMutation,
   useUpdateQuantityCartMutation,
 } from '../../services/cartsApi';
 import { useGetMyProfileQuery } from '../../services/authApi';
-import { productApi } from '../../api';
+import { productApi } from '../../services';
 
 import styles from './ItemCart.module.scss';
 import config from '../../config';

@@ -5,7 +5,7 @@ import ReactLoading from 'react-loading';
 import { Rating } from 'react-simple-star-rating';
 
 import { Button } from '../../components';
-import { reviewApi } from '../../api';
+import { reviewApi } from '../../services';
 import styles from './EvaluateProduct.module.scss';
 import { IInputReview, IOrderItem } from '../../interfaces';
 

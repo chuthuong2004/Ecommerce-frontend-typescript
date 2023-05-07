@@ -5,7 +5,6 @@ import classNames from 'classnames/bind';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './SlickSlide.scss';
-import { NextArrowIcon, PrevArrowIcon } from '../Icons';
 import { ISlide } from '../../pages/Home/components/Women/dataWomen';
 import { NextArrow, PrevArrow } from '..';
 import { memo, useRef } from 'react';
