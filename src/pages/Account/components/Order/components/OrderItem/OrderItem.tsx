@@ -30,7 +30,7 @@ const OrderItem: React.FC<Props> = ({ order }) => {
             <span className={cx('copied')}>Copied</span>
           </span>
         </div>
-        <Link to={`${config.routes.order}/${order.orderId}`} className={cx('order__status')}>
+        <Link to={`${config.routes.order}/${order._id}`} className={cx('order__status')}>
           <span>
             {order.orderStatus === EOrderStatus.Processing && 'Đang xử lý'}
             {order.orderStatus === EOrderStatus.Shipping && 'Đang vận chuyển'}

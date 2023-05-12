@@ -103,7 +103,7 @@ const Product = () => {
         const res = await productApi.getBySlug(slug);
         if (res) {
           console.log(res);
-          if (user) setProduct(res);
+          setProduct(res);
           setDefaultColor(location.state?.colorSelected || res.colors[0]);
           setDefaultSize(location.state?.colorSelected.sizes[0] || res.colors[0].sizes[0]);
           setIsFavorited(res.favorites.includes(user?._id || ''));
