@@ -140,7 +140,7 @@ const Search: React.FC<Props> = ({ handleClose }) => {
               <h5>Gợi ý cho bạn</h5>
               <div className={cx('search-bar-product-item')}>
                 {product.map((item) => (
-                  <div className={cx('product-loop-suggest')}>
+                  <div key={item._id} className={cx('product-loop-suggest')}>
                     <img
                       className={cx('product-img')}
                       src={process.env.REACT_APP_API_URL + item.image}
@@ -162,7 +162,7 @@ const Search: React.FC<Props> = ({ handleClose }) => {
                   </div>
                 ))}
                 {product.map((item) => (
-                  <div className={cx('product-loop-suggest')}>
+                  <div key={item._id} className={cx('product-loop-suggest')}>
                     <img
                       className={cx('product-img')}
                       src={process.env.REACT_APP_API_URL + item.image}

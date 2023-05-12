@@ -309,7 +309,7 @@ const TradeMarkSlide = () => {
               className={cx('slider')}
             >
               {linkList.map((link, i) => (
-                <SwiperSlide className={cx('slide-item')}>
+                <SwiperSlide key={i} className={cx('slide-item')}>
                   <Link to={link.to}>{link.icon}</Link>
                 </SwiperSlide>
               ))}

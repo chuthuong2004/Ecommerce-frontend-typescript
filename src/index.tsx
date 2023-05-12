@@ -14,24 +14,24 @@ const container = document.getElementById('root')!;
 const root = createRoot(container);
 let persistor = persistStore(store);
 root.render(
-  <React.StrictMode>
-    <GoogleOAuthProvider
-      clientId={
-        process.env.REACT_APP_GOOGLE_CLIENT_ID ||
-        '258122201888-nki79uqhlu4g7tbmj5cukepcqvcs2d5u.apps.googleusercontent.com'
-      }
-    >
-      <Provider store={store}>
-        <PersistGate persistor={persistor}>
-          <SocketsProvider>
-            <GlobalStyles>
-              <App />
-            </GlobalStyles>
-          </SocketsProvider>
-        </PersistGate>
-      </Provider>
-    </GoogleOAuthProvider>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <GoogleOAuthProvider
+    clientId={
+      process.env.REACT_APP_GOOGLE_CLIENT_ID ||
+      '258122201888-nki79uqhlu4g7tbmj5cukepcqvcs2d5u.apps.googleusercontent.com'
+    }
+  >
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <SocketsProvider>
+          <GlobalStyles>
+            <App />
+          </GlobalStyles>
+        </SocketsProvider>
+      </PersistGate>
+    </Provider>
+  </GoogleOAuthProvider>,
+  // </React.StrictMode>,
 );
 
 // If you want to start measuring performance in your app, pass a function

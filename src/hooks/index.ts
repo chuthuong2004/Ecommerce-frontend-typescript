@@ -1,2 +1,4 @@
-export { default as useDebounce }
-from './useDebounce';
+import useDebounce from './useDebounce';
+import useSearchProducts from './useSearchProducts';
+import useProducts from './useProducts';
+export { useDebounce, useSearchProducts, useProducts };

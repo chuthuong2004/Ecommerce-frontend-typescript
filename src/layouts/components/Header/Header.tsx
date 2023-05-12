@@ -168,6 +168,8 @@ function Header() {
       console.log(errorCart);
     }
   }, [isLoadingCart, isFetchingCart]);
+  console.log('header');
+
   return (
     <div
       ref={headerRef}

@@ -2,9 +2,13 @@ import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
 import { useLocation, Link } from 'react-router-dom';
 import config from '@/config';
-import { Kids, Men, Women } from './components';
-import { TradeMarkSlide } from '@/components';
-import { memo } from 'react';
+import { Loading, TradeMarkSlide } from '@/components';
+import { Suspense, lazy, memo } from 'react';
+
+const Kids = lazy(() => import('./components/Kids'));
+const Men = lazy(() => import('./components/Men'));
+const Women = lazy(() => import('./components/Women'));
+
 const cx = classNames.bind(styles);
 const Home: React.FC = () => {
   const useQuery = () => new URLSearchParams(useLocation().search);
@@ -42,9 +46,11 @@ const Home: React.FC = () => {
           </section>
         </>
       )}
-      {query.get('view') === 'men' && <Men />}
-      {query.get('view') === 'women' && <Women />}
-      {query.get('view') === 'kids' && <Kids />}
+      <Suspense fallback={<Loading />}>
+        {query.get('view') === 'men' && <Men />}
+        {query.get('view') === 'women' && <Women />}
+        {query.get('view') === 'kids' && <Kids />}
+      </Suspense>
       <TradeMarkSlide />
     </section>
   );

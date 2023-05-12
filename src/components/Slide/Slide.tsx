@@ -37,30 +37,13 @@ const Slide: React.FC<Props> = ({ slides }) => {
   const sliderRef = useRef<Slider>(null);
   return (
     <div className={cx('slide-container')}>
-      <Swiper
-        // install Swiper modules
-        modules={[Navigation, Pagination, Scrollbar, A11y]}
-        // spaceBetween={50}
-        slidesPerView={1}
-        navigation
-        pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => console.log(swiper)}
-        onSlideChange={() => console.log('slide change')}
-      >
-        {slides.map((slide: ISlide) => (
-          <SwiperSlide key={slide._id} className={cx('slide-banner-item')}>
-            <img className={cx('slide-banner-img')} src={slide.img} alt="" />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-      {/* <Slider className={cx('slider')} ref={sliderRef} {...settings}>
+      <Slider className={cx('slider')} ref={sliderRef} {...settings}>
         {slides.map((slide: ISlide) => (
           <div key={slide._id} className={cx('slide-banner-item')}>
             <img className={cx('slide-banner-img')} src={slide.img} alt="" />
           </div>
         ))}
-      </Slider> */}
+      </Slider>
       <NextArrow onClick={() => sliderRef.current?.slickNext()} className="center" />
       <PrevArrow onClick={() => sliderRef.current?.slickPrev()} className="center" />
     </div>

@@ -1,9 +1,10 @@
+import { IToken } from '@/interfaces';
 import axios from 'axios';
 import queryString from 'query-string';
 
 const baseURL: string | undefined = process.env.REACT_APP_API_URL + '/api/v1/';
 
-let token = JSON.parse(localStorage.getItem('token') as any);
+let token: IToken = JSON.parse(localStorage.getItem('token') as any);
 const axiosClient = axios.create({
   baseURL,
   headers: {

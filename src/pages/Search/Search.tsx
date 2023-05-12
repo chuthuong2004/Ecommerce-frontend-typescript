@@ -5,37 +5,21 @@ import { useLocation } from 'react-router-dom';
 import { BiSortAlt2 } from 'react-icons/bi';
 import HeadlessTippy from '@tippyjs/react/headless';
 import 'tippy.js/dist/tippy.css';
-import Loading from 'react-loading';
-import { Button, ProductItem } from '@/components';
+import { Button, ProductItem, Loading } from '@/components';
 import { ESort } from '@/interfaces';
-import { IProduct } from '@/models';
+import { useSearchProducts } from '@/hooks';
 import { productApi } from '@/services';
+import { IProduct } from '@/models';
 const cx = classNames.bind(styles);
 const Search = () => {
   const useQuery = () => new URLSearchParams(useLocation().search);
   let query: URLSearchParams = useQuery();
-  const [products, setProducts] = useState<IProduct[]>([]);
   const [actionSort, setActionSort] = useState<string>(ESort.LATEST);
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    const fetchListProduct = async () => {
-      try {
-        const params = {
-          limit: 0,
-          page: 1,
-          sort: actionSort,
-        };
-        setLoading(true);
-        const res = await productApi.search(query.get('q'), params);
-        setProducts(res.data);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchListProduct();
-  }, [query.get('q'), actionSort]);
+  
+  const { loading, products } = useSearchProducts({
+    query: query.get('q') || '',
+    sort: actionSort,
+  });
 
   const renderTippy = (attrs: any) => (
     <div className={cx('menu-more')} tabIndex="-1" {...attrs}>
@@ -100,6 +84,8 @@ const Search = () => {
       </div>
     </div>
   );
+  console.log('render');
+
   return (
     <div className={cx('container-fluid')}>
       <div className={cx('title')}>
@@ -135,17 +121,15 @@ const Search = () => {
         </div>
       </div>
 
-      {loading ? (
-        <Loading />
-      ) : (
-        <div className={cx('products')}>
-          {products.length > 0 ? (
-            products.map((product) => <ProductItem key={product._id} product={product} />)
-          ) : (
-            <div>Không tìm thấy sản phẩm phù hợp</div>
-          )}
-        </div>
-      )}
+      <div className={cx('products')}>
+        {loading ? (
+          <div>Loading...</div>
+        ) : products.length > 0 ? (
+          products.map((product) => <ProductItem key={product._id} product={product} />)
+        ) : (
+          <div>Không tìm thấy sản phẩm phù hợp</div>
+        )}
+      </div>
     </div>
   );
 };

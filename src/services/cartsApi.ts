@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '@/redux/store';
 import { ICart } from '@/models';
+import { IResponseData } from '@/interfaces';
 export const cartsApi = createApi({
   reducerPath: 'cartsApi',
   baseQuery: fetchBaseQuery({
@@ -31,7 +32,7 @@ export const cartsApi = createApi({
       providesTags: ['Cart'],
     }),
     addItemToCart: builder.mutation<
-      { message: string; data: ICart },
+      IResponseData<ICart>,
       { product: string; color: string; size: string | number }
     >({
       query: (body) => {

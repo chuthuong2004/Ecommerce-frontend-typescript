@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useRef } from 'react';
 import Slider, { Settings } from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -33,6 +33,7 @@ const SlideProduct: React.FC<Props> = ({
     setSlideStart(nextSlide >= settings.slidesToScroll);
     setSlideEnd(nextSlide >= settings.slidesToScroll + settings.slidesToShow);
   };
+  const sliderRef = useRef<Slider>(null);
   let settings = {
     dots: false,
     infinite: false,
@@ -56,7 +57,7 @@ const SlideProduct: React.FC<Props> = ({
   return (
     <div className={cx('list-products')}>
       {title && <h4 className={cx('title')}>{title}</h4>}
-      <Slider className={cx('slider', 'slider-list')} {...settings}>
+      <Slider ref={sliderRef} className={cx('slider', 'slider-list')} {...settings}>
         {products.map((product) => (
           <ProductItem product={product} key={product?._id} />
         ))}
@@ -69,8 +70,20 @@ const SlideProduct: React.FC<Props> = ({
           )}
         </div>
       </Slider>
-      <PrevArrow className="center" />
-      <NextArrow className="center" />
+      <PrevArrow
+        onClick={() => sliderRef.current?.slickPrev()}
+        className="center"
+        style={{
+          opacity: slideStart ? 1 : 0,
+        }}
+      />
+      <NextArrow
+        onClick={() => sliderRef.current?.slickNext()}
+        className="center"
+        style={{
+          opacity: slideEnd ? 0 : 1,
+        }}
+      />
     </div>
   );
 };

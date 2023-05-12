@@ -15,7 +15,7 @@ const Women = () => {
     };
   });
   return (
-    <div>
+    <div className={cx('container')}>
       <Slide slides={slides} />
       <img
         className={cx('img-intro-women')}
