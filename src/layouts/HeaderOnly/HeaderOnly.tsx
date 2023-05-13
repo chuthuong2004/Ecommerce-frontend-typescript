@@ -1,14 +1,12 @@
 import React, { ReactNode, Suspense } from 'react';
-const Header = React.lazy(() => import('../components/Header'));
+import { Header } from '../components';
 type Props = {
   children: ReactNode;
 };
 const HeaderOnly: React.FC<Props> = ({ children }) => {
   return (
     <div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Header />
-      </Suspense>
+      <Header />
       <div className="container">
         <div className="content"> {children} </div>
       </div>

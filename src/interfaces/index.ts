@@ -18,7 +18,7 @@ import { IQueryOptions } from './queryOption.interface';
 import {
   FileResponse,
   IResponseData,
-  IResponseProducts,
+  IResponsePaginating,
   IResponseUpload,
 } from './response.interface';
 import { ISize } from './size.interface';
@@ -47,7 +47,7 @@ export type {
   IResponseData,
   FileResponse,
   IResponseUpload,
-  IResponseProducts,
+  IResponsePaginating,
   ISize,
   IToken,
   IWard,

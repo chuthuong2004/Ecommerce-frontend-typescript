@@ -10,9 +10,9 @@ const Policy = () => {
         <div className={cx('container')}>
           <h1>Chính sách bảo mật</h1>
           <p>
-            Công ty cổ phần Maison cam kết sẽ bảo mật những thông tin mang tính riêng tư của bạn.
-            Bạn vui lòng đọc bản “Chính sách bảo mật” dưới đây để hiểu hơn những cam kết mà chúng
-            tôi thực hiện, nhằm tôn trọng và bảo vệ quyền lợi của người truy cập:
+            Công ty cổ phần Koga Clothes cam kết sẽ bảo mật những thông tin mang tính riêng tư của
+            bạn. Bạn vui lòng đọc bản “Chính sách bảo mật” dưới đây để hiểu hơn những cam kết mà
+            chúng tôi thực hiện, nhằm tôn trọng và bảo vệ quyền lợi của người truy cập:
           </p>
           <strong>Sử dụng thông tin cá nhân</strong>
           <p>
@@ -42,27 +42,27 @@ const Policy = () => {
           </div>
           <strong>bảo mật thông tin cá nhân</strong>
           <p>
-            Công ty cổ phần Maison cam kết bảo mật thông tin cá nhân của bạn bằng mọi cách thức có
-            thể. Chúng tôi sẽ sử dụng nhiều công nghệ bảo mật thông tin khác nhau nhằm bảo vệ thông
-            tin này không bị truy lục, sử dụng hoặc tiết lộ ngoài ý muốn.
+            Công ty cổ phần Koga Clothes cam kết bảo mật thông tin cá nhân của bạn bằng mọi cách
+            thức có thể. Chúng tôi sẽ sử dụng nhiều công nghệ bảo mật thông tin khác nhau nhằm bảo
+            vệ thông tin này không bị truy lục, sử dụng hoặc tiết lộ ngoài ý muốn.
           </p>
           <strong>Quy định về "spam"</strong>
           <p>
-            Công ty cổ phần Maison thực sự quan ngại đến vấn nạn Spam (thư rác), các Email giả mạo
-            danh tín chúng tôi gởi đi. Do đó, chúng tôi khẳng định chỉ gởi Email đến bạn khi và chỉ
-            khi bạn có đăng ký hoặc sử dụng dịch vụ từ hệ thống của chúng tôi.
+            Công ty cổ phần Koga Clothes thực sự quan ngại đến vấn nạn Spam (thư rác), các Email giả
+            mạo danh tín chúng tôi gởi đi. Do đó, chúng tôi khẳng định chỉ gởi Email đến bạn khi và
+            chỉ khi bạn có đăng ký hoặc sử dụng dịch vụ từ hệ thống của chúng tôi.
           </p>
           <p>
-            Công ty cổ phần Maison cam kết không bán, thuê lại hoặc cho thuê email của bạn từ bên
-            thứ ba. Nếu bạn vô tình nhận được Email không theo yêu cầu từ hệ thống chúng tôi do một
-            nguyên nhân ngoài ý muốn, xin vui lòng nhấn vào link từ chối nhận Email này kèm theo,
-            hoặc thông báo trực tiếp đến trung tâm hỗ trợ khách hàng.
+            Công ty cổ phần Koga Clothes cam kết không bán, thuê lại hoặc cho thuê email của bạn từ
+            bên thứ ba. Nếu bạn vô tình nhận được Email không theo yêu cầu từ hệ thống chúng tôi do
+            một nguyên nhân ngoài ý muốn, xin vui lòng nhấn vào link từ chối nhận Email này kèm
+            theo, hoặc thông báo trực tiếp đến trung tâm hỗ trợ khách hàng.
           </p>
           <strong>THÔNG TIN LIÊN HỆ</strong>
           <p>
             Chúng tôi luôn hoan nghênh các ý kiến đóng góp, liên hệ và phản hồi thông tin từ bạn về
             “Chính sách bảo mật” này. Nếu bạn có những thắc mắc liên quan xin vui lòng liên hệ theo
-            địa chỉ Email: customercare@maisonjsc.com.
+            địa chỉ Email: customercare@kogaclothes.com.
           </p>
         </div>
       </div>

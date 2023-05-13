@@ -121,13 +121,14 @@ const linkList = [
 
 const settings: Settings = {
   dots: true,
-  // infinite: true,
+  infinite: true,
   speed: 500,
   slidesToShow: 1,
   slidesToScroll: 1,
-  // autoplay: true,
+  autoplay: true,
   draggable: true,
   autoplaySpeed: 3000,
+  arrows: false,
   dotsClass: cx('container-dots'),
   responsive: [
     {
@@ -294,7 +295,7 @@ const TradeMarkSlide = () => {
               </div>
             </Slider>
 
-            <Swiper
+            {/* <Swiper
               slidesPerView={5}
               grid={{
                 rows: 3,
@@ -313,7 +314,7 @@ const TradeMarkSlide = () => {
                   <Link to={link.to}>{link.icon}</Link>
                 </SwiperSlide>
               ))}
-            </Swiper>
+            </Swiper> */}
           </div>
         </div>
       </div>

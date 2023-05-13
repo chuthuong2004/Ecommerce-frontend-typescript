@@ -1,4 +1,5 @@
 import { axiosClient } from '@/api';
+import { IResponsePaginating } from '@/interfaces';
 import { IMessage } from '@/models';
 
 const messageApi = {
@@ -14,7 +15,7 @@ const messageApi = {
   getMessagesFromConversation: (
     conversationId: string,
     params: any,
-  ): Promise<{ countDocument: number; resultPerPage: number; data: IMessage[] }> => {
+  ): Promise<IResponsePaginating<IMessage[]>> => {
     const url = `messages/${conversationId}`;
     return axiosClient.get(url, { params });
   },

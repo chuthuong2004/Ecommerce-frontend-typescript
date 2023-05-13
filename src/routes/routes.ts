@@ -32,6 +32,11 @@ const publicRoutes: Array<routeType> = [
     layout: HeaderOnly,
   },
   {
+    path: config.routes.introduce,
+    component: lazy(() => import('@/pages/Introduce')),
+    layout: HeaderOnly,
+  },
+  {
     path: config.routes.partner,
     component: lazy(() => import('@/pages/Account')),
   },

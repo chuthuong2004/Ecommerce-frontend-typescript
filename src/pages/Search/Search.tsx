@@ -15,11 +15,27 @@ const Search = () => {
   const useQuery = () => new URLSearchParams(useLocation().search);
   let query: URLSearchParams = useQuery();
   const [actionSort, setActionSort] = useState<string>(ESort.LATEST);
-  
-  const { loading, products } = useSearchProducts({
-    query: query.get('q') || '',
-    sort: actionSort,
-  });
+  // const { loading, products } = useSearchProducts({
+  //   query: query.get('q') || '',
+  //   sort: actionSort,
+  // });
+
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [loading, setLoading] = useState(false);
+  const fetchProducts = async () => {
+    const params = {
+      limit: 0,
+      page: 1,
+      sort: actionSort,
+    };
+    setLoading(true);
+    const res = await productApi.search(query.get('q'), params);
+    setProducts(res.data);
+    setLoading(false);
+  };
+  useEffect(() => {
+    fetchProducts();
+  }, [query.get('q'), actionSort]);
 
   const renderTippy = (attrs: any) => (
     <div className={cx('menu-more')} tabIndex="-1" {...attrs}>

@@ -1,10 +1,9 @@
 import { axiosClient } from '@/api';
+import { IResponsePaginating } from '@/interfaces';
 import { IBrand } from '@/models';
 
 const brandApi = {
-  getAll: (
-    params: any,
-  ): Promise<{ countDocument: number; resultPerPage: number; data: IBrand[] }> => {
+  getAll: (params: any): Promise<IResponsePaginating<IBrand[]>> => {
     console.log(params);
 
     const url = 'brands';

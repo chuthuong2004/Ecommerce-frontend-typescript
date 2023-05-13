@@ -30,7 +30,7 @@ import { IColor, ISize, ITabContent, IFavorite } from '../../interfaces';
 import { IProduct } from '../../models';
 import { productApi } from '../../services';
 import { brandsMen } from '../Home/components/Men/dataMen';
-import { ReturnPolicy } from './components';
+import { ReturnPolicy, Review } from './components';
 const cx = classNames.bind(styles);
 
 const Product = () => {
@@ -94,6 +94,11 @@ const Product = () => {
       _id: uuidv4(),
       title: 'Về thương hiệu',
       content: product?.brand.history || '',
+    },
+    {
+      _id: uuidv4(),
+      title: 'Đánh giá sản phẩm',
+      content: <Review productId={product?._id || ''} rate={product?.rate || 0} />,
     },
   ];
 

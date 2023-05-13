@@ -1,0 +1,78 @@
+.container {
+  display: flex;
+  gap: 2rem;
+  .review {
+    flex: 3;
+    padding: 2rem;
+    border-radius: 6px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    .rating-box {
+      background-color: #fff8f3;
+      // background-color: #d364151c;
+    }
+    .progress-bar-rating {
+      .progress {
+        background-color: #eeeeee;
+      }
+    }
+  }
+  .review {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    height: max-content;
+    .rating-box {
+      flex: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      border-radius: 5px;
+      gap: 2rem;
+      color: #ff8f3c;
+      border-radius: 5px;
+      text-align: center;
+      padding: 22px 10px;
+      padding-top: 10px;
+      .rating-number {
+        font-size: 4rem;
+        font-weight: 700;
+      }
+      p {
+        font-weight: 500;
+      }
+    }
+    .progress-bar-container {
+      flex: 9;
+      display: flex;
+      flex-direction: column;
+
+      .progress-bar-rating {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        flex: 1;
+        .progress {
+          flex: 1;
+          height: 8px;
+          border-radius: 8px;
+          position: relative;
+          &-bar {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 8px;
+            border-radius: 8px;
+            background-color: #ff8f3c;
+            transition: all 0.4s linear;
+          }
+        }
+      }
+    }
+  }
+  .list-review {
+    padding: 2rem;
+    flex: 6;
+  }
+}

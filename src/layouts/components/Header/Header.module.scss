@@ -119,7 +119,6 @@
           .user-links {
             display: block;
             width: 100%;
-            background-color: red;
             .user-link {
               font-size: 1.4rem;
               text-align: left;
@@ -247,7 +246,7 @@
     }
     .wrapper {
       width: 100%;
-      background-color: var(--red);
+      // background-color: var(--red);
       color: white;
       padding: 0 1rem;
       .inner {

@@ -30,6 +30,7 @@ import CategoryContainer from './CategoryContainer';
 import Button from './Button';
 import BlockTitle from './BlockTitle';
 import Helmet from './Helmet';
+import ReviewItem from './ReviewItem';
 export {
   WishList,
   TradeMarkProduct,
@@ -63,4 +64,5 @@ export {
   Button,
   BlockTitle,
   Helmet,
+  ReviewItem,
 };

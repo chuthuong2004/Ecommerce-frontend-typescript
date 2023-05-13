@@ -2,7 +2,7 @@ import { BaseQueryResult } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '@/redux/store';
 import { IOrder } from '@/models';
-import { IAddress } from '@/interfaces';
+import { IAddress, IResponsePaginating } from '@/interfaces';
 export const ordersApi = createApi({
   reducerPath: 'ordersApi',
   baseQuery: fetchBaseQuery({
@@ -22,10 +22,7 @@ export const ordersApi = createApi({
   }),
   tagTypes: ['Order'],
   endpoints: (builder) => ({
-    getMyOrder: builder.query<
-      { countDocument: number; totalAmount: number; resultPerPage: number; data: IOrder[] },
-      {}
-    >({
+    getMyOrder: builder.query<IResponsePaginating<IOrder[]> & { totalAmount: number }, {}>({
       query: () => `/order/me?sort=-updatedAt`,
       providesTags: ['Order'],
     }),

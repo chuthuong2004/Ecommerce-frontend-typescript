@@ -1,8 +1,6 @@
-import { IProduct } from '@/models';
-
-export interface IResponseData<Type> {
+export interface IResponseData<T> {
   message: string;
-  data: Type;
+  data: T;
 }
 export interface FileResponse {
   fieldname: string;
@@ -20,8 +18,8 @@ export interface IResponseUpload {
   file: FileResponse;
 }
 
-export interface IResponseProducts {
+export interface IResponsePaginating<T> {
   countDocument: number;
   resultPerPage: number;
-  data: IProduct[];
+  data: T;
 }

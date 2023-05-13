@@ -6,6 +6,7 @@ import { IConversation } from './conversation.model';
 import { IMessage } from './message.model';
 import { IOrder } from './order.model';
 import { IProduct } from './product.model';
+import { IReview } from './review.model';
 import { IUser } from './user.model';
 
 export type {
@@ -18,4 +19,5 @@ export type {
   IOrder,
   IProduct,
   IUser,
+  IReview,
 };

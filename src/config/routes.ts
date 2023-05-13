@@ -23,5 +23,6 @@ const routes = {
   recentlyViewed: '/tai-khoan/da-xem-gan-day',
   changePassword: '/tai-khoan/doi-mat-khau',
   help: '/pages/chinh-sach-bao-mat',
+  introduce: '/pages/gioi-thieu-koga',
 };
 export default routes;
